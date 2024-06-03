@@ -3,16 +3,23 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
-const jwt = require('jsonwebtoken');
 const authRoutes = require('./routes/auth');
 const patientRoutes = require('./routes/patient');
+require('dotenv').config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
 // MongoDB connection
-mongoose.connect('mongodb://localhost:27017/patient-details', { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect(process.env.MONGO_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
+
 const db = mongoose.connection;
+
+db.on('error', (error) => console.error('MongoDB connection error:', error));
+db.once('open', () => console.log('MongoDB connected'));
 
 // Middleware
 app.use(bodyParser.json());

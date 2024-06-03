@@ -1,17 +1,18 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+
 import HomePage from './pages/HomePage';
 import { AppointmentProvider } from './context/AppointmentContext';
 
 const App = () => {
   return (
-    <AppointmentProvider>
-      <Router>
+    <Router>
+      <AppointmentProvider>
         <Switch>
-          <Route path="/" component={HomePage} exact />
+          <Route exact path="/" component={HomePage} />
         </Switch>
-      </Router>
-    </AppointmentProvider>
+      </AppointmentProvider>
+    </Router>
   );
 };
 
