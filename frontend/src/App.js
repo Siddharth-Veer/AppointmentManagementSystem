@@ -1,19 +1,15 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import HomePage from './components/Appointment.js';
 
-import HomePage from './pages/HomePage';
-import { AppointmentProvider } from './context/AppointmentContext';
-
-const App = () => {
+function App() {
   return (
     <Router>
-      <AppointmentProvider>
-        <Switch>
-          <Route exact path="/" component={HomePage} />
-        </Switch>
-      </AppointmentProvider>
+      <Routes>
+        <Route path="/" element={<Appointment/>} />
+      </Routes>
     </Router>
   );
-};
+}
 
 export default App;
