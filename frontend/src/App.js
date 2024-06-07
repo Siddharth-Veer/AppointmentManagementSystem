@@ -1,19 +1,25 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import HomePage from './pages/HomePage';
+import { BrowserRouter as Router, Route, Routes} from 'react-router-dom';
+import HomePage from './components/HomePage';
+import AppointmentBooking from './pages/AppointmentBooking';
+import SignIn from './pages/SignIn';
+import SignUp from './pages/SignUp';
+
 import { AppointmentProvider } from './context/AppointmentContext';
 
 const App = () => {
   return (
-    <AppointmentProvider>
-      <Router>
-      <Routes>
+    <Router>
+      <AppointmentProvider>
+        <Routes>
           <Route path="/" component={HomePage} exact />
-          </Routes>
-      </Router>
-    </AppointmentProvider>
+          <Route path="/book-appointment" element={<AppointmentBooking />} />
+          <Route path="/SignIn" element={<SignIn />}  />
+          <Route path="/signup" element={<SignUp />} />
+        </Routes>
+      </AppointmentProvider>
+    </Router>
   );
 };
-//raj
 
 export default App;

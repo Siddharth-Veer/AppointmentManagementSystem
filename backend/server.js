@@ -1,20 +1,34 @@
+// server.js
+
 const express = require('express');
-const dotenv = require('dotenv');
-const connectDB = require('./config/db');
-const appointmentRoutes = require('./routes/appointmentRoutes');
-const { errorHandler } = require('./middleware/errorHandler');
-
-dotenv.config();
-
-connectDB();
+const mongoose = require('mongoose');
+const bodyParser = require('body-parser');
+const authRoutes = require('./routes/auth');
+const patientRoutes = require('./routes/patient');
+require('dotenv').config();
 
 const app = express();
-
-app.use(express.json());
-
-app.use('/api/appointments', appointmentRoutes);
-
-app.use(errorHandler);
-
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
+// MongoDB connection
+mongoose.connect(process.env.MONGO_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
+
+const db = mongoose.connection;
+
+db.on('error', (error) => console.error('MongoDB connection error:', error));
+db.once('open', () => console.log('MongoDB connected'));
+
+// Middleware
+app.use(bodyParser.json());
+
+// Routes
+app.use('/api/auth', authRoutes);
+app.use('/api/patient', patientRoutes);
+
+// Start the server
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
