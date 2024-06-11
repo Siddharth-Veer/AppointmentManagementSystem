@@ -14,49 +14,15 @@ const doctors = [
 ];
 
 const AppointmentBooking = () => {
-  const [selectedDoctor, setSelectedDoctor] = useState(null);
-  const [selectedDate, setSelectedDate] = useState(new Date());
-  const [showCalendar, setShowCalendar] = useState(false);
+    const [doctor, setDoctor] = useState('');
+    const [date, setDate] = useState('');
+    const [time, setTime] = useState('');
+    const [reason, setReason] = useState('');
 
-  const updateDateButton = () => {
-    return selectedDate.toDateString();
-  };
-
-  const populateDays = (year, month) => {
-    const firstDay = new Date(year, month, 1).getDay();
-    const daysInMonth = new Date(year, month + 1, 0).getDate();
-    const days = [];
-
-    for (let i = 0; i < firstDay; i++) {
-      days.push(<span key={empty-${i}}></span>);
-    }
-
-    for (let i = 1; i <= daysInMonth; i++) {
-      days.push(
-        <span key={i} onClick={() => handleDateChange(i, month, year)}>
-          {i}
-        </span>
-      );
-    }
-
-    return days;
-  };
-
-  const handleDateChange = (day, month, year) => {
-    const newDate = new Date(year, month, day);
-    setSelectedDate(newDate);
-    setShowCalendar(false);
-  };
-
-  const handlePrevMonth = () => {
-    const newDate = new Date(selectedDate.setMonth(selectedDate.getMonth() - 1));
-    setSelectedDate(newDate);
-  };
-
-  const handleNextMonth = () => {
-    const newDate = new Date(selectedDate.setMonth(selectedDate.getMonth() + 1));
-    setSelectedDate(newDate);
-  };
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        console.log({ doctor, date, time, reason });
+    };
 
   return (
     <div className="appointment-booking">
