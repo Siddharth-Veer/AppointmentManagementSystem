@@ -58,12 +58,6 @@ const HomePage = () => {
             </div>
           </div>
         </section>
-        <section>
-          <h1>Appointments</h1>
-          {appointments.map(appointment => (
-            <Appointment key={appointment._id} appointment={appointment} />
-          ))}
-        </section>
       </main>
     </>
   );
