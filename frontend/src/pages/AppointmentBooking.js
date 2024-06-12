@@ -62,12 +62,22 @@ const AppointmentBooking = () => {
     <div className="appointment-booking">
       <div className="top-menu">
         <h2>[patient's name will appear here]</h2>
-        <div className="calendar-button">
-          <button onClick={() => setShowCalendar(!showCalendar)}>
-            {updateDateButton()}
-          </button>
-          {showCalendar && (
-            <div className="calendar-dropdown">
+        <div className="buttons">
+          <button className="appointment_btn">Appointments</button>
+          <button className="appointment_btn">Walk-In</button>
+        </div>
+      </div>
+      {selectedDoctor ? (
+        <div className="appointment-content">
+          <div className="appointment-header">
+           
+            <p>{selectedDoctor.name}</p>
+            <p>{selectedDoctor.speciality}</p>
+            <p>Contact: {selectedDoctor.contact}</p>
+            <button onClick={() => setSelectedDoctor(null)}>Go Back</button>
+          </div>
+          <div className="appointment-body">
+            <div className="left-sidebar">
               <div className="calendar">
                 <div className="calendar-header">
                   <button onClick={handlePrevMonth}>&lt;</button>
@@ -84,35 +94,37 @@ const AppointmentBooking = () => {
                 </div>
               </div>
             </div>
-          )}
-        </div>
-        <div className="buttons">
-          <button className="appointment_btn">Appointments</button>
-          <button className="appointment_btn">Walk-In</button>
-        </div>
-      </div>
-      {selectedDoctor ? (
-        <div className="appointment-content">
-          <div className="appointment-header">
-            <button onClick={() => setSelectedDoctor(null)}>Back</button>
-            <h2>{selectedDoctor.name}</h2>
-            <h3>{selectedDoctor.speciality}</h3>
-            <p>Contact: {selectedDoctor.contact}</p>
-          </div>
-          <div className="appointments">
-            <h2>Available Slots</h2>
-            <div className="appointment-slots">
-              {/* Generate morning and evening slots as per the provided image */}
-              <div className="slots">
-                <h3>Morning</h3>
-                <div className="slot-times">
-                  {/* Add slot buttons here */}
+            <div className="right-content">
+              <h2>Available Slots</h2>
+              <div className="appointment-slots">
+                <div className="slots">
+                  <h3>Morning</h3>
+                  <div className="slot-times">
+                    <button>9:00 AM</button>
+                    <button>9:40 AM</button>
+                    <button>10:00 AM</button>
+                    <button>11:00 AM</button>
+                    <button>11:30 AM</button>
+                    <button>12:00 PM</button>
+                    <button>11:30 AM</button>
+                    <button>12:00 PM</button>
+                    <button>11:30 AM</button>
+                    <button>12:00 PM</button>
+                  </div>
                 </div>
-              </div>
-              <div className="slots">
-                <h3>Evening</h3>
-                <div className="slot-times">
-                  {/* Add slot buttons here */}
+                <div className="slots">
+                  <h3>Evening</h3>
+                  <div className="slot-times">
+                    <button>3:00 PM</button>
+                    <button>4:00 PM</button>
+                    <button>4:30 PM</button>
+                    <button>5:10 PM</button>
+                    <button>6:00 PM</button>
+                    <button>11:30 AM</button>
+                    <button>12:00 PM</button>
+                    <button>11:30 AM</button>
+                    <button>12:00 PM</button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -120,7 +132,7 @@ const AppointmentBooking = () => {
         </div>
       ) : (
         <div className="doctors-list">
-          <h2>Doctors List</h2>
+          {/* <h2>Doctors List</h2> */}
           <div className="doctors-table">
             <div className="doctors-table-header">
               <div className="doctors-table-cell">Doctor's Name</div>

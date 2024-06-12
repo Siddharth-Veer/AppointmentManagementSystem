@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import HomePage from './pages/HomePage';
 import AppointmentBooking from './pages/AppointmentBooking';
+import AboutUs from './pages/AboutUs';
 import { AppointmentProvider } from './context/AppointmentContext';
 
 const App = () => {
