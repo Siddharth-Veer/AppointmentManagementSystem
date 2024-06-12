@@ -27,13 +27,13 @@ const HomePage = () => {
                         <button>Search</button>
                     </div>
                     <div className="icons">
-                        <div className="icon"><img src="#" alt="ADHD" /><span>ADHD</span></div>
-                        <div className="icon"><img src="#" alt="Weight Loss" /><span>Weight Loss</span></div>
-                        <div className="icon"><img src="#" alt="Birth Control" /><span>Birth Control</span></div>
-                        <div className="icon"><img src="#" alt="Prescription" /><span>Prescription</span></div>
-                        <div className="icon"><img src="#" alt="Back Pain" /><span>Back Pain</span></div>
-                        <div className="icon"><img src="#" alt="Hair Loss" /><span>Hair Loss</span></div>
-                        <div className="icon"><img src="#" alt="Headache" /><span>Headache</span></div>
+                        <div className="icon"><img src="images/ADHD-icon.png" alt="ADHD" /><span>ADHD</span></div>
+                        <div className="icon"><img src="images/Weight-loss-icon.png" alt="Weight Loss" /><span>Weight Loss</span></div>
+                        <div className="icon"><img src="images/Birth-Control-icon.png" alt="Birth Control" /><span>Birth Control</span></div>
+                        <div className="icon"><img src="images/Prescription-icon.png" alt="Prescription" /><span>Prescription</span></div>
+                        <div className="icon"><img src="images/Back-Pain-icon.png" alt="Back Pain" /><span>Back Pain</span></div>
+                        <div className="icon"><img src="images/Hair-loss-icon.png" alt="Hair Loss" /><span>Hair Loss</span></div>
+                        <div className="icon"><img src="images/Headache-icon.png" alt="Headache" /><span>Headache</span></div>
                     </div>
                 </section>
                 <section className="how-it-works">
@@ -41,17 +41,17 @@ const HomePage = () => {
                     <h3>Three Easy Steps to Book Your Doctor's Appointment Online</h3>
                     <div className="steps">
                         <div className="step">
-                            <img src="#" alt="Search Icon" />
+                            <img src="images/search-icon.png" alt="Search Icon" />
                             <h4>1. Search For Care</h4>
                             <p>Enter your location and search for in-person or virtual care appointments.</p>
                         </div>
                         <div className="step">
-                            <img src="#" alt="Compare Icon" />
+                            <img src="images/list-icon.png" alt="Compare Icon" />
                             <h4>2. Compare Providers</h4>
                             <p>See a list and map of providers in your area. Compare their services and availability to find the best option for you.</p>
                         </div>
                         <div className="step">
-                            <img src="#" alt="Book Icon" />
+                            <img src="images/appoitment-icon.png" alt="Book Icon" />
                             <h4>3. Book an Appointment</h4>
                             <p>Once you’ve selected a provider you can immediately make a booking. Access the care you need in minutes.</p>
                         </div>
@@ -87,21 +87,12 @@ const HomePage = () => {
                             <ul>
                                 <li><a href="#">Developers</a></li>
                                 <li><a href="#">Partners</a></li>
-                                <li><a href="#">Affiliates</a></li>
                             </ul>
                         </div>
                     </div>
                 </div>
                 <div className="footer-bottom">
-                    <div className="social-icons">
-                        <a href="#"><i className="fab fa-facebook-f"></i></a>
-                        <a href="#"><i className="fab fa-twitter"></i></a>
-                        <a href="#"><i className="fab fa-linkedin-in"></i></a>
-                        <a href="#"><i className="fab fa-instagram"></i></a>
-                    </div>
                     <p>&copy; 2024 Medisync. All rights reserved.</p>
-                    <span>|</span>
-                    <a href="#">Privacy Policy</a>
                 </div>
             </footer>
     </>
