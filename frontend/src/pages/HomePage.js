@@ -19,6 +19,7 @@ const HomePage = () => {
   return (
     <>
       <header>
+        <img src="..\assets\images\logo.png" alt="Medisync Logo" />
         <div className="logo">Medisync</div>
         <nav>
           <ul>
