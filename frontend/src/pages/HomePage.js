@@ -19,7 +19,7 @@ const HomePage = () => {
   return (
     <>
       <header>
-        <div className="logo">Medisync</div>
+        <div className="logo" >Medisync</div>
         <nav>
           <ul>
             <li><a href="#" onClick={toggleMenu}>Menu</a></li>

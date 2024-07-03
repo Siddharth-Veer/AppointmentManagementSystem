@@ -4,8 +4,8 @@ import HomePage from './pages/HomePage';
 import AppointmentBooking from './pages/AppointmentBooking';
 import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
+import ContactUs from './pages/ContactUs';
 import { AppointmentProvider } from './context/AppointmentContext';
-
 
 const App = () => {
   return (
