@@ -228,13 +228,11 @@ nav ul li a {
     justify-content: space-between;
     align-items: center;
     padding: 10px 20px;
+    text-align: center;
+    justify-content: center;
     background-color: var(--footer-bottom-background-color);
 }
 
-.footer-bottom .social-icons a {
-    margin: 0 5px;
-    color: var(--primary-color);
-}
 
 .footer-bottom p, .footer-bottom a {
     margin: 0;
