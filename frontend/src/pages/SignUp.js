@@ -26,11 +26,12 @@ const SignUp = () => {
                 await updateProfile(user, { displayName: name });
                 console.log('User signed up:', user);
                 setSuccessMessage('User signed up successfully!');
-                navigate('/book-appointment'); // Redirect to book-appointment page after sign-up
+                navigate(`/registration-form?userId=${user.uid}`); // Redirect to registration form page after sign-up
             } else {
                 setError('Failed to create user');
             }
         } catch (error) {
+            console.error('Error during sign-up:', error); // Log error
             setError(error.message);
         }
     };
