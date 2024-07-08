@@ -4,7 +4,13 @@ import HomePage from './pages/HomePage';
 import AppointmentBooking from './pages/AppointmentBooking';
 import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
+import ContactUs from './pages/ContactUs';
+import AboutUs from './pages/AboutUs';
+import ForgotPassword from './pages/ForgotPassword';
+import ResetPassword from './pages/ResetPassword';
+
 import { AppointmentProvider } from './context/AppointmentContext';
+
 
 const App = () => {
   return (
@@ -13,8 +19,10 @@ const App = () => {
         <Routes>
           <Route path="/" element={<HomePage />} exact />
           <Route path="/book-appointment" element={<AppointmentBooking />} />
-          <Route path="/signin" element={<SignIn />} />
+          <Route path="/SignIn" element={<SignIn />}  />
           <Route path="/signup" element={<SignUp />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
         </Routes>
       </AppointmentProvider>
     </Router>
