@@ -1,4 +1,7 @@
-import React, { useState } from 'react';
+// AppointmentBooking.js
+
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import '../css/AppointmentBooking.css';
 import doctor1 from '../images/doctor-1.jpg';
 import doctor2 from '../images/doctor-2.jpg';
@@ -16,11 +19,20 @@ const doctors = [
 const AppointmentBooking = () => {
   const [selectedDoctor, setSelectedDoctor] = useState(null);
   const [selectedDate, setSelectedDate] = useState(new Date());
-  const [showCalendar, setShowCalendar] = useState(false);
+  const [patientName, setPatientName] = useState('');
 
-  const updateDateButton = () => {
-    return selectedDate.toDateString();
-  };
+  useEffect(() => {
+    const fetchPatientName = async () => {
+        try {
+            const response = await axios.get('http://localhost:5000/api/auth/user/name');
+            setPatientName(response.data);
+        } catch (error) {
+            console.error('Error fetching patient name:', error);
+        }
+    };
+
+    fetchPatientName();
+}, []);
 
   const populateDays = (year, month) => {
     const firstDay = new Date(year, month, 1).getDay();
@@ -45,7 +57,6 @@ const AppointmentBooking = () => {
   const handleDateChange = (day, month, year) => {
     const newDate = new Date(year, month, day);
     setSelectedDate(newDate);
-    setShowCalendar(false);
   };
 
   const handlePrevMonth = () => {
@@ -61,7 +72,7 @@ const AppointmentBooking = () => {
   return (
     <div className="appointment-booking">
       <div className="top-menu">
-        <h2>[patient's name will appear here]</h2>
+        <h2>Welcome {patientName} !</h2>
         <div className="buttons">
           <button className="appointment_btn">Appointments</button>
           <button className="appointment_btn">Walk-In</button>
@@ -70,7 +81,7 @@ const AppointmentBooking = () => {
       {selectedDoctor ? (
         <div className="appointment-content">
           <div className="appointment-header">
-           
+            <img src={selectedDoctor.profilePicture} alt={selectedDoctor.name} className="doctor-profile-picture" />
             <p>{selectedDoctor.name}</p>
             <p>{selectedDoctor.speciality}</p>
             <p>Contact: {selectedDoctor.contact}</p>
@@ -100,30 +111,19 @@ const AppointmentBooking = () => {
                 <div className="slots">
                   <h3>Morning</h3>
                   <div className="slot-times">
+                    {/* Sample slot buttons */}
                     <button>9:00 AM</button>
-                    <button>9:40 AM</button>
                     <button>10:00 AM</button>
                     <button>11:00 AM</button>
-                    <button>11:30 AM</button>
-                    <button>12:00 PM</button>
-                    <button>11:30 AM</button>
-                    <button>12:00 PM</button>
-                    <button>11:30 AM</button>
-                    <button>12:00 PM</button>
                   </div>
                 </div>
                 <div className="slots">
                   <h3>Evening</h3>
                   <div className="slot-times">
+                    {/* Sample slot buttons */}
                     <button>3:00 PM</button>
                     <button>4:00 PM</button>
-                    <button>4:30 PM</button>
-                    <button>5:10 PM</button>
-                    <button>6:00 PM</button>
-                    <button>11:30 AM</button>
-                    <button>12:00 PM</button>
-                    <button>11:30 AM</button>
-                    <button>12:00 PM</button>
+                    <button>5:00 PM</button>
                   </div>
                 </div>
               </div>
@@ -132,7 +132,6 @@ const AppointmentBooking = () => {
         </div>
       ) : (
         <div className="doctors-list">
-          {/* <h2>Doctors List</h2> */}
           <div className="doctors-table">
             <div className="doctors-table-header">
               <div className="doctors-table-cell">Doctor's Name</div>
