@@ -8,6 +8,7 @@ import ContactUs from './pages/ContactUs';
 import AboutUs from './pages/AboutUs';
 import ForgotPassword from './pages/ForgotPassword';
 import ResetPassword from './pages/ResetPassword';
+import RegistrationForm from './pages/RegistrationForm';
 
 import { AppointmentProvider } from './context/AppointmentContext';
 
@@ -18,6 +19,7 @@ const App = () => {
       <AppointmentProvider>
         <Routes>
           <Route path="/" element={<HomePage />} exact />
+          <Route path="/registration-form" element={<RegistrationForm />} />
           <Route path="/book-appointment" element={<AppointmentBooking />} />
           <Route path="/SignIn" element={<SignIn />}  />
           <Route path="/signup" element={<SignUp />} />

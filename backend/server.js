@@ -1,10 +1,8 @@
-// server.js
-
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+const cors = require('cors');
 const authRoutes = require('./routes/auth');
-const patientRoutes = require('./routes/patient');
 require('dotenv').config();
 
 const app = express();
@@ -22,11 +20,11 @@ db.on('error', (error) => console.error('MongoDB connection error:', error));
 db.once('open', () => console.log('MongoDB connected'));
 
 // Middleware
+app.use(cors());
 app.use(bodyParser.json());
 
 // Routes
 app.use('/api/auth', authRoutes);
-app.use('/api/patient', patientRoutes);
 
 // Start the server
 app.listen(PORT, () => {
