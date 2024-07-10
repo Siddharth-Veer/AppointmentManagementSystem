@@ -4,7 +4,7 @@ import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, up
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyB5OX2DPmOkjtmdxTfxlCFrUHafplht7RI(REMOVE THIS FROM BRACKET TO BRACKET)",
+  apiKey: "AIzaSyB5OX2DPmOkjtmdxTfxlCFrUHafplht7RI",
   authDomain: "medisync-edbd5.firebaseapp.com",
   projectId: "medisync-edbd5",
   storageBucket: "medisync-edbd5.appspot.com",
