@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { signInWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '../firebase'; // Adjust the path as per your project structure
+import { signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
+import { auth, googleProvider } from '../firebase';
 import { useNavigate } from 'react-router-dom';
 import '../css/SignIn.css';
 
@@ -31,7 +31,21 @@ const SignIn = () => {
             setError(error.message);
         }
     };
+    const handleGoogleSignIn = async () => {
+        try {
+            const result = await signInWithPopup(auth, googleProvider);
+            const user = result.user;
 
+            if (user) {
+                console.log('User signed in with Google:', user);
+                navigate('/book-appointment'); // Redirect to book-appointment page after Google sign-in
+            } else {
+                setError('Failed to sign in with Google');
+            }
+        } catch (error) {
+            setError(error.message);
+        }
+    };
     return (
         <div className="modal">
             <div className="modal-content">
@@ -63,6 +77,9 @@ const SignIn = () => {
                         <a href="/forgot-password" className="forgot-password-link">Forgot Password?</a>
                     </p>
                 </form>
+                <button onClick={handleGoogleSignIn} className="google-signin-button">
+                    Sign In with Google
+                </button>
             </div>
         </div>
     );

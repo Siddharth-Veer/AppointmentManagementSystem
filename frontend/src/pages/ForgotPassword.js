@@ -36,6 +36,7 @@ const ForgotPassword = () => {
                         />
                     </div>
                     <button type="submit">Reset Password</button>
+                    <button type="button" onClick={() => window.history.back()}>Go Back</button> 
                 </form>
             </div>
         </div>
