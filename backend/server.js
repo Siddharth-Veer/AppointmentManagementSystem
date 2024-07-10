@@ -3,6 +3,8 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const authRoutes = require('./routes/auth');
+const doctorsRouter = require('./routes/doctors');
+const appointmentRoutes = require('./routes/appointments'); // Import the appointment routes
 require('dotenv').config();
 
 const app = express();
@@ -15,7 +17,6 @@ mongoose.connect(process.env.MONGO_URI, {
 });
 
 const db = mongoose.connection;
-
 db.on('error', (error) => console.error('MongoDB connection error:', error));
 db.once('open', () => console.log('MongoDB connected'));
 
@@ -25,6 +26,8 @@ app.use(bodyParser.json());
 
 // Routes
 app.use('/api/auth', authRoutes);
+app.use('/api/doctors', doctorsRouter);
+app.use('/api/appointments', appointmentRoutes); // Use the appointment routes
 
 // Start the server
 app.listen(PORT, () => {
