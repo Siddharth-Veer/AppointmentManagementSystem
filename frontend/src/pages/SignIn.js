@@ -73,13 +73,17 @@ const SignIn = () => {
                         />
                     </div>
                     <button type="submit">Sign In</button>
-                    <p>
-                        <a href="/forgot-password" className="forgot-password-link">Forgot Password?</a>
-                    </p>
+                    
                 </form>
                 <button onClick={handleGoogleSignIn} className="google-signin-button">
                     Sign In with Google
                 </button>
+                <p><br></br>
+                        <a href="/forgot-password" className="forgot-password-link">Forgot Password?</a>
+                    </p>
+                    <p>
+                        <a href="/signup" className="signup-link">New User - Sign Up First</a>
+                    </p>
             </div>
         </div>
     );

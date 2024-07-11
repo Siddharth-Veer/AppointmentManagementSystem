@@ -137,6 +137,7 @@ const AppointmentBooking = () => {
         <div className="bottom-section">
           <div className="doctors-list-container">
             <div className="doctors-list">
+              <h2>Doctors List:</h2>
               {doctors.map((doctor) => (
                 <div key={doctor._id} className="doctor-item" onClick={() => handleDoctorSelect(doctor)}>
                   <div className="doctor-name">{doctor.name}</div>
@@ -145,7 +146,7 @@ const AppointmentBooking = () => {
             </div>
             <div className="doctor-details-container">
               {selectedDoctor && (
-                <>
+                <><h2>Doctors Details:</h2>
                   <div className="doctor-details">
                     <h2>{selectedDoctor.name}</h2>
                     <p>Speciality: {selectedDoctor.speciality}</p>
@@ -213,7 +214,7 @@ const AppointmentBooking = () => {
                         11:00 AM
                       </button>
                     </div>
-                    <h3>Afternoon</h3>
+                    <h3>Evening</h3>
                     <div className="slot-times">
                       <button
                         className={selectedTime === '1:00 PM' ? 'active' : ''}

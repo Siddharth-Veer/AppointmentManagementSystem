@@ -26,7 +26,7 @@ const SignUp = () => {
                 await updateProfile(user, { displayName: name });
                 console.log('User signed up:', user);
                 setSuccessMessage('User signed up successfully!');
-                navigate('/book-appointment'); // Redirect to book-appointment page after sign-up
+                navigate('/registration-form'); // Redirect to book-appointment page after sign-up
             } else {
                 setError('Failed to create user');
             }
@@ -42,7 +42,7 @@ const SignUp = () => {
             if (user) {
                 console.log('User signed in with Google:', user);
                 setSuccessMessage('User signed in with Google successfully!');
-                navigate('/book-appointment'); // Redirect to book-appointment page after Google sign-in
+                navigate('/registration-form'); // Redirect to book-appointment page after Google sign-in
             } else {
                 setError('Failed to sign in with Google');
             }
