@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const authRoutes = require('./routes/auth');
 const patientRoutes = require('./routes/patient');
+const doctorRoutes = require('./routes/doctors'); // Add this line
 require('dotenv').config();
 
 const app = express();
@@ -27,6 +28,7 @@ app.use(bodyParser.json());
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/patient', patientRoutes);
+app.use('/api/doctors', doctorRoutes); // Add this line
 
 // Start the server
 app.listen(PORT, () => {
