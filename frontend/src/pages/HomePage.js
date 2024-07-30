@@ -19,7 +19,12 @@ const HomePage = () => {
   return (
     <>
       <header>
+<<<<<<< HEAD
         <div className="logo" >Medisync</div>
+=======
+        <img src="logo.png" alt="Medisync Logo" />
+        <div className="logo">Medisync</div>
+>>>>>>> 39c7c603d627a15cd5e0fb302fb91643941bb1ed
         <nav>
           <ul>
             <li><a href="#" onClick={toggleMenu}>Menu</a></li>

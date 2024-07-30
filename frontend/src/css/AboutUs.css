@@ -1,0 +1,109 @@
+/* General styles */
+.about-us-container {
+  font-family: 'Arial', sans-serif;
+  color: #333;
+  line-height: 1.6;
+  max-width: 988px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Hero section */
+.hero-section {
+  padding: 50px 20px;
+  text-align: center;
+  
+}
+
+
+.hero-section h1 {
+  color: #ffffff;
+  font-size: 36px;
+  margin-bottom: 10px;
+}
+
+.hero-section p {
+  color: #ffffff;
+  font-size: 23px;
+}
+
+/* Section styles */
+.section {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  padding: 40px 20px;
+  border-bottom: 1px solid #e0e0e0;
+  background-color: #ffffff;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+}
+
+.section:last-child {
+  margin-bottom: 0;
+}
+
+.section h2 {
+  color: #333;
+  font-size: 28px;
+  margin-bottom: 20px;
+}
+
+.section p {
+  color: #333;
+  font-size: 23px;
+}
+
+/* Text and image containers */
+.text-container {
+  flex: 1 1 50%;
+  padding: 0 20px;
+  text-align: center;
+}
+
+.image-container {
+  flex: 1 1 50%;
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.image-container img {
+  max-width: 55%;
+  border-radius: 8px;
+}
+
+/* Contact section */
+.contact-section {
+  text-align: center;
+  padding: 40px 0;
+}
+
+.contact-section a {
+  color: #3498db;
+  text-decoration: none;
+}
+
+.contact-section a:hover {
+  text-decoration: underline;
+}
+
+/* Background gradient for the entire page */
+#root {
+  background: linear-gradient(to bottom right, #0081A7, #00AFB9, #FED9B7, #F07167);
+  min-height: 100vh;
+  overflow: auto;
+}
+
+
+/* Menu bar Section */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  background-color: var(--background-color);
+  border-bottom: 1px solid #dddddd;
+}
