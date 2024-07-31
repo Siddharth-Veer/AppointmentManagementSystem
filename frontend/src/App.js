@@ -15,6 +15,7 @@ import AppointmentConfirmation from './pages/AppointmentConfirmation';
 import AdminMainLayout from './components/AdminMainLayout'; // Correct import path
 
 import { AppointmentProvider } from './context/AppointmentContext';
+import DoctorPage from './pages/DoctorPage';
 
 const App = () => {
   return (
@@ -33,7 +34,8 @@ const App = () => {
           <Route path="/add-doctor" element={<AddDoctor />} />
           <Route path="/select-date-time" element={<SelectDateTime />} />
           <Route path="/appointment-confirmation" element={<AppointmentConfirmation />} />
-          <Route path="/admin" element={<AdminMainLayout />} /> {/* Correct route */}
+          <Route path="/doctor-signin" element={<SignIn />} />
+          <Route path="/Doctor-page" element={<DoctorPage />} />
         </Routes>
       </AppointmentProvider>
     </Router>
