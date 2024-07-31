@@ -1,3 +1,72 @@
+// import React, { useState } from "react";
+// import {
+//   auth,
+//   createUserWithEmailAndPassword,
+//   updateProfile,
+// } from "../firebase";
+// import { useNavigate } from "react-router-dom";
+// import axios from "axios";
+// import "../css/SignUp.css";
+
+// const SignUp = () => {
+//   const [name, setName] = useState("");
+//   const [email, setEmail] = useState("");
+//   const [password, setPassword] = useState("");
+//   const [dateOfBirth, setDateOfBirth] = useState("");
+//   const [error, setError] = useState("");
+//   const [successMessage, setSuccessMessage] = useState("");
+//   const navigate = useNavigate();
+
+//   const handleSubmit = async (e) => {
+//     e.preventDefault();
+
+//     if (!name || !email || !password || !dateOfBirth) {
+//       setError("Please fill in all fields");
+//       return;
+//     }
+
+//     try {
+//       // Firebase sign-up
+//       const userCredential = await createUserWithEmailAndPassword(
+//         auth,
+//         email,
+//         password
+//       );
+//       const user = userCredential.user;
+
+//       if (user) {
+//         await updateProfile(user, { displayName: name });
+//         console.log("User signed up:", user);
+
+//         // Save user details in MongoDB
+//         const idNo = generateUniqueId(); // Implement this function as needed
+//         await axios.post("http://localhost:5000/api/auth/register", {
+//           idNo,
+//           name,
+//           email,
+//           dateOfBirth,
+//         });
+
+//         setSuccessMessage("User signed up successfully!");
+//         navigate("/signin", { state: { name } }); // Redirect to Sign In page
+//       }
+//     } catch (error) {
+//       console.error("Error during sign-up:", error);
+
+//       // Handling specific Firebase errors
+//       if (error.code === "auth/email-already-in-use") {
+//         setError("This email is already in use.");
+//       } else {
+//         setError("Error during sign-up: " + error.message);
+//       }
+//     }
+//   };
+
+//   const generateUniqueId = () => {
+//     // Implement your unique ID generation logic here
+//     return Math.random().toString(36).substr(2, 9); // Example unique ID
+//   };
+
 import React, { useState } from "react";
 import {
   auth,
@@ -19,12 +88,14 @@ const SignUp = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     if (!name || !email || !password || !dateOfBirth) {
       setError("Please fill in all fields");
       return;
     }
 
     try {
+      // Firebase sign-up
       const userCredential = await createUserWithEmailAndPassword(
         auth,
         email,
@@ -34,10 +105,9 @@ const SignUp = () => {
 
       if (user) {
         await updateProfile(user, { displayName: name });
-        console.log("User signed up:", user);
 
         // Save user details in MongoDB
-        const idNo = generateUniqueId(); // Assume this function generates a unique ID for the user
+        const idNo = generateUniqueId();
         await axios.post("http://localhost:5000/api/auth/register", {
           idNo,
           name,
@@ -46,19 +116,19 @@ const SignUp = () => {
         });
 
         setSuccessMessage("User signed up successfully!");
-        navigate("/book-appointment");
-      } else {
-        setError("Failed to create user");
+        navigate("/signin", { state: { name } });
       }
     } catch (error) {
-      console.error("Error during sign-up:", error);
-      setError(error.message);
+      if (error.code === "auth/email-already-in-use") {
+        setError("This email is already in use.");
+      } else {
+        setError("Error during sign-up: " + error.message);
+      }
     }
   };
 
   const generateUniqueId = () => {
-    // Generate a unique ID for the user, e.g., using a library like uuid or any custom logic
-    return "some-unique-id";
+    return Math.random().toString(36).substr(2, 9);
   };
 
   return (
