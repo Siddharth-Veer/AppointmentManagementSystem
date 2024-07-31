@@ -7,7 +7,7 @@
   
   body {
     background: #fff;
-    overflow: hidden;
+    /* overflow: hidden; */
     /* font-size: 14px; */
   }
   label {
