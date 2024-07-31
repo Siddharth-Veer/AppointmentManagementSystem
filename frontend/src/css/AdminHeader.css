@@ -1,0 +1,89 @@
+/* AdminHeader.css */
+.sticky {
+    position: sticky;
+  }
+  
+  .top-0 {
+    top: 0;
+  }
+  
+  .z-30 {
+    z-index: 30;
+  }
+  
+  .flex {
+    display: flex;
+  }
+  
+  .h-14 {
+    height: 3.5rem;
+  }
+  
+  .items-center {
+    align-items: center;
+  }
+  
+  .gap-4 {
+    gap: 1rem;
+  }
+  
+  .border-b {
+    border-bottom: 1px solid #e0e0e0; /* Adjust border color */
+  }
+  
+  .bg-background {
+    background-color: #ffffff; /* Adjust background color */
+  }
+  
+  .px-4 {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  
+  .sm\:static {
+    position: static;
+  }
+  
+  .sm\:h-auto {
+    height: auto;
+  }
+  
+  .sm\:border-0 {
+    border: none;
+  }
+  
+  .sm\:bg-transparent {
+    background-color: transparent;
+  }
+  
+  .sm\:px-6 {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+  
+  .menu-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .avatar-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .avatar {
+    border-radius: 50%;
+    width: 2rem;
+    height: 2rem;
+  }
+  
+  .text-lg {
+    font-size: 1.125rem;
+  }
+  
+  .font-semibold {
+    font-weight: 600;
+  }
+  

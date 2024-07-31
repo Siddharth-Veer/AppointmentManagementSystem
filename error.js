@@ -1,88 +1,38 @@
 // AppointmentBooking.js
 
-import React, { useState, useEffect } from "react";
-import axios from "axios";
-import "../css/AppointmentBooking.css";
-import doctor1 from "../images/doctor-1.jpg";
-import doctor2 from "../images/doctor-2.jpg";
-import doctor3 from "../images/doctor-3.jpg";
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import '../css/AppointmentBooking.css';
+import doctor1 from '../images/doctor-1.jpg';
+import doctor2 from '../images/doctor-2.jpg';
+import doctor3 from '../images/doctor-3.jpg';
 
 const doctors = [
-  {
-    id: 1,
-    name: "Dr. Nishant Clinician",
-    speciality: "Pediatrics",
-    contact: "123-456-7890",
-    profilePicture: doctor1,
-    appointments: [
-      { time: "10:00 AM", patient: "Alice" },
-      { time: "11:00 AM", patient: "Bob" },
-    ],
-  },
-  {
-    id: 2,
-    name: "Dr. John Doe",
-    speciality: "Cardiology",
-    contact: "234-567-8901",
-    profilePicture: doctor2,
-    appointments: [{ time: "12:00 PM", patient: "Charlie" }],
-  },
-  {
-    id: 3,
-    name: "Dr. Jane Smith",
-    speciality: "Dermatology",
-    contact: "345-678-9012",
-    profilePicture: doctor3,
-    appointments: [{ time: "01:00 PM", patient: "David" }],
-  },
-  {
-    id: 1,
-    name: "Dr. Nishant Clinician",
-    speciality: "Pediatrics",
-    contact: "123-456-7890",
-    profilePicture: doctor1,
-    appointments: [
-      { time: "10:00 AM", patient: "Alice" },
-      { time: "11:00 AM", patient: "Bob" },
-    ],
-  },
-  {
-    id: 2,
-    name: "Dr. John Doe",
-    speciality: "Cardiology",
-    contact: "234-567-8901",
-    profilePicture: doctor2,
-    appointments: [{ time: "12:00 PM", patient: "Charlie" }],
-  },
-  {
-    id: 3,
-    name: "Dr. Jane Smith",
-    speciality: "Dermatology",
-    contact: "345-678-9012",
-    profilePicture: doctor3,
-    appointments: [{ time: "01:00 PM", patient: "David" }],
-  },
+  { id: 1, name: 'Dr. Nishant Clinician', speciality: 'Pediatrics', contact: '123-456-7890', profilePicture: doctor1, appointments: [{ time: '10:00 AM', patient: 'Alice' }, { time: '11:00 AM', patient: 'Bob' }] },
+  { id: 2, name: 'Dr. John Doe', speciality: 'Cardiology', contact: '234-567-8901', profilePicture: doctor2, appointments: [{ time: '12:00 PM', patient: 'Charlie' }] },
+  { id: 3, name: 'Dr. Jane Smith', speciality: 'Dermatology', contact: '345-678-9012', profilePicture: doctor3, appointments: [{ time: '01:00 PM', patient: 'David' }] },
+  { id: 1, name: 'Dr. Nishant Clinician', speciality: 'Pediatrics', contact: '123-456-7890', profilePicture: doctor1, appointments: [{ time: '10:00 AM', patient: 'Alice' }, { time: '11:00 AM', patient: 'Bob' }] },
+  { id: 2, name: 'Dr. John Doe', speciality: 'Cardiology', contact: '234-567-8901', profilePicture: doctor2, appointments: [{ time: '12:00 PM', patient: 'Charlie' }] },
+  { id: 3, name: 'Dr. Jane Smith', speciality: 'Dermatology', contact: '345-678-9012', profilePicture: doctor3, appointments: [{ time: '01:00 PM', patient: 'David' }] },
 ];
 
 const AppointmentBooking = () => {
   const [selectedDoctor, setSelectedDoctor] = useState(null);
   const [selectedDate, setSelectedDate] = useState(new Date());
-  const [patientName, setPatientName] = useState("");
+  const [patientName, setPatientName] = useState('');
 
   useEffect(() => {
     const fetchPatientName = async () => {
-      try {
-        const response = await axios.get(
-          "http://localhost:5000/api/auth/user/name"
-        );
-        setPatientName(response.data);
-      } catch (error) {
-        console.error("Error fetching patient name:", error);
-      }
+        try {
+            const response = await axios.get('http://localhost:5000/api/auth/user/name');
+            setPatientName(response.data);
+        } catch (error) {
+            console.error('Error fetching patient name:', error);
+        }
     };
 
     fetchPatientName();
-  }, []);
+}, []);
 
   const populateDays = (year, month) => {
     const firstDay = new Date(year, month, 1).getDay();
@@ -95,18 +45,7 @@ const AppointmentBooking = () => {
 
     for (let i = 1; i <= daysInMonth; i++) {
       days.push(
-        <span
-          key={i}
-          onClick={() => handleDateChange(i)}
-          className={`day ${
-            selectedDate &&
-            selectedDate.getDate() === i &&
-            selectedDate.getMonth() === month &&
-            selectedDate.getFullYear() === year
-              ? "selected"
-              : ""
-          }`}
-        >
+        <span key={i} onClick={() => handleDateChange(i, month, year)}>
           {i}
         </span>
       );
@@ -120,19 +59,13 @@ const AppointmentBooking = () => {
     setSelectedDate(newDate);
   };
 
-  // Change to the previous month
   const handlePrevMonth = () => {
-    const newDate = new Date(
-      selectedDate.setMonth(selectedDate.getMonth() - 1)
-    );
+    const newDate = new Date(selectedDate.setMonth(selectedDate.getMonth() - 1));
     setSelectedDate(newDate);
   };
 
-  // Change to the next month
   const handleNextMonth = () => {
-    const newDate = new Date(
-      selectedDate.setMonth(selectedDate.getMonth() + 1)
-    );
+    const newDate = new Date(selectedDate.setMonth(selectedDate.getMonth() + 1));
     setSelectedDate(newDate);
   };
 
@@ -143,22 +76,12 @@ const AppointmentBooking = () => {
         <div className="buttons">
           <button className="appointment_btn">Appointments</button>
           <button className="appointment_btn">Walk-In</button>
-          <button
-            className="appointment_btn"
-            onClick={() => navigate("/signin")}
-          >
-            Logout
-          </button>
         </div>
       </div>
       {selectedDoctor ? (
         <div className="appointment-content">
           <div className="appointment-header">
-            <img
-              src={selectedDoctor.profilePicture}
-              alt={selectedDoctor.name}
-              className="doctor-profile-picture"
-            />
+            <img src={selectedDoctor.profilePicture} alt={selectedDoctor.name} className="doctor-profile-picture" />
             <p>{selectedDoctor.name}</p>
             <p>{selectedDoctor.speciality}</p>
             <p>Contact: {selectedDoctor.contact}</p>
@@ -169,27 +92,15 @@ const AppointmentBooking = () => {
               <div className="calendar">
                 <div className="calendar-header">
                   <button onClick={handlePrevMonth}>&lt;</button>
-                  <span>
-                    {selectedDate.toLocaleString("default", { month: "long" })}{" "}
-                    {selectedDate.getFullYear()}
-                  </span>
+                  <span>{selectedDate.toLocaleString('default', { month: 'long' })} {selectedDate.getFullYear()}</span>
                   <button onClick={handleNextMonth}>&gt;</button>
                 </div>
                 <div className="calendar-body">
                   <div className="day-names">
-                    <span>Sun</span>
-                    <span>Mon</span>
-                    <span>Tue</span>
-                    <span>Wed</span>
-                    <span>Thu</span>
-                    <span>Fri</span>
-                    <span>Sat</span>
+                    <span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span>
                   </div>
                   <div className="days">
-                    {populateDays(
-                      selectedDate.getFullYear(),
-                      selectedDate.getMonth()
-                    )}
+                    {populateDays(selectedDate.getFullYear(), selectedDate.getMonth())}
                   </div>
                 </div>
               </div>
@@ -228,17 +139,9 @@ const AppointmentBooking = () => {
               <div className="doctors-table-cell">Contact</div>
             </div>
             {doctors.map((doctor) => (
-              <div
-                key={doctor.id}
-                className="doctors-table-row"
-                onClick={() => setSelectedDoctor(doctor)}
-              >
+              <div key={doctor.id} className="doctors-table-row" onClick={() => setSelectedDoctor(doctor)}>
                 <div className="doctors-table-cell">
-                  <img
-                    src={doctor.profilePicture}
-                    alt={doctor.name}
-                    className="doctor-profile-picture"
-                  />
+                  <img src={doctor.profilePicture} alt={doctor.name} className="doctor-profile-picture" />
                   {doctor.name}
                 </div>
                 <div className="doctors-table-cell">{doctor.speciality}</div>

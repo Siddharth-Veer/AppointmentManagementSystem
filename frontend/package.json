@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "dependencies": {
+    "@heroicons/react": "^2.1.5",
     "axios": "^1.7.2",
     "cross-env": "^7.0.3",
     "firebase": "^10.12.3",
@@ -30,7 +31,6 @@
       "last 1 safari version"
     ]
   },
-  "devDependencies": {},
   "author": "",
   "license": "ISC",
   "description": ""

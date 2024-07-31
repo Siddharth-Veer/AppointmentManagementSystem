@@ -1,4 +1,7 @@
+// ForgotPassword.js
+
 import React, { useState } from 'react';
+import { auth, sendPasswordResetEmail } from '../firebase'; 
 import '../css/ForgotPassword.css';
 
 const ForgotPassword = () => {
@@ -6,15 +9,22 @@ const ForgotPassword = () => {
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         if (!email) {
             setError('Please enter your email');
             setSuccess('');
-        } else {
-            setError('');
+            return;
+        }
+
+        try {
+            await sendPasswordResetEmail(auth, email);
             setSuccess('Password reset instructions have been sent to your email');
+            setError('');
             console.log('Resetting password for', email);
+        } catch (error) {
+            setError(error.message);
+            setSuccess('');
         }
     };
 

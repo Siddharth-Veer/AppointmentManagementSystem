@@ -3,12 +3,14 @@ const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const authRoutes = require("./routes/auth");
+const doctorsRouter = require("./routes/doctors");
+const appointmentRoutes = require("./routes/appointments");
 require("dotenv").config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// MongoDB connection
+// MongoDB connectiond
 mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -25,6 +27,8 @@ app.use(bodyParser.json());
 
 // Routes
 app.use("/api/auth", authRoutes);
+app.use("/api/doctors", doctorsRouter);
+app.use("/api/appointments", appointmentRoutes); // Use the appointment routes
 
 // Start the server
 app.listen(PORT, () => {
