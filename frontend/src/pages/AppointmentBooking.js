@@ -1,37 +1,94 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import '../css/AppointmentBooking.css';
-import Map from './Map';
 
 const AppointmentBooking = () => {
   const [doctors, setDoctors] = useState([]);
   const [selectedDoctor, setSelectedDoctor] = useState(null);
-  const [selectedDate, setSelectedDate] = useState(new Date());
-  const [showCalendar, setShowCalendar] = useState(false);
+  const [selectedDate, setSelectedDate] = useState(new Date()); // Initialize selectedDate to current date
+  const [selectedTime, setSelectedTime] = useState(''); // State for selected time
+  const [patientName, setPatientName] = useState('');
+  const [showDateTimeSection, setShowDateTimeSection] = useState(false); // State to control showing date and time section
+  const [currentMonth, setCurrentMonth] = useState(new Date().getMonth());
+  const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
+  const navigate = useNavigate();
 
   useEffect(() => {
-    // Fetch doctors data from the server
-    axios.get('/api/doctors')
-      .then(response => setDoctors(response.data))
-      .catch(error => console.error('Error fetching doctors data:', error));
+    const fetchDoctors = async () => {
+      try {
+        const response = await axios.get('http://localhost:5000/api/doctors');
+        setDoctors(response.data);
+      } catch (error) {
+        console.error('Error fetching doctors:', error);
+      }
+    };
+
+    const fetchPatientName = async () => {
+      try {
+        const response = await axios.get('http://localhost:5000/api/auth/user/name');
+        setPatientName(response.data);
+      } catch (error) {
+        console.error('Error fetching patient name:', error);
+      }
+    };
+
+    fetchDoctors();
+    fetchPatientName();
   }, []);
 
-  const updateDateButton = () => {
-    return selectedDate.toDateString();
+  const handleDateChange = (day) => {
+    const newDate = new Date(currentYear, currentMonth, day);
+    setSelectedDate(newDate);
   };
 
+  const handleTimeSelect = (time) => {
+    setSelectedTime(time);
+  };
+
+  const handleConfirm = async () => {
+    if (selectedTime && selectedDoctor) {
+      const appointmentDetails = {
+        patientName,
+        doctorName: selectedDoctor.name,
+        speciality: selectedDoctor.speciality,
+        contact: selectedDoctor.contact,
+        date: selectedDate.toLocaleDateString(),
+        time: selectedTime
+      };
+
+      // Save appointment details to the server
+      try {
+        const response = await axios.post('http://localhost:5000/api/appointments', appointmentDetails);
+        if (response.status === 201) {
+          localStorage.setItem('appointmentDetails', JSON.stringify(appointmentDetails));
+          navigate('/appointment-confirmation'); // Navigate to appointment confirmation page
+        }
+      } catch (error) {
+        console.error('Error saving appointment:', error);
+      }
+    } else {
+      alert('Please select both a time slot and a doctor.');
+    }
+  };
+
+  // Function to populate days in the calendar
   const populateDays = (year, month) => {
     const firstDay = new Date(year, month, 1).getDay();
     const daysInMonth = new Date(year, month + 1, 0).getDate();
     const days = [];
 
     for (let i = 0; i < firstDay; i++) {
-      days.push(<span key={`empty-${i}`}></span>);
+      days.push(<span key={`empty-${i}`} className="empty-day"></span>);
     }
 
     for (let i = 1; i <= daysInMonth; i++) {
       days.push(
-        <span key={i} onClick={() => handleDateChange(i, month, year)}>
+        <span
+          key={i}
+          onClick={() => handleDateChange(i)}
+          className={`day ${selectedDate && selectedDate.getDate() === i && selectedDate.getMonth() === month && selectedDate.getFullYear() === year ? 'selected' : ''}`}
+        >
           {i}
         </span>
       );
@@ -40,84 +97,156 @@ const AppointmentBooking = () => {
     return days;
   };
 
-  const handleDateChange = (day, month, year) => {
-    const newDate = new Date(year, month, day);
-    setSelectedDate(newDate);
-    setShowCalendar(false);
+  const handleDoctorSelect = (doctor) => {
+    setSelectedDoctor(doctor);
+  };
+
+  const handleSelectClick = () => {
+    setShowDateTimeSection(true); // Show date and time section
   };
 
   const handlePrevMonth = () => {
-    const newDate = new Date(selectedDate.setMonth(selectedDate.getMonth() - 1));
-    setSelectedDate(newDate);
+    if (currentMonth === 0) {
+      setCurrentMonth(11);
+      setCurrentYear(currentYear - 1);
+    } else {
+      setCurrentMonth(currentMonth - 1);
+    }
   };
 
   const handleNextMonth = () => {
-    const newDate = new Date(selectedDate.setMonth(selectedDate.getMonth() + 1));
-    setSelectedDate(newDate);
+    if (currentMonth === 11) {
+      setCurrentMonth(0);
+      setCurrentYear(currentYear + 1);
+    } else {
+      setCurrentMonth(currentMonth + 1);
+    }
   };
 
   return (
     <div className="appointment-booking">
       <div className="top-menu">
-        <h2>[patient's name will appear here]</h2>
+        <h2>Welcome {patientName}!</h2>
         <div className="buttons">
           <button className="appointment_btn">Appointments</button>
           <button className="appointment_btn">Walk-In</button>
+          <button className="appointment_btn" onClick={() => navigate('/signin')}>Logout</button>
         </div>
       </div>
-      {selectedDoctor ? (
-        <div className="appointment-content">
-          <div className="appointment-header">
-            <p>{selectedDoctor.name}</p>
-            <p>{selectedDoctor.speciality}</p>
-            <p>Contact: {selectedDoctor.contact}</p>
-            <button onClick={() => setSelectedDoctor(null)}>Go Back</button>
-          </div>
-          <div className="appointment-body">
-            <div className="left-sidebar">
-              <div className="calendar">
-                <div className="calendar-header">
-                  <button onClick={handlePrevMonth}>&lt;</button>
-                  <span>{selectedDate.toLocaleString('default', { month: 'long' })} {selectedDate.getFullYear()}</span>
-                  <button onClick={handleNextMonth}>&gt;</button>
+      <div className="main-container">
+        <div className="bottom-section">
+          <div className="doctors-list-container">
+            <div className="doctors-list">
+              <h2>Doctors List:</h2>
+              {doctors.map((doctor) => (
+                <div key={doctor._id} className="doctor-item" onClick={() => handleDoctorSelect(doctor)}>
+                  <div className="doctor-name">{doctor.name}</div>
                 </div>
-                <div className="calendar-body">
-                  <div className="day-names">
-                    <span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span>
+              ))}
+            </div>
+            <div className="doctor-details-container">
+              {selectedDoctor && (
+                <><h2>Doctors Details:</h2>
+                  <div className="doctor-details">
+                    <h2>{selectedDoctor.name}</h2>
+                    <p>Speciality: {selectedDoctor.speciality}</p>
+                    <p>Contact: {selectedDoctor.contact}</p>
                   </div>
-                  <div className="days">
-                    {populateDays(selectedDate.getFullYear(), selectedDate.getMonth())}
+                  <button className="select-button" onClick={handleSelectClick}>Select Date & Time</button>
+                </>
+              )}
+            </div>
+            <div className="map-container">
+              {selectedDoctor && (
+                <iframe
+                  title={`Map of ${selectedDoctor.hospital}`}
+                  src={`https://maps.google.com/maps?q=${selectedDoctor.hospital}&output=embed`}
+                  width="100%"
+                  height="100%"
+                  frameBorder="0"
+                  allowFullScreen=""
+                  loading="lazy"
+                ></iframe>
+              )}
+            </div>
+          </div>
+        </div>
+        {showDateTimeSection && (
+          <div className="top-section">
+            <div className="appointment-content">
+              <div className="appointment-body">
+                <div className="calendar">
+                  <div className="calendar-header">
+                    <button onClick={handlePrevMonth}>Prev</button>
+                    <span>{new Date(currentYear, currentMonth).toLocaleString('default', { month: 'long' })} {currentYear}</span>
+                    <button onClick={handleNextMonth}>Next</button>
+                  </div>
+                  <div className="calendar-body">
+                    <div className="day-names">
+                      <span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span>
+                    </div>
+                    <div className="days">
+                      {populateDays(currentYear, currentMonth)}
+                    </div>
+                  </div>
+                </div>
+                <div className="time-slots">
+                  <h2>Available Slots</h2>
+                  <div className="slots">
+                    <h3>Morning</h3>
+                    <div className="slot-times">
+                      <button
+                        className={selectedTime === '9:00 AM' ? 'active' : ''}
+                        onClick={() => handleTimeSelect('9:00 AM')}
+                      >
+                        9:00 AM
+                      </button>
+                      <button
+                        className={selectedTime === '10:00 AM' ? 'active' : ''}
+                        onClick={() => handleTimeSelect('10:00 AM')}
+                      >
+                        10:00 AM
+                      </button>
+                      <button
+                        className={selectedTime === '11:00 AM' ? 'active' : ''}
+                        onClick={() => handleTimeSelect('11:00 AM')}
+                      >
+                        11:00 AM
+                      </button>
+                    </div>
+                    <h3>Evening</h3>
+                    <div className="slot-times">
+                      <button
+                        className={selectedTime === '1:00 PM' ? 'active' : ''}
+                        onClick={() => handleTimeSelect('1:00 PM')}
+                      >
+                        1:00 PM
+                      </button>
+                      <button
+                        className={selectedTime === '2:00 PM' ? 'active' : ''}
+                        onClick={() => handleTimeSelect('2:00 PM')}
+                      >
+                        2:00 PM
+                      </button>
+                      <button
+                        className={selectedTime === '3:00 PM' ? 'active' : ''}
+                        onClick={() => handleTimeSelect('3:00 PM')}
+                      >
+                        3:00 PM
+                      </button>
+                    </div>
+                  </div>
+                  <div className="confirm-button">
+                    <button onClick={handleConfirm} disabled={!selectedTime}>
+                      Confirm Appointment
+                    </button>
                   </div>
                 </div>
               </div>
             </div>
-            <div className="right-content">
-              <h2>Doctor's Location</h2>
-              <Map location={selectedDoctor.location} />
-            </div>
           </div>
-        </div>
-      ) : (
-        <div className="doctors-list">
-          <div className="doctors-table">
-            <div className="doctors-table-header">
-              <div className="doctors-table-cell">Doctor's Name</div>
-              <div className="doctors-table-cell">Speciality</div>
-              <div className="doctors-table-cell">Contact</div>
-            </div>
-            {doctors.map((doctor) => (
-              <div key={doctor._id} className="doctors-table-row" onClick={() => setSelectedDoctor(doctor)}>
-                <div className="doctors-table-cell">
-                  <img src={`/images/${doctor.profilePicture}`} alt={doctor.name} className="doctor-profile-picture" />
-                  {doctor.name}
-                </div>
-                <div className="doctors-table-cell">{doctor.speciality}</div>
-                <div className="doctors-table-cell">{doctor.contact}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 };

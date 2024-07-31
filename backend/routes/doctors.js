@@ -1,23 +1,32 @@
-// routes/doctors.js
 const express = require('express');
 const router = express.Router();
 const Doctor = require('../models/Doctor');
 
+// GET /api/doctors - Get all doctors
 router.get('/', async (req, res) => {
   try {
     const doctors = await Doctor.find();
     res.json(doctors);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
+  } catch (error) {
+    console.error('Error fetching doctors:', error);
+    res.status(500).json({ message: 'Server error' });
   }
 });
 
-router.get('/:id', async (req, res) => {
+// POST /api/doctors - Add a new doctor
+router.post('/', async (req, res) => {
   try {
-    const doctor = await Doctor.findById(req.params.id);
-    res.json(doctor);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
+    const { name, speciality, contact } = req.body;
+    const newDoctor = new Doctor({
+      name,
+      speciality,
+      contact
+    });
+    const savedDoctor = await newDoctor.save();
+    res.status(201).json(savedDoctor);
+  } catch (error) {
+    console.error('Error adding doctor:', error);
+    res.status(500).json({ message: 'Server error' });
   }
 });
 

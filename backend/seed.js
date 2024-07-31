@@ -1,20 +1,12 @@
-// seed.js
 const mongoose = require('mongoose');
-const Doctor = require('./models/Doctor');
-require('dotenv').config();
+const Doctor = require('./models/Doctor'); // Adjust path as per your project structure
+const connectDB = require('./config/db'); // Import your MongoDB connection function
 
-mongoose.connect(process.env.MONGO_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+// Connect to MongoDB
+connectDB();
 
-const db = mongoose.connection;
-
-db.on('error', (error) => console.error('MongoDB connection error:', error));
-db.once('open', async () => {
-  console.log('MongoDB connected');
-
-  const doctors = [
+// Sample doctor data
+const doctors = [
     {
       name: 'Dr. Nishant Clinician',
       speciality: 'Pediatrics',
@@ -34,7 +26,7 @@ db.once('open', async () => {
       speciality: 'Dermatology',
       contact: '345-678-9012',
       profilePicture: 'doctor3.jpg',
-      location: { lat: 40.7128, lng: -74.0060 },
+      location: { lat: 40.7128, lng: -74.006 },
     },
     {
       name: 'Dr. Alex Johnson',
@@ -59,12 +51,18 @@ db.once('open', async () => {
     },
   ];
 
+const insertDoctors = async () => {
   try {
-    await Doctor.insertMany(doctors);
-    console.log('Doctors data inserted successfully');
+    // Insert doctors into MongoDB
+    const insertedDoctors = await Doctor.insertMany(doctors);
+    console.log('Doctors inserted:', insertedDoctors);
   } catch (error) {
-    console.error('Error inserting doctors data:', error);
+    console.error('Error inserting doctors:', error);
   } finally {
+    // Close the connection after inserting
     mongoose.connection.close();
   }
-});
+};
+
+// Call function to insert doctors
+insertDoctors();

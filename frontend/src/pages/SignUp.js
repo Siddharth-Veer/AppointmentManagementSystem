@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { auth, createUserWithEmailAndPassword, updateProfile } from '../firebase'; // Adjust the path as per your project structure
+import { auth, createUserWithEmailAndPassword, updateProfile ,googleProvider, signInWithPopup} from '../firebase'; // Adjust the path as per your project structure
 import { useNavigate } from 'react-router-dom';
 import '../css/SignUp.css';
 
@@ -26,7 +26,7 @@ const SignUp = () => {
                 await updateProfile(user, { displayName: name });
                 console.log('User signed up:', user);
                 setSuccessMessage('User signed up successfully!');
-                navigate('/book-appointment'); // Redirect to book-appointment page after sign-up
+                navigate('/registration-form'); // Redirect to book-appointment page after sign-up
             } else {
                 setError('Failed to create user');
             }
@@ -34,7 +34,22 @@ const SignUp = () => {
             setError(error.message);
         }
     };
+    const handleGoogleSignIn = async () => {
+        try {
+            const result = await signInWithPopup(auth, googleProvider);
+            const user = result.user;
 
+            if (user) {
+                console.log('User signed in with Google:', user);
+                setSuccessMessage('User signed in with Google successfully!');
+                navigate('/registration-form'); // Redirect to book-appointment page after Google sign-in
+            } else {
+                setError('Failed to sign in with Google');
+            }
+        } catch (error) {
+            setError(error.message);
+        }
+    };
     return (
         <div className="modal">
             <div className="modal-content">
@@ -74,6 +89,9 @@ const SignUp = () => {
                     </div>
                     <button type="submit">Sign Up</button>
                 </form>
+                <button onClick={handleGoogleSignIn} className="google-signin-button">
+                    Sign Up with Google
+                </button>
             </div>
         </div>
     );
