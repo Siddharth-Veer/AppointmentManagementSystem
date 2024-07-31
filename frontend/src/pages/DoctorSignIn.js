@@ -4,7 +4,7 @@ import { auth, googleProvider } from '../firebase';
 import { useNavigate } from 'react-router-dom';
 import '../css/SignIn.css';
 
-const SignIn = () => {
+const DoctorSignIn = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
@@ -23,7 +23,7 @@ const SignIn = () => {
 
             if (user) {
                 console.log('User signed in:', user);
-                navigate('/book-appointment'); // Redirect to book-appointment page after sign-in
+                navigate('/doctor'); // Redirect to book-appointment page after sign-in
             } else {
                 setError('Failed to sign in');
             }
@@ -31,21 +31,21 @@ const SignIn = () => {
             setError(error.message);
         }
     };
-    const handleGoogleSignIn = async () => {
-        try {
-            const result = await signInWithPopup(auth, googleProvider);
-            const user = result.user;
+    // const handleGoogleSignIn = async () => {
+    //     try {
+    //         const result = await signInWithPopup(auth, googleProvider);
+    //         const user = result.user;
 
-            if (user) {
-                console.log('User signed in with Google:', user);
-                navigate('/book-appointment'); // Redirect to book-appointment page after Google sign-in
-            } else {
-                setError('Failed to sign in with Google');
-            }
-        } catch (error) {
-            setError(error.message);
-        }
-    };
+    //         if (user) {
+    //             console.log('User signed in with Google:', user);
+    //             navigate('/doctor-page'); // Redirect to book-appointment page after Google sign-in
+    //         } else {
+    //             setError('Failed to sign in with Google');
+    //         }
+    //     } catch (error) {
+    //         setError(error.message);
+    //     }
+    // };
     return (
         <div className="modal">
             <div className="modal-content">
@@ -75,18 +75,14 @@ const SignIn = () => {
                     <button type="submit">Sign In</button>
                     
                 </form>
-                <button onClick={handleGoogleSignIn} className="google-signin-button">
-                    Sign In with Google
-                </button>
-                <p><br></br>
+                
+                {/* <p><br></br>
                         <a href="/forgot-password" className="forgot-password-link">Forgot Password?</a>
-                    </p>
-                    <p>
-                        <a href="/signup" className="signup-link">New User - Sign Up First</a>
-                    </p>
+                </p> */}
+                    
             </div>
         </div>
     );
 };
 
-export default SignIn;
+export default DoctorSignIn;

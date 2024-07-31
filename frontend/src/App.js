@@ -15,6 +15,7 @@ import AppointmentConfirmation from './pages/AppointmentConfirmation';
 
 import { AppointmentProvider } from './context/AppointmentContext';
 import DoctorPage from './pages/DoctorPage';
+import DoctorSignIn from './pages/DoctorSignIn';
 
 const App = () => {
   return (
@@ -31,7 +32,7 @@ const App = () => {
           <Route path="/add-doctor" element={<AddDoctor />} /> {/* Add the new route */}
           <Route path="/select-date-time" element={<SelectDateTime />} />
           <Route path="/appointment-confirmation" element={<AppointmentConfirmation />} />
-          <Route path="/doctor-signin" element={<SignIn />} />
+          <Route path="/doctor-signin" element={<DoctorSignIn />} />
           <Route path="/Doctor-page" element={<DoctorPage />} />
         </Routes>
       </AppointmentProvider>
