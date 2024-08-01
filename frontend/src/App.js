@@ -17,6 +17,8 @@ import AdminMainLayout from './components/AdminMainLayout';
 import { AppointmentProvider } from './context/AppointmentContext';
 // import DoctorPage from './pages/DoctorPage';
 import DoctorSignIn from './pages/DoctorSignIn';
+import DoctorPage from './pages/DoctorPage';
+import AdminLogin from './pages/AdminLogin';
 const App = () => {
   return (
     <Router>
@@ -38,6 +40,7 @@ const App = () => {
           {/* <Route path="/doctor-page" element={<DoctorPage />} /> */}
           {/* Admin routes */}
           <Route path="/admin/*" element={<AdminMainLayout />} />
+          <Route path="/admin-login" element={<AdminLogin />} />
         </Routes>
       </AppointmentProvider>
     </Router>
