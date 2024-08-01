@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const Doctor = require('../models/Doctor'); // Assuming you have a Doctor model set up
+const Doctor = require('../models/Doctor');
 
 // POST /api/doctors - Add a new doctor
 router.post('/', async (req, res) => {
@@ -18,7 +18,7 @@ router.post('/', async (req, res) => {
       speciality,
       contact,
       email,
-      password,
+      password, // The password will be hashed by the pre-save hook
       status
     });
 
@@ -27,10 +27,11 @@ router.post('/', async (req, res) => {
     res.status(201).json(savedDoctor);
 
   } catch (error) {
-    console.error('Error adding doctor:', error);
-    res.status(500).json({ message: 'Server error' });
+    console.error('Error adding doctor:', error.message);
+    res.status(500).json({ message: 'Server error', error: error.message });
   }
 });
+
 
 router.get('/', async (req, res) => {
   try {
@@ -52,6 +53,37 @@ router.put('/:id', async (req, res) => {
       { name, speciality, contact, email, password, status },
       { new: true }
     );
+
+    if (!updatedDoctor) {
+      return res.status(404).json({ message: 'Doctor not found' });
+    }
+
+    res.status(200).json(updatedDoctor);
+  } catch (error) {
+    console.error('Error updating doctor:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+router.put('/:id', async (req, res) => {
+  try {
+    const updateFields = { ...req.body };
+    
+    // Remove password field if not provided
+    if (!updateFields.password) {
+      delete updateFields.password;
+    }
+
+    const updatedDoctor = await Doctor.findByIdAndUpdate(
+      req.params.id,
+      updateFields,
+      { new: true }
+    );
+
+    if (!updatedDoctor) {
+      return res.status(404).json({ message: 'Doctor not found' });
+    }
+
     res.status(200).json(updatedDoctor);
   } catch (error) {
     console.error('Error updating doctor:', error);

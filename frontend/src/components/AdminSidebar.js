@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom'; // Import Link for routing
-import { HomeIcon, UserIcon, PlusIcon, CogIcon } from '@heroicons/react/24/outline'; // Import icons from Heroicons
+import { HomeIcon, UserIcon, PlusIcon, CogIcon, CalendarIcon, ClipboardDocumentIcon, PowerIcon } from '@heroicons/react/24/outline'; // Import icons from Heroicons
 import '../css/AdminSidebar.css';
 
 const AdminSidebar = () => {
@@ -22,6 +22,18 @@ const AdminSidebar = () => {
         <Link to="/admin/manage-doctors" className="sidebar-item group">
           <CogIcon className="icon" />
           <span className="sr-only">Manage Doctors</span>
+        </Link>
+        <Link to="/admin/manage-availability" className="sidebar-item group">
+          <CalendarIcon className="icon" />
+          <span className="sr-only">Manage Availability</span>
+        </Link>
+        <Link to="/admin/manage-appointment" className="sidebar-item group">
+          <ClipboardDocumentIcon className="icon" />
+          <span className="sr-only">Manage Appointments</span>
+        </Link>
+        <Link to="/admin-login" className="sidebar-item group">
+          <PowerIcon className="icon" />
+          <span className="sr-only">Logout</span>
         </Link>
       </nav>
     </aside>

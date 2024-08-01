@@ -1,3 +1,5 @@
+// src/components/AdminMainLayout.js
+
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import AdminSidebar from './AdminSidebar';
@@ -5,6 +7,8 @@ import AdminHeader from './AdminHeader';
 import AdminDoctorList from './AdminDoctorList';
 import AddDoctor from './AddDoctor';
 import ManageDoctors from './ManageDoctors';
+import ManageAvailability from './ManageAvailability'; 
+import ManageAppointments from './ManageAppointment'; // Import new component
 import '../css/AdminMainLayout.css';
 
 const AdminMainLayout = () => {
@@ -19,6 +23,8 @@ const AdminMainLayout = () => {
             <Route path="doctorslist" element={<AdminDoctorList />} />
             <Route path="add-doctor" element={<AddDoctor />} />
             <Route path="manage-doctors" element={<ManageDoctors />} />
+            <Route path="manage-availability" element={<ManageAvailability />} />
+            <Route path="manage-appointment" element={<ManageAppointments />} /> {/* Add route */}
           </Routes>
         </main>
       </div>

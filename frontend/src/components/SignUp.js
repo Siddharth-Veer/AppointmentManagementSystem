@@ -50,25 +50,7 @@ const SignUp = () => {
         }
     };
 
-    const generateUniqueId = async () => {
-        try {
-            // Fetch the latest ID from the database
-            const response = await axios.get("http://localhost:5000/api/auth/latest-id");
-            const latestId = response.data.latestId;
 
-            if (latestId) {
-                // Increment the latest ID
-                const newId = (parseInt(latestId) + 1).toString().padStart(4, '0');
-                return newId;
-            } else {
-                // If no IDs exist, start with "0001"
-                return "0001";
-            }
-        } catch (error) {
-            console.error("Error generating unique ID:", error);
-            throw new Error("Unable to generate unique ID");
-        }
-    };
 
     const handleGoogleSignIn = async () => {
         try {

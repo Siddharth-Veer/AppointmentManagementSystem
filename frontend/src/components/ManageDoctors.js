@@ -3,7 +3,7 @@ import axios from 'axios';
 
 const ManageDoctors = () => {
   const [doctors, setDoctors] = useState([]);
-  const [showConfirm, setShowConfirm] = useState(null); // State to manage confirmation dialog
+  const [showConfirm, setShowConfirm] = useState(false); // State to manage confirmation dialog
   const [doctorToDelete, setDoctorToDelete] = useState(null); // State to track which doctor to delete
 
   useEffect(() => {
@@ -42,7 +42,7 @@ const ManageDoctors = () => {
     try {
       await axios.delete(`http://localhost:5000/api/doctors/${doctorToDelete}`);
       setDoctors(doctors.filter((doctor) => doctor._id !== doctorToDelete));
-      setShowConfirm(null);
+      setShowConfirm(false);
       setDoctorToDelete(null);
       alert('Doctor deleted successfully!');
     } catch (error) {

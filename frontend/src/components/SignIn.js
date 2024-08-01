@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
 import { auth, googleProvider } from '../firebase';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import '../css/SignIn.css';
 
 const SignIn = () => {
@@ -19,31 +18,20 @@ const SignIn = () => {
         }
 
         try {
-            const userCredential = await signInWithEmailAndPassword(
-              auth,
-              email,
-              password
-            );
+            const userCredential = await signInWithEmailAndPassword(auth, email, password);
             const user = userCredential.user;
-      
+
             if (user) {
-              // Fetch the user name from the server
-              const response = await axios.get(
-                "http://localhost:5000/api/auth/user",
-                { params: { email } }
-              );
-              const userName = response.data.name;
-      
-              // Set session or local storage as needed here
-              localStorage.setItem("userName", userName);
-      
-              navigate("/appointment-booking", { state: { name: userName } });
+                const userName = user.displayName || 'User';
+                localStorage.setItem('userName', userName); // Save user name to local storage
+                console.log('User signed in:', user);
+                navigate('/appointment-booking'); // Redirect to book-appointment page after sign-in
             } else {
-              setError("Failed to sign in");
+                setError('Failed to sign in');
             }
-          } catch (error) {
+        } catch (error) {
             setError(error.message);
-          }
+        }
     };
 
     const handleGoogleSignIn = async () => {
@@ -99,7 +87,7 @@ const SignIn = () => {
                     <a href="/forgot-password" className="forgot-password-link">Forgot Password?</a>
                 </p>
                 <p>
-                    <a href="/sign-up" className="signup-link">New User - Sign Up First</a>
+                    <a href="/signup" className="signup-link">New User - Sign Up First</a>
                 </p>
             </div>
         </div>
