@@ -1,0 +1,60 @@
+/* AdminMainLayout.css */
+.flex {
+    display: flex;
+  }
+  
+  .min-h-screen {
+    min-height: 100vh;
+  }
+  
+  .bg-muted-40 {
+    background-color: #f0f0f0; /* Adjust to your design */
+  }
+  
+  .sm\:gap-4 {
+    gap: 1rem; /* Adjust spacing */
+  }
+  
+  .sm\:py-4 {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+  }
+  
+  .sm\:pl-14 {
+    padding-left: 3.5rem;
+  }
+  
+  .grid {
+    display: grid;
+  }
+  
+  .flex-1 {
+    flex: 1;
+  }
+  
+  .items-start {
+    align-items: flex-start;
+  }
+  
+  .gap-4 {
+    gap: 1rem;
+  }
+  
+  .p-4 {
+    padding: 1rem;
+  }
+  
+  .sm\:px-6 {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+  
+  .sm\:py-0 {
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+  
+  .md\:gap-8 {
+    gap: 2rem;
+  }
+  

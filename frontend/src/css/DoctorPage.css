@@ -87,3 +87,92 @@
     font-size: 0.875rem;
     margin: 0 5px;
 }
+/* Custom Toolbar Styles */
+.rbc-toolbar-custom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #ffffff;
+    padding: 5px;
+    border-bottom: 2px solid #dee2e6;
+}
+
+.rbc-toolbar-label {
+    font-size: 1.0em;
+    color: #101213;
+    text-align: center;
+    flex: 1;
+}
+
+.rbc-toolbar-custom .rbc-toolbar-button {
+    color: #007bff;
+    background-color: #ffffff;
+    border: 1px solid #dee2e6;
+    padding: 5px 10px;
+    margin: 2px;
+    border-radius: 0.25rem;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.rbc-toolbar-custom .rbc-toolbar-button:hover {
+    background-color: #007bff;
+    color: #ffffff;
+}
+
+.rbc-toolbar-select {
+    margin: 0 5px;
+    padding: 5px;
+    border: 1px solid #dee2e6;
+    border-radius: 0.25rem;
+}
+
+/* Calendar Styles */
+.rbc-calendar {
+    border: 1px solid #dee2e6;
+    border-radius: 0.25rem;
+}
+
+.rbc-month-view {
+    border-bottom: 1px solid #dee2e6;
+}
+
+.rbc-header {
+    background-color: #f8f9fa;
+    font-weight: bold;
+    text-align: center;
+}
+
+.rbc-day-bg {
+    background-color: #ffffff;
+}
+
+.rbc-day-bg:hover {
+    background-color: #e9ecef;
+}
+
+.rbc-event {
+    background-color: #007bff;
+    color: #ffffff;
+    border-radius: 0.25rem;
+    padding: 2px 5px;
+    font-size: 0.75rem;
+    text-align: center;
+}
+
+.rbc-event:hover {
+    background-color: #0056b3;
+}
+
+/* Additional Styles */
+.appointment-actions {
+    margin-top: 10px;
+    display: flex;
+    /* justify-content: space-between; */
+}
+
+.appointment-actions .btn {
+    width: 100px;
+    padding: 4px 8px;
+    font-size: 0.875rem;
+    margin: 0 5px;
+}
