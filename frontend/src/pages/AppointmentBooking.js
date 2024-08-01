@@ -6,10 +6,10 @@ import '../css/AppointmentBooking.css';
 const AppointmentBooking = () => {
   const [doctors, setDoctors] = useState([]);
   const [selectedDoctor, setSelectedDoctor] = useState(null);
-  const [selectedDate, setSelectedDate] = useState(new Date()); // Initialize selectedDate to current date
-  const [selectedTime, setSelectedTime] = useState(''); // State for selected time
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [selectedTime, setSelectedTime] = useState('');
   const [patientName, setPatientName] = useState('');
-  const [showDateTimeSection, setShowDateTimeSection] = useState(false); // State to control showing date and time section
+  const [showDateTimeSection, setShowDateTimeSection] = useState(false);
   const [currentMonth, setCurrentMonth] = useState(new Date().getMonth());
   const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
   const navigate = useNavigate();
@@ -24,13 +24,9 @@ const AppointmentBooking = () => {
       }
     };
 
-    const fetchPatientName = async () => {
-      try {
-        const response = await axios.get('http://localhost:5000/api/auth/user/name');
-        setPatientName(response.data);
-      } catch (error) {
-        console.error('Error fetching patient name:', error);
-      }
+    const fetchPatientName = () => {
+      const userName = localStorage.getItem('userName');
+      setPatientName(userName || 'Guest');
     };
 
     fetchDoctors();
@@ -54,15 +50,14 @@ const AppointmentBooking = () => {
         speciality: selectedDoctor.speciality,
         contact: selectedDoctor.contact,
         date: selectedDate.toLocaleDateString(),
-        time: selectedTime
+        time: selectedTime,
       };
 
-      // Save appointment details to the server
       try {
         const response = await axios.post('http://localhost:5000/api/appointments', appointmentDetails);
         if (response.status === 201) {
           localStorage.setItem('appointmentDetails', JSON.stringify(appointmentDetails));
-          navigate('/appointment-confirmation'); // Navigate to appointment confirmation page
+          navigate('/appointment-confirmation');
         }
       } catch (error) {
         console.error('Error saving appointment:', error);
@@ -72,7 +67,6 @@ const AppointmentBooking = () => {
     }
   };
 
-  // Function to populate days in the calendar
   const populateDays = (year, month) => {
     const firstDay = new Date(year, month, 1).getDay();
     const daysInMonth = new Date(year, month + 1, 0).getDate();
@@ -87,7 +81,9 @@ const AppointmentBooking = () => {
         <span
           key={i}
           onClick={() => handleDateChange(i)}
-          className={`day ${selectedDate && selectedDate.getDate() === i && selectedDate.getMonth() === month && selectedDate.getFullYear() === year ? 'selected' : ''}`}
+          className={`day ${
+            selectedDate && selectedDate.getDate() === i && selectedDate.getMonth() === month && selectedDate.getFullYear() === year ? 'selected' : ''
+          }`}
         >
           {i}
         </span>
@@ -102,7 +98,7 @@ const AppointmentBooking = () => {
   };
 
   const handleSelectClick = () => {
-    setShowDateTimeSection(true); // Show date and time section
+    setShowDateTimeSection(true);
   };
 
   const handlePrevMonth = () => {
@@ -130,7 +126,7 @@ const AppointmentBooking = () => {
         <div className="buttons">
           <button className="appointment_btn">Appointments</button>
           <button className="appointment_btn">Walk-In</button>
-          <button className="appointment_btn" onClick={() => navigate('/signin')}>Logout</button>
+          <button className="appointment_btn" onClick={() => navigate('/sign-in')}>Logout</button>
         </div>
       </div>
       <div className="main-container">

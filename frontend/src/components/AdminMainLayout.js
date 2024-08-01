@@ -1,21 +1,29 @@
 import React from 'react';
-import Sidebar from '../pages/AdminSidebar';
-import Header from '../pages/AdminHeader';
-import DoctorList from '../pages/AdminDoctorList';
+import { Routes, Route } from 'react-router-dom';
+import AdminSidebar from './AdminSidebar';
+import AdminHeader from './AdminHeader';
+import AdminDoctorList from './AdminDoctorList';
+import AddDoctor from './AddDoctor';
+import ManageDoctors from './ManageDoctors';
 import '../css/AdminMainLayout.css';
 
-const MainLayout = () => {
+const AdminMainLayout = () => {
   return (
     <div className="flex min-h-screen w-full bg-muted-40">
-      <Sidebar />
+      <AdminSidebar />
       <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-14">
-        <Header />
+        <AdminHeader />
         <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
-          <DoctorList />
+          <Routes>
+            <Route path="/" element={<AdminDoctorList />} />
+            <Route path="doctorslist" element={<AdminDoctorList />} />
+            <Route path="add-doctor" element={<AddDoctor />} />
+            <Route path="manage-doctors" element={<ManageDoctors />} />
+          </Routes>
         </main>
       </div>
     </div>
   );
 };
 
-export default MainLayout;
+export default AdminMainLayout;

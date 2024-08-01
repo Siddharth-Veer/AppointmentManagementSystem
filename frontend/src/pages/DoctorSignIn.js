@@ -2,10 +2,9 @@ import React, { useState } from 'react';
 import { signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
 import { auth, googleProvider } from '../firebase';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import '../css/SignIn.css';
 
-const SignIn = () => {
+const DoctorSignIn = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
@@ -19,51 +18,34 @@ const SignIn = () => {
         }
 
         try {
-            const userCredential = await signInWithEmailAndPassword(
-              auth,
-              email,
-              password
-            );
+            const userCredential = await signInWithEmailAndPassword(auth, email, password);
             const user = userCredential.user;
-      
-            if (user) {
-              // Fetch the user name from the server
-              const response = await axios.get(
-                "http://localhost:5000/api/auth/user",
-                { params: { email } }
-              );
-              const userName = response.data.name;
-      
-              // Set session or local storage as needed here
-              localStorage.setItem("userName", userName);
-      
-              navigate("/appointment-booking", { state: { name: userName } });
-            } else {
-              setError("Failed to sign in");
-            }
-          } catch (error) {
-            setError(error.message);
-          }
-    };
-
-    const handleGoogleSignIn = async () => {
-        try {
-            const result = await signInWithPopup(auth, googleProvider);
-            const user = result.user;
 
             if (user) {
-                const userName = user.displayName || 'User';
-                localStorage.setItem('userName', userName); // Save user name to local storage
-                console.log('User signed in with Google:', user);
-                navigate('/appointment-booking'); // Redirect to book-appointment page after Google sign-in
+                console.log('User signed in:', user);
+                navigate('/doctor'); // Redirect to book-appointment page after sign-in
             } else {
-                setError('Failed to sign in with Google');
+                setError('Failed to sign in');
             }
         } catch (error) {
             setError(error.message);
         }
     };
+    // const handleGoogleSignIn = async () => {
+    //     try {
+    //         const result = await signInWithPopup(auth, googleProvider);
+    //         const user = result.user;
 
+    //         if (user) {
+    //             console.log('User signed in with Google:', user);
+    //             navigate('/doctor-page'); // Redirect to book-appointment page after Google sign-in
+    //         } else {
+    //             setError('Failed to sign in with Google');
+    //         }
+    //     } catch (error) {
+    //         setError(error.message);
+    //     }
+    // };
     return (
         <div className="modal">
             <div className="modal-content">
@@ -91,19 +73,16 @@ const SignIn = () => {
                         />
                     </div>
                     <button type="submit">Sign In</button>
+                    
                 </form>
-                <button onClick={handleGoogleSignIn} className="google-signin-button">
-                    Sign In with Google
-                </button>
-                <p><br></br>
-                    <a href="/forgot-password" className="forgot-password-link">Forgot Password?</a>
-                </p>
-                <p>
-                    <a href="/sign-up" className="signup-link">New User - Sign Up First</a>
-                </p>
+                
+                {/* <p><br></br>
+                        <a href="/forgot-password" className="forgot-password-link">Forgot Password?</a>
+                </p> */}
+                    
             </div>
         </div>
     );
 };
 
-export default SignIn;
+export default DoctorSignIn;

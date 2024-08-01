@@ -5,34 +5,23 @@ import AppointmentBooking from './pages/AppointmentBooking';
 import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
 import ContactUs from './pages/ContactUs';
-<<<<<<< HEAD
-import { AppointmentProvider } from './context/AppointmentContext';
-
-=======
 import AboutUs from './pages/AboutUs';
 import ForgotPassword from './pages/ForgotPassword';
 import ResetPassword from './pages/ResetPassword';
 import RegistrationForm from './pages/RegistrationForm';
-import AddDoctor from './pages/AddDoctor';
+import AddDoctor from './components/AddDoctor';
 import SelectDateTime from './pages/select-date-time';
 import AppointmentConfirmation from './pages/AppointmentConfirmation';
-import AdminMainLayout from './components/AdminMainLayout'; // Correct import path
+import AdminMainLayout from './components/AdminMainLayout';
 
 import { AppointmentProvider } from './context/AppointmentContext';
-
->>>>>>> 39c7c603d627a15cd5e0fb302fb91643941bb1ed
+// import DoctorPage from './pages/DoctorPage';
+import DoctorSignIn from './pages/DoctorSignIn';
 const App = () => {
   return (
     <Router>
       <AppointmentProvider>
         <Routes>
-<<<<<<< HEAD
-          <Route path="/" element={<HomePage />} exact />
-          <Route path="/book-appointment" element={<AppointmentBooking />} />
-          <Route path="/signin" element={<SignIn />} />
-          <Route path="/signup" element={<SignUp />} />
-          <Route path="/contactUs" element={<ContactUs />} />
-=======
           <Route path="/" element={<HomePage />} />
           <Route path="/appointment-booking" element={<AppointmentBooking />} />
           <Route path="/sign-in" element={<SignIn />} />
@@ -45,8 +34,10 @@ const App = () => {
           <Route path="/add-doctor" element={<AddDoctor />} />
           <Route path="/select-date-time" element={<SelectDateTime />} />
           <Route path="/appointment-confirmation" element={<AppointmentConfirmation />} />
-          <Route path="/admin" element={<AdminMainLayout />} /> {/* Correct route */}
->>>>>>> 39c7c603d627a15cd5e0fb302fb91643941bb1ed
+          <Route path="/doctor-signin" element={<DoctorSignIn />} />
+          {/* <Route path="/doctor-page" element={<DoctorPage />} /> */}
+          {/* Admin routes */}
+          <Route path="/admin/*" element={<AdminMainLayout />} />
         </Routes>
       </AppointmentProvider>
     </Router>

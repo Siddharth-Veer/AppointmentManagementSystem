@@ -26,7 +26,7 @@ const RegistrationForm = () => {
         try {
             const response = await axios.post('http://localhost:5000/api/auth/register', formData);
             localStorage.setItem('patientName', formData.name); // Set patientName in localStorage
-            navigate('/book-appointment');
+            navigate('/appointment-booking');
         } catch (error) {
             console.error('Error registering user:', error);
         }
