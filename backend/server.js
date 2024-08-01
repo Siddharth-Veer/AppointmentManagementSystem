@@ -25,6 +25,22 @@ db.once('open', () => console.log('MongoDB connected'));
 // Middleware
 app.use(cors());
 app.use(bodyParser.json());
+// Define a schema and model for your appointments
+const appointmentSchema = new mongoose.Schema({
+  date: String,
+  patientName: String,
+  // patientAge: Number,
+  // reason: String,
+});
+// Route to get all appointments
+app.get('/api/appointments', async (req, res) => {
+  try {
+    const appointments = await Appointment.find();
+    res.json(appointments);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
 
 // Routes
 app.use('/api/auth', authRoutes);
