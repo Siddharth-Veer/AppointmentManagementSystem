@@ -23,7 +23,7 @@ const DoctorSignIn = () => {
 
             if (user) {
                 console.log('User signed in:', user);
-                navigate('/doctor'); // Redirect to book-appointment page after sign-in
+                navigate('/doctor-page'); // Redirect to book-appointment page after sign-in
             } else {
                 setError('Failed to sign in');
             }

@@ -3,6 +3,7 @@ import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { Modal, Button } from 'react-bootstrap';
 import '../css/DoctorPage.css'; // Custom CSS for additional styling
 
 const localizer = momentLocalizer(moment);
@@ -40,6 +41,9 @@ const DoctorPage = () => {
   const [viewDate, setViewDate] = useState(new Date());
   const [selectedMonth, setSelectedMonth] = useState(moment().format('M')); // Default to current month
   const [selectedYear, setSelectedYear] = useState(moment().format('YYYY')); // Default to current year
+  const [showRescheduleModal, setShowRescheduleModal] = useState(false);
+  const [selectedAppointment, setSelectedAppointment] = useState(null);
+  const [availableSlots, setAvailableSlots] = useState([]);
 
   const handleSelectSlot = ({ start }) => {
     setSelectedDate(start);
@@ -59,8 +63,29 @@ const DoctorPage = () => {
   };
 
   const handleReschedule = (appointmentId) => {
-    console.log(`Appointment ${appointmentId} rescheduled.`);
-    // Implement actual "reschedule" logic here
+    const appointment = mockAppointments.find(app => app._id === appointmentId);
+    if (appointment) {
+      setSelectedAppointment(appointment);
+      // Simulate fetching available slots
+      setAvailableSlots([
+        { time: '1:00 PM' },
+        { time: '2:00 PM' },
+        { time: '3:00 PM' },
+      ]);
+      setShowRescheduleModal(true);
+    }
+  };
+
+  const handleCloseModal = () => {
+    setShowRescheduleModal(false);
+    setSelectedAppointment(null);
+    setAvailableSlots([]);
+  };
+
+  const handleRescheduleSlot = (newTime) => {
+    console.log(`Appointment ${selectedAppointment._id} rescheduled to ${newTime}.`);
+    // Implement actual reschedule logic here
+    handleCloseModal();
   };
 
   const calendarEvents = mockAppointments.map(appointment => ({
@@ -146,14 +171,15 @@ const DoctorPage = () => {
     <div className="container-fluid">
       <nav>
         <ul>
-          <li>Appointments</li>
-          <li>Logout</li>
+          <li><a href="/">Home</a></li>
+          <li><a href="/doctor-page">Doctor Page</a></li>
+          
         </ul>
       </nav>
 
       <div className="row">
         <div className="col-md-4" id="calendar-column">
-          <h2></h2>
+          <h2>Calendar</h2>
           <div className="calendar">
             <Calendar
               localizer={localizer}
@@ -199,6 +225,34 @@ const DoctorPage = () => {
           </ul>
         </div>
       </div>
+
+      {/* Reschedule Modal */}
+      <Modal show={showRescheduleModal} onHide={handleCloseModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>Reschedule Appointment</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <h4>Current Appointment:</h4>
+          <p>{selectedAppointment?.time} - {selectedAppointment?.patientName}</p>
+          <h4>Select New Time Slot:</h4>
+          <ul>
+            {availableSlots.map((slot, index) => (
+              <li key={index}>
+                <button 
+                  className="btn btn-info" 
+                  onClick={() => handleRescheduleSlot(slot.time)}>
+                  {slot.time}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseModal}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 };

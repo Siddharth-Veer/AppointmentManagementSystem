@@ -4,7 +4,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const authRoutes = require('./routes/auth');
 const doctorsRouter = require('./routes/doctors');
-const appointmentRoutes = require('./routes/appointments'); 
+const appointmentRoutes = require('./routes/Appointments'); 
 require('dotenv').config();
 
 const app = express();
