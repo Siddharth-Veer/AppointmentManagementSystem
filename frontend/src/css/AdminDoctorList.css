@@ -86,4 +86,32 @@
     border: none;
     cursor: pointer;
   }
-  
+  /* Existing styles... */
+
+.status-button {
+  background-color: #007bff; /* Blue color for button */
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.status-button:hover {
+  background-color: #0056b3; /* Darker blue on hover */
+}
+
+.badge-active {
+  background-color: #28a745; /* Green for active */
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.badge-suspended {
+  background-color: #dc3545; /* Red for suspended */
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+}

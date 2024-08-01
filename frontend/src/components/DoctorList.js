@@ -1,14 +1,25 @@
-import React from 'react';
-import '../css/AdminDoctorList.css';
-
-const doctors = [
-  { name: 'Dr. John Doe', specialty: 'Cardiology', phone: '+1 (555) 123-4567', email: 'john.doe@acmeclinic.com', status: 'Active' },
-  { name: 'Dr. Jane Smith', specialty: 'Dermatology', phone: '+1 (555) 987-6543', email: 'jane.smith@acmeclinic.com', status: 'Active' },
-  { name: 'Dr. Michael Johnson', specialty: 'Pediatrics', phone: '+1 (555) 456-7890', email: 'michael.johnson@acmeclinic.com', status: 'Suspended' },
-  { name: 'Dr. Emily Davis', specialty: 'Obstetrics', phone: '+1 (555) 234-5678', email: 'emily.davis@acmeclinic.com', status: 'Active' }
-];
+// components/DoctorList.js
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import '../css/AdminDoctorList.css'; // Adjust if necessary
 
 const DoctorList = () => {
+  const [doctors, setDoctors] = useState([]);
+
+  useEffect(() => {
+    const fetchDoctors = async () => {
+      try {
+        const response = await axios.get('http://localhost:5000/api/doctors');
+        console.log('Doctors fetched:', response.data); // Log the response data
+        setDoctors(response.data);
+      } catch (error) {
+        console.error('Error fetching doctors:', error);
+      }
+    };
+
+    fetchDoctors();
+  }, []);
+
   return (
     <div className="rounded-lg border bg-card text-card-foreground shadow-sm">
       <div className="flex flex-col space-y-1.5 p-6">
@@ -29,14 +40,14 @@ const DoctorList = () => {
               </tr>
             </thead>
             <tbody>
-              {doctors.map((doctor, index) => (
-                <tr key={index} className="border-b">
+              {doctors.map((doctor) => (
+                <tr key={doctor._id} className="border-b">
                   <td className="p-4 font-medium">{doctor.name}</td>
-                  <td className="p-4">{doctor.specialty}</td>
-                  <td className="p-4">{doctor.phone}</td>
+                  <td className="p-4">{doctor.speciality}</td>
+                  <td className="p-4">{doctor.contact}</td>
                   <td className="p-4">{doctor.email}</td>
                   <td className="p-4">
-                    <div className={`badge ${doctor.status === 'Active' ? 'badge-active' : 'badge-suspended'}`}>
+                    <div className={`badge ${doctor.status === 'active' ? 'badge-active' : 'badge-suspended'}`}>
                       {doctor.status}
                     </div>
                   </td>
