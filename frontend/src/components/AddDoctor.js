@@ -26,15 +26,15 @@ const AddDoctor = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post('http://localhost:5000/api/doctors', formData);
-            console.log('Doctor added:', response.data);
-            alert('Doctor has been added successfully!');
-            navigate('/admin/manage-doctors');
+          const response = await axios.post('http://localhost:5000/api/doctors', formData);
+          console.log('Doctor added:', response.data);
+          alert('Doctor has been added successfully!');
+          navigate('/admin/manage-doctors');
         } catch (error) {
-            console.error('Error adding doctor:', error);
-            alert('Failed to add doctor. Please try again.');
+          console.error('Error adding doctor:', error);
+          alert('Failed to add doctor. Please try again.');
         }
-    };
+      };
 
     return (
         <div className="add-doctor-container">

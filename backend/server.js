@@ -6,7 +6,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const authRoutes = require('./routes/auth');
 const doctorsRouter = require('./routes/doctors');
-const appointmentRoutes = require('./routes/appointments');
+const appointmentRoutes = require('./routes/Appointments');
 require('dotenv').config();
 
 const app = express();
@@ -46,6 +46,7 @@ app.get('/api/appointments', async (req, res) => {
 app.use('/api/auth', authRoutes);
 app.use('/api/doctors', doctorsRouter);
 app.use('/api/appointments', appointmentRoutes);
+
 
 // Start the server
 app.listen(PORT, () => {

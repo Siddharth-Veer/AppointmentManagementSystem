@@ -1,6 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const User = require("../models/User");
+const Doctor = require('../models/Doctor');
+const bcrypt = require('bcryptjs');
 
 // POST /api/auth/register - Register a new user
 router.post("/register", async (req, res) => {
@@ -57,6 +59,32 @@ router.get("/latest-id", async (req, res) => {
   } catch (error) {
     console.error('Error fetching latest ID:', error);
     res.status(500).json({ message: "Server error" });
+  }
+});
+
+
+// POST /api/doctors/login - Authenticate doctor
+router.post('/login', async (req, res) => {
+  const { email, password } = req.body;
+
+  try {
+      // Find doctor by email
+      const doctor = await Doctor.findOne({ email });
+
+      if (!doctor) {
+          return res.status(401).json({ message: 'Invalid credentials' });
+      }
+
+      // Compare the plain-text password
+      if (password !== doctor.password) {
+          return res.status(401).json({ message: 'Invalid credentials' });
+      }
+
+      // Authentication successful
+      res.status(200).json({ message: 'Login successful' });
+  } catch (error) {
+      console.error('Error authenticating doctor:', error);
+      res.status(500).json({ message: 'Server error' });
   }
 });
 

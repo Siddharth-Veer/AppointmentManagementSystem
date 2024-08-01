@@ -1,85 +1,51 @@
 import React, { useState } from 'react';
-import { signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
-import { auth, googleProvider } from '../firebase';
+import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import '../css/SignIn.css';
 
 const DoctorSignIn = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [error, setError] = useState('');
-    const navigate = useNavigate(); // Hook for navigation
+    const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (!email || !password) {
-            setError('Please fill in all fields');
-            return;
-        }
-
         try {
-            const userCredential = await signInWithEmailAndPassword(auth, email, password);
-            const user = userCredential.user;
-
-            if (user) {
-                console.log('User signed in:', user);
-                navigate('/doctor'); // Redirect to book-appointment page after sign-in
-            } else {
-                setError('Failed to sign in');
-            }
+            const response = await axios.post('http://localhost:5000/api/doctors/signin', { email, password });
+            console.log('Doctor signed in:', response.data);
+            alert('Sign in successful!');
+            navigate('/'); // Redirect to a secure page or dashboard
         } catch (error) {
-            setError(error.message);
+            console.error('Error signing in:', error);
+            alert('Failed to sign in. Please check your credentials.');
         }
     };
-    // const handleGoogleSignIn = async () => {
-    //     try {
-    //         const result = await signInWithPopup(auth, googleProvider);
-    //         const user = result.user;
 
-    //         if (user) {
-    //             console.log('User signed in with Google:', user);
-    //             navigate('/doctor-page'); // Redirect to book-appointment page after Google sign-in
-    //         } else {
-    //             setError('Failed to sign in with Google');
-    //         }
-    //     } catch (error) {
-    //         setError(error.message);
-    //     }
-    // };
     return (
         <div className="modal">
             <div className="modal-content">
-                <h2>Sign In</h2>
-                {error && <p className="error">{error}</p>}
-                <form onSubmit={handleSubmit}>
-                    <div className="form-group">
-                        <label htmlFor="email">Email:</label>
-                        <input
-                            type="email"
-                            id="email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            required
-                        />
-                    </div>
-                    <div className="form-group">
-                        <label htmlFor="password">Password:</label>
-                        <input
-                            type="password"
-                            id="password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            required
-                        />
-                    </div>
-                    <button type="submit">Sign In</button>
-                    
-                </form>
-                
-                {/* <p><br></br>
-                        <a href="/forgot-password" className="forgot-password-link">Forgot Password?</a>
-                </p> */}
-                    
+            <form onSubmit={handleSubmit} className="doctor-signin-form">
+                <h2>Doctor Sign In</h2>
+                <div className="form-section">
+                    <label>Email:</label>
+                    <input
+                        type="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        required
+                    />
+                </div>
+                <div className="form-section">
+                    <label>Password:</label>
+                    <input
+                        type="password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        required
+                    />
+                </div>
+                <button type="submit">Sign In</button>
+            </form>
             </div>
         </div>
     );
