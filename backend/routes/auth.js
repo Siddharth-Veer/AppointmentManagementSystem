@@ -1,8 +1,6 @@
 const express = require("express");
 const router = express.Router();
 const User = require("../models/User");
-const Doctor = require('../models/Doctor');
-const bcrypt = require('bcryptjs');
 
 // POST /api/auth/register - Register a new user
 router.post("/register", async (req, res) => {
@@ -10,22 +8,26 @@ router.post("/register", async (req, res) => {
 
   // Basic validation
   if (!idNo || !name || !email || !dateOfBirth) {
-    return res.status(400).json({ message: "Please provide all required fields" });
+    return res
+      .status(400)
+      .json({ message: "Please provide all required fields" });
   }
 
   try {
     // Check if a user with the same ID or email already exists
     const existingUser = await User.findOne({ $or: [{ idNo }, { email }] });
     if (existingUser) {
-      return res.status(400).json({ message: "User with this ID or email already exists" });
+      return res
+        .status(400)
+        .json({ message: "User with this ID or email already exists" });
     }
 
     // Create a new user
     const newUser = new User({ idNo, name, email, dateOfBirth });
     await newUser.save();
     res.status(201).json(newUser);
-  } catch (error) {
-    console.error('Error saving user:', error);
+  } 
+    catch (error) {
     res.status(500).json({ message: "Server error" });
   }
 });
@@ -42,49 +44,7 @@ router.get("/user", async (req, res) => {
       res.status(404).json({ message: "User not found" });
     }
   } catch (error) {
-    console.error('Error fetching user:', error);
     res.status(500).json({ message: "Server error" });
-  }
-});
-
-// GET /api/auth/latest-id - Get the latest user ID
-router.get("/latest-id", async (req, res) => {
-  try {
-    const latestUser = await User.findOne().sort({ idNo: -1 }).select('idNo');
-    if (latestUser && latestUser.idNo) {
-      res.status(200).json({ latestId: latestUser.idNo });
-    } else {
-      res.status(200).json({ latestId: null });
-    }
-  } catch (error) {
-    console.error('Error fetching latest ID:', error);
-    res.status(500).json({ message: "Server error" });
-  }
-});
-
-
-// POST /api/doctors/login - Authenticate doctor
-router.post('/login', async (req, res) => {
-  const { email, password } = req.body;
-
-  try {
-      // Find doctor by email
-      const doctor = await Doctor.findOne({ email });
-
-      if (!doctor) {
-          return res.status(401).json({ message: 'Invalid credentials' });
-      }
-
-      // Compare the plain-text password
-      if (password !== doctor.password) {
-          return res.status(401).json({ message: 'Invalid credentials' });
-      }
-
-      // Authentication successful
-      res.status(200).json({ message: 'Login successful' });
-  } catch (error) {
-      console.error('Error authenticating doctor:', error);
-      res.status(500).json({ message: 'Server error' });
   }
 });
 

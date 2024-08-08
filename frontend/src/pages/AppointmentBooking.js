@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import '../css/AppointmentBooking.css';
+import '../css/index.css';
 
 const AppointmentBooking = () => {
   const [doctors, setDoctors] = useState([]);
@@ -12,6 +12,8 @@ const AppointmentBooking = () => {
   const [showDateTimeSection, setShowDateTimeSection] = useState(false);
   const [currentMonth, setCurrentMonth] = useState(new Date().getMonth());
   const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
+  const [availableSlots, setAvailableSlots] = useState([]);
+  const [availableDates, setAvailableDates] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -32,6 +34,38 @@ const AppointmentBooking = () => {
     fetchDoctors();
     fetchPatientName();
   }, []);
+
+  useEffect(() => {
+    const fetchAvailableDates = async () => {
+      if (selectedDoctor) {
+        try {
+          const response = await axios.get(`http://localhost:5000/api/availability?doctorId=${selectedDoctor._id}`);
+          const datesWithAvailability = response.data.map(item => new Date(item.day));
+          setAvailableDates(datesWithAvailability);
+        } catch (error) {
+          console.error('Error fetching available dates:', error);
+        }
+      }
+    };
+
+    fetchAvailableDates();
+  }, [selectedDoctor]);
+
+  useEffect(() => {
+    const fetchAvailableSlots = async () => {
+      if (selectedDoctor && selectedDate) {
+        const formattedDate = selectedDate.toISOString().split('T')[0]; // Format date as YYYY-MM-DD
+        try {
+          const response = await axios.get(`http://localhost:5000/api/availability?doctorId=${selectedDoctor._id}&date=${formattedDate}`);
+          setAvailableSlots(response.data?.slots || []);
+        } catch (error) {
+          console.error('Error fetching available slots:', error);
+        }
+      }
+    };
+
+    fetchAvailableSlots();
+  }, [selectedDoctor, selectedDate]);
 
   const handleDateChange = (day) => {
     const newDate = new Date(currentYear, currentMonth, day);
@@ -77,13 +111,14 @@ const AppointmentBooking = () => {
     }
 
     for (let i = 1; i <= daysInMonth; i++) {
+      const dayDate = new Date(year, month, i);
       days.push(
         <span
           key={i}
           onClick={() => handleDateChange(i)}
           className={`day ${
             selectedDate && selectedDate.getDate() === i && selectedDate.getMonth() === month && selectedDate.getFullYear() === year ? 'selected' : ''
-          }`}
+          } ${availableDates.some(d => d.toDateString() === dayDate.toDateString()) ? 'available' : ''}`}
         >
           {i}
         </span>
@@ -95,6 +130,7 @@ const AppointmentBooking = () => {
 
   const handleDoctorSelect = (doctor) => {
     setSelectedDoctor(doctor);
+    setShowDateTimeSection(false);
   };
 
   const handleSelectClick = () => {
@@ -189,48 +225,19 @@ const AppointmentBooking = () => {
                 <div className="time-slots">
                   <h2>Available Slots</h2>
                   <div className="slots">
-                    <h3>Morning</h3>
-                    <div className="slot-times">
-                      <button
-                        className={selectedTime === '9:00 AM' ? 'active' : ''}
-                        onClick={() => handleTimeSelect('9:00 AM')}
-                      >
-                        9:00 AM
-                      </button>
-                      <button
-                        className={selectedTime === '10:00 AM' ? 'active' : ''}
-                        onClick={() => handleTimeSelect('10:00 AM')}
-                      >
-                        10:00 AM
-                      </button>
-                      <button
-                        className={selectedTime === '11:00 AM' ? 'active' : ''}
-                        onClick={() => handleTimeSelect('11:00 AM')}
-                      >
-                        11:00 AM
-                      </button>
-                    </div>
-                    <h3>Evening</h3>
-                    <div className="slot-times">
-                      <button
-                        className={selectedTime === '1:00 PM' ? 'active' : ''}
-                        onClick={() => handleTimeSelect('1:00 PM')}
-                      >
-                        1:00 PM
-                      </button>
-                      <button
-                        className={selectedTime === '2:00 PM' ? 'active' : ''}
-                        onClick={() => handleTimeSelect('2:00 PM')}
-                      >
-                        2:00 PM
-                      </button>
-                      <button
-                        className={selectedTime === '3:00 PM' ? 'active' : ''}
-                        onClick={() => handleTimeSelect('3:00 PM')}
-                      >
-                        3:00 PM
-                      </button>
-                    </div>
+                    {availableSlots.length > 0 ? (
+                      availableSlots.map((slot, index) => (
+                        <button
+                          key={index}
+                          className={selectedTime === slot.startTime ? 'active' : ''}
+                          onClick={() => handleTimeSelect(slot.startTime)}
+                        >
+                          {slot.startTime} - {slot.endTime}
+                        </button>
+                      ))
+                    ) : (
+                      <p>No slots available for the selected date.</p>
+                    )}
                   </div>
                   <div className="confirm-button">
                     <button onClick={handleConfirm} disabled={!selectedTime}>

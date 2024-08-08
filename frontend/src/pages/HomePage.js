@@ -1,12 +1,12 @@
-import React, { useContext, useEffect, useState } from 'react';  // Add useState here
+import React, { useContext, useEffect, useState } from 'react';  
 import Appointment from '../components/Appointment';
 import { AppointmentContext } from '../context/AppointmentContext';
 import HamburgerMenu from '../components/HamburgerMenu';
-import '../css/HomePage.css';
+import '../css/index.css';
 
 const HomePage = () => {
   const { appointments, fetchAppointments } = useContext(AppointmentContext);
-  const [isMenuOpen, setIsMenuOpen] = useState(false);  // useState is now correctly imported
+  const [isMenuOpen, setIsMenuOpen] = useState(false); 
 
   useEffect(() => {
     fetchAppointments();
