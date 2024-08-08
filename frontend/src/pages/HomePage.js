@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { AppointmentContext } from '../context/AppointmentContext';
 import HamburgerMenu from '../components/HamburgerMenu';
 import '../css/index.css';
+import '../css/index.css';
 
 const HomePage = () => {
   const { appointments, fetchAppointments } = useContext(AppointmentContext);
