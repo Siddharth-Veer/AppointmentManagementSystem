@@ -8,6 +8,7 @@
   width: 100%;
   top: 0;
   left: 0;
+  z-index: 2000; /* Ensure modals are above other content */
 }
 
 .modal-content {
@@ -15,6 +16,12 @@
   padding: 2rem;
   border-radius: 10px;
   text-align: center;
+  width: 90%; /* Make modal responsive */
+  max-width: 500px; /* Maximum width */
+}
+
+.modal-content h2 {
+  margin-bottom: 20px;
 }
 
 .form-group {
@@ -42,7 +49,16 @@ button {
   cursor: pointer;
 }
 
+button:hover {
+  background: #005F7F;
+}
+
 .error {
   color: red;
+  margin-bottom: 1rem;
+}
+
+.success {
+  color: green;
   margin-bottom: 1rem;
 }

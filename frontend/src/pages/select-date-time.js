@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import '../css/SelectDateTime.css'; // Import your CSS file for styling
+import '../css/index.css'; 
 
 const SelectDateTime = ({ patientName }) => {
   const [selectedDate, setSelectedDate] = useState(new Date());
@@ -13,9 +13,9 @@ const SelectDateTime = ({ patientName }) => {
     const fetchPatientName = async () => {
       try {
         const response = await axios.get('http://localhost:5000/api/auth/user/name');
-        // Assuming response.data contains the patient's name
+        
         // Set the patientName state with the fetched data
-        // Ensure the correct state setter is used here (setPatientName)
+       
       } catch (error) {
         console.error('Error fetching patient name:', error);
       }

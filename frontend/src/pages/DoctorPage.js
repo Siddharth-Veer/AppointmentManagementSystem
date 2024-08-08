@@ -43,7 +43,9 @@ const DoctorPage = () => {
   const [selectedYear, setSelectedYear] = useState(moment().format('YYYY')); // Default to current year
   const [showRescheduleModal, setShowRescheduleModal] = useState(false);
   const [selectedAppointment, setSelectedAppointment] = useState(null);
+  const [showDetailModal, setShowDetailModal] = useState(false);
   const [availableSlots, setAvailableSlots] = useState([]);
+  const navigate = useNavigate();
 
   const handleSelectSlot = ({ start }) => {
     setSelectedDate(start);
@@ -93,6 +95,11 @@ const DoctorPage = () => {
     start: appointment.date,
     end: appointment.date,
   }));
+
+  const handleLogout = () => {
+    localStorage.removeItem('doctorToken'); // Clear the token from local storage
+    navigate('/doctor-signin'); // Redirect to sign-in page
+  };
 
   // Custom Toolbar Component
   const CustomToolbar = ({ label, onNavigate, onView }) => {
@@ -167,13 +174,23 @@ const DoctorPage = () => {
     );
   };
 
+  const handleAppointmentClick = (appointment) => {
+    setSelectedAppointment(appointment);
+    setShowDetailModal(true);
+  };
+
+  const handleCloseDetailModal = () => {
+    setShowDetailModal(false);
+    setSelectedAppointment(null);
+  };
+
   return (
     <div className="container-fluid">
       <nav>
         <ul>
           <li><a href="/">Home</a></li>
           <li><a href="/doctor-page">Doctor Page</a></li>
-          
+          <button onClick={handleLogout}>Logout</button>
         </ul>
       </nav>
 
@@ -200,23 +217,27 @@ const DoctorPage = () => {
         </div>
         <div className="col-md-8" id="details-column">
           <h2>
-            Appointments for {selectedDate ? moment(selectedDate).format('MMMM Do YYYY') : 'Select a date'}
+            Appointments for {selectedDate ? moment(selectedDate).format('MMMM Do YYYY') : 'Selected date'}
           </h2>
           <ul className="list-group">
             {getAppointmentsForSelectedDate().map((appointment) => (
-              <li key={appointment._id} className="list-group-item">
+              <li 
+                key={appointment._id} 
+                className="list-group-item"
+                onClick={() => handleAppointmentClick(appointment)}
+              >
                 <strong>{appointment.time}</strong> - {appointment.patientName} ({appointment.speciality})
                 <p>Contact: {appointment.contact}</p>
                 
                 <div className="appointment-actions">
                   <button 
                     className="btn btn-success" 
-                    onClick={() => handleDone(appointment._id)}>
+                    onClick={(e) => { e.stopPropagation(); handleDone(appointment._id); }}>
                     Done
                   </button>
                   <button 
                     className="btn btn-warning" 
-                    onClick={() => handleReschedule(appointment._id)}>
+                    onClick={(e) => { e.stopPropagation(); handleReschedule(appointment._id); }}>
                     Reschedule
                   </button>
                 </div>
@@ -226,31 +247,55 @@ const DoctorPage = () => {
         </div>
       </div>
 
+      {/* Appointment Detail Modal */}
+      <Modal show={showDetailModal} onHide={handleCloseDetailModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>Appointment Details</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {selectedAppointment && (
+            <>
+              <p><strong>Time:</strong> {selectedAppointment.time}</p>
+              <p><strong>Patient Name:</strong> {selectedAppointment.patientName}</p>
+              <p><strong>Speciality:</strong> {selectedAppointment.speciality}</p>
+              <p><strong>Contact:</strong> {selectedAppointment.contact}</p>
+            </>
+          )}
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseDetailModal}>Close</Button>
+        </Modal.Footer>
+      </Modal>
+
       {/* Reschedule Modal */}
       <Modal show={showRescheduleModal} onHide={handleCloseModal}>
         <Modal.Header closeButton>
           <Modal.Title>Reschedule Appointment</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <h4>Current Appointment:</h4>
-          <p>{selectedAppointment?.time} - {selectedAppointment?.patientName}</p>
-          <h4>Select New Time Slot:</h4>
-          <ul>
+          {selectedAppointment && (
+            <>
+              <p><strong>Current Time:</strong> {selectedAppointment.time}</p>
+              <p><strong>Patient Name:</strong> {selectedAppointment.patientName}</p>
+              <p><strong>Speciality:</strong> {selectedAppointment.speciality}</p>
+              <p><strong>Contact:</strong> {selectedAppointment.contact}</p>
+            </>
+          )}
+          <h5>Available Slots:</h5>
+          <ul className="list-group">
             {availableSlots.map((slot, index) => (
-              <li key={index}>
-                <button 
-                  className="btn btn-info" 
-                  onClick={() => handleRescheduleSlot(slot.time)}>
-                  {slot.time}
-                </button>
+              <li 
+                key={index} 
+                className="list-group-item"
+                onClick={() => handleRescheduleSlot(slot.time)}
+              >
+                {slot.time}
               </li>
             ))}
           </ul>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleCloseModal}>
-            Close
-          </Button>
+          <Button variant="secondary" onClick={handleCloseModal}>Close</Button>
         </Modal.Footer>
       </Modal>
     </div>

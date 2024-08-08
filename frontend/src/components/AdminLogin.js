@@ -1,9 +1,9 @@
+// AdminLogin.js
 import React, { useState } from 'react';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import '../css/index.css';
+import '../css/SignIn.css'; // Use the same CSS file as SignIn
 
-const DoctorSignIn = () => {
+const AdminLogin = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
@@ -17,33 +17,35 @@ const DoctorSignIn = () => {
         }
 
         try {
-            const response = await axios.post('http://localhost:5000/api/doctors/signin', { email, password });
-            console.log('Response:', response.data);
+            const response = await fetch('http://localhost:5000/api/auth/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password })
+              });
 
-            if (response.data.message === 'Sign in successful') {
-                sessionStorage.setItem('doctorToken', response.data.token); // Store JWT token in session storage
-                sessionStorage.setItem('doctorName', response.data.name);  // Store doctor's name in session storage
-                alert('Sign in successful!');
-                navigate('/doctor-page');
+            const result = await response.json();
+            if (response.ok) {
+                localStorage.setItem('adminToken', result.token);
+                navigate('/admin');
             } else {
-                setError('Failed to sign in. Please check your credentials.');
+                setError(result.message || 'Login failed');
             }
-        } catch (error) {
-            setError('Failed to sign in. Please check your credentials.');
-            console.error('Error signing in:', error);
+        } catch (err) {
+            setError('An error occurred');
         }
     };
+
 
     return (
         <div className="modal">
             <div className="modal-content">
-                <h2>Sign In</h2>
+                <h2>Admin Login</h2>
                 {error && <p className="error">{error}</p>}
                 <form onSubmit={handleSubmit}>
                     <div className="form-group">
                         <label htmlFor="email">Email:</label>
                         <input
-                            type="email"
+                            type="text"
                             id="email"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
@@ -60,11 +62,11 @@ const DoctorSignIn = () => {
                             required
                         />
                     </div>
-                    <button type="submit">Sign In</button>
+                    <button type="submit">Log In</button>
                 </form>
             </div>
         </div>
     );
 };
 
-export default DoctorSignIn;
+export default AdminLogin;

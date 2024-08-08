@@ -5,6 +5,7 @@ import AdminHeader from './AdminHeader';
 import AdminDoctorList from './AdminDoctorList';
 import AddDoctor from './AddDoctor';
 import ManageDoctors from './ManageDoctors';
+import AdminLogin from './AdminLogin';
 import '../css/AdminMainLayout.css';
 
 const AdminMainLayout = () => {
@@ -19,6 +20,7 @@ const AdminMainLayout = () => {
             <Route path="doctorslist" element={<AdminDoctorList />} />
             <Route path="add-doctor" element={<AddDoctor />} />
             <Route path="manage-doctors" element={<ManageDoctors />} />
+            <Route path="logout" element={<AdminLogin />} />
           </Routes>
         </main>
       </div>
