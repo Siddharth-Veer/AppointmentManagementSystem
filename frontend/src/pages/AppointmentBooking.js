@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import '../css/AppointmentBooking.css';
@@ -67,10 +67,10 @@ const AppointmentBooking = () => {
     fetchAvailableSlots();
   }, [selectedDoctor, selectedDate]);
 
-  const handleDateChange = (day) => {
+  const handleDateChange = useCallback((day) => {
     const newDate = new Date(currentYear, currentMonth, day);
     setSelectedDate(newDate);
-  };
+  }, [currentYear, currentMonth]);
 
   const handleTimeSelect = (time) => {
     setSelectedTime(time);
@@ -101,7 +101,7 @@ const AppointmentBooking = () => {
     }
   };
 
-  const populateDays = (year, month) => {
+  const populateDays = useCallback((year, month) => {
     const firstDay = new Date(year, month, 1).getDay();
     const daysInMonth = new Date(year, month + 1, 0).getDate();
     const days = [];
@@ -116,8 +116,10 @@ const AppointmentBooking = () => {
         <span
           key={i}
           onClick={() => handleDateChange(i)}
-          className={`day ${selectedDate && selectedDate.getDate() === i && selectedDate.getMonth() === month && selectedDate.getFullYear() === year ? 'selected' : ''
-            } ${availableDates.some(d => d.toDateString() === dayDate.toDateString()) ? 'available' : ''}`}
+          className={`day ${
+            selectedDate && selectedDate.getDate() === i && selectedDate.getMonth() === month && selectedDate.getFullYear() === year ? 'selected' : ''
+          } ${availableDates.some(d => d.toDateString() === dayDate.toDateString()) ? 'available' : ''}`}
+          aria-selected={selectedDate && selectedDate.getDate() === i}
         >
           {i}
         </span>
@@ -125,7 +127,7 @@ const AppointmentBooking = () => {
     }
 
     return days;
-  };
+  }, [selectedDate, availableDates, handleDateChange]);
 
   const handleDoctorSelect = (doctor) => {
     setSelectedDoctor(doctor);
@@ -189,7 +191,8 @@ const AppointmentBooking = () => {
             </div>
             <div className="doctor-details-container">
               {selectedDoctor && (
-                <><h2>Doctors Details:</h2>
+                <>
+                  <h2>Doctor's Details:</h2>
                   <div className="doctor-details">
                     <h2>{selectedDoctor.name}</h2>
                     <p>Speciality: {selectedDoctor.speciality}</p>

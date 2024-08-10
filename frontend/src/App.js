@@ -12,11 +12,15 @@ import ResetPassword from './components/ResetPassword';
 import AddDoctor from './components/AddDoctor';
 import SelectDateTime from './pages/select-date-time';
 import AppointmentConfirmation from './pages/AppointmentConfirmation';
+import AdminLogin from './pages/AdminLogin';
 import AdminMainLayout from './components/AdminMainLayout';
 import AdminLogin from './components/AdminLogin'; 
 import DoctorSignIn from './components/DoctorSignIn';
 import DoctorDashboard from './components/DoctorDashboard';
 import AdminLogout from './components/AdminLogout'; 
+import 'bootstrap/dist/css/bootstrap.min.css';
+import WalkIn from './pages/WalkIn';
+import { AppointmentProvider } from './context/AppointmentContext';
 
 const App = () => {
   return (
@@ -35,6 +39,7 @@ const App = () => {
         <Route path="/appointment-confirmation" element={<AppointmentConfirmation />} />
         <Route path="/doctor-signin" element={<DoctorSignIn />} />
         <Route path="/doctor-dashboard" element={<DoctorDashboard />} />
+        <Route path="/walk-in" element={<WalkIn />} />
         <Route path="/admin-login" element={<AdminLogin />} />
         <Route path="/admin-logout" element={<AdminLogout />} /> {/* Add AdminLogout route */}
         <Route path="/admin/*" element={<AdminMainLayout />} />

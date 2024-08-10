@@ -44,9 +44,7 @@ const DoctorPage = () => {
   const [showRescheduleModal, setShowRescheduleModal] = useState(false);
   const [selectedAppointment, setSelectedAppointment] = useState(null);
   const [showDetailModal, setShowDetailModal] = useState(false);
-  const [showDetailModal, setShowDetailModal] = useState(false);
   const [availableSlots, setAvailableSlots] = useState([]);
-  const navigate = useNavigate();
 
   const handleSelectSlot = ({ start }) => {
     setSelectedDate(start);
@@ -185,23 +183,12 @@ const DoctorPage = () => {
     setSelectedAppointment(null);
   };
 
-  const handleAppointmentClick = (appointment) => {
-    setSelectedAppointment(appointment);
-    setShowDetailModal(true);
-  };
-
-  const handleCloseDetailModal = () => {
-    setShowDetailModal(false);
-    setSelectedAppointment(null);
-  };
-
   return (
     <div className="container-fluid">
       <nav>
         <ul>
           <li><a href="/">Home</a></li>
           <li><a href="/doctor-page">Doctor Page</a></li>
-          <button onClick={handleLogout}>Logout</button>
         </ul>
       </nav>
 
@@ -238,11 +225,6 @@ const DoctorPage = () => {
                 className="list-group-item"
                 onClick={() => handleAppointmentClick(appointment)}
               >
-              <li 
-                key={appointment._id} 
-                className="list-group-item"
-                onClick={() => handleAppointmentClick(appointment)}
-              >
                 <strong>{appointment.time}</strong> - {appointment.patientName} ({appointment.speciality})
                 <p>Contact: {appointment.contact}</p>
                 
@@ -250,12 +232,10 @@ const DoctorPage = () => {
                   <button 
                     className="btn btn-success" 
                     onClick={(e) => { e.stopPropagation(); handleDone(appointment._id); }}>
-                    onClick={(e) => { e.stopPropagation(); handleDone(appointment._id); }}>
                     Done
                   </button>
                   <button 
                     className="btn btn-warning" 
-                    onClick={(e) => { e.stopPropagation(); handleReschedule(appointment._id); }}>
                     onClick={(e) => { e.stopPropagation(); handleReschedule(appointment._id); }}>
                     Reschedule
                   </button>
@@ -265,26 +245,6 @@ const DoctorPage = () => {
           </ul>
         </div>
       </div>
-
-      {/* Appointment Detail Modal */}
-      <Modal show={showDetailModal} onHide={handleCloseDetailModal}>
-        <Modal.Header closeButton>
-          <Modal.Title>Appointment Details</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          {selectedAppointment && (
-            <>
-              <p><strong>Time:</strong> {selectedAppointment.time}</p>
-              <p><strong>Patient Name:</strong> {selectedAppointment.patientName}</p>
-              <p><strong>Speciality:</strong> {selectedAppointment.speciality}</p>
-              <p><strong>Contact:</strong> {selectedAppointment.contact}</p>
-            </>
-          )}
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleCloseDetailModal}>Close</Button>
-        </Modal.Footer>
-      </Modal>
 
       {/* Appointment Detail Modal */}
       <Modal show={showDetailModal} onHide={handleCloseDetailModal}>
@@ -322,23 +282,7 @@ const DoctorPage = () => {
           )}
           <h5>Available Slots:</h5>
           <ul className="list-group">
-          {selectedAppointment && (
-            <>
-              <p><strong>Current Time:</strong> {selectedAppointment.time}</p>
-              <p><strong>Patient Name:</strong> {selectedAppointment.patientName}</p>
-              <p><strong>Speciality:</strong> {selectedAppointment.speciality}</p>
-              <p><strong>Contact:</strong> {selectedAppointment.contact}</p>
-            </>
-          )}
-          <h5>Available Slots:</h5>
-          <ul className="list-group">
             {availableSlots.map((slot, index) => (
-              <li 
-                key={index} 
-                className="list-group-item"
-                onClick={() => handleRescheduleSlot(slot.time)}
-              >
-                {slot.time}
               <li 
                 key={index} 
                 className="list-group-item"
@@ -350,7 +294,6 @@ const DoctorPage = () => {
           </ul>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleCloseModal}>Close</Button>
           <Button variant="secondary" onClick={handleCloseModal}>Close</Button>
         </Modal.Footer>
       </Modal>

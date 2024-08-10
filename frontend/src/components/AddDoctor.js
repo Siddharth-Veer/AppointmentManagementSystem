@@ -35,7 +35,6 @@ const AddDoctor = () => {
           alert('Failed to add doctor. Please try again.');
         }
       };
-    
 
     return (
         <div className="add-doctor-container">
