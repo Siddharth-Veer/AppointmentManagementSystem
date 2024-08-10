@@ -1,178 +1,133 @@
-/* Custom Toolbar Styles */
-.rbc-toolbar-custom {
+/* DoctorPage.css */
+
+/* General Layout */
+.doctor-dashboard-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+.dashboard-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: #ffffff;
-    padding: 5px;
-    border-bottom: 2px solid #dee2e6;
+    padding: 10px 20px;
+    background-color: #fff;
+    border-bottom: 1px solid #e0e0e0;
 }
 
-.rbc-toolbar-label {
-    font-size: 1.0em;
-    color: #101213;
-    text-align: center;
-    flex: 1;
-}
-
-.rbc-toolbar-custom .rbc-toolbar-button {
-    color: #007bff;
-    background-color: #ffffff;
-    border: 1px solid #dee2e6;
-    padding: 5px 10px;
-    margin: 2px;
-    border-radius: 0.25rem;
-    transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-.rbc-toolbar-custom .rbc-toolbar-button:hover {
-    background-color: #007bff;
-    color: #ffffff;
-}
-
-.rbc-toolbar-select {
-    margin: 0 5px;
-    padding: 5px;
-    border: 1px solid #dee2e6;
-    border-radius: 0.25rem;
-}
-
-/* Calendar Styles */
-.rbc-calendar {
-    border: 1px solid #dee2e6;
-    border-radius: 0.25rem;
-}
-
-.rbc-month-view {
-    border-bottom: 1px solid #dee2e6;
-}
-
-.rbc-header {
-    background-color: #f8f9fa;
+.logo {
+    font-size: 1.5rem;
     font-weight: bold;
-    text-align: center;
+    color: #333;
 }
 
-.rbc-day-bg {
-    background-color: #ffffff;
-}
-
-.rbc-day-bg:hover {
-    background-color: #e9ecef;
-}
-
-.rbc-event {
-    background-color: #007bff;
-    color: #ffffff;
-    border-radius: 0.25rem;
-    padding: 2px 5px;
-    font-size: 0.75rem;
-    text-align: center;
-}
-
-.rbc-event:hover {
-    background-color: #0056b3;
-}
-
-/* Additional Styles */
-.appointment-actions {
-    margin-top: 10px;
+.doctor-info {
     display: flex;
-    /* justify-content: space-between; */
-}
-
-.appointment-actions .btn {
-    width: 100px;
-    padding: 4px 8px;
-    font-size: 0.875rem;
-    margin: 0 5px;
-}
-/* Custom Toolbar Styles */
-.rbc-toolbar-custom {
-    display: flex;
-    justify-content: space-between;
     align-items: center;
+    gap: 10px;
+}
+
+.icon {
+    width: 24px;
+    height: 24px;
+}
+
+.logout-button {
+    height: 50px;   
+    width: 50px;
+    align-items: center;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.dashboard-content {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    flex-grow: 1;
+    gap: 20px;
+    padding: 20px;
+    background-color: #f7f8fa;
+}
+
+.sidebar {
     background-color: #ffffff;
-    padding: 5px;
-    border-bottom: 2px solid #dee2e6;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-.rbc-toolbar-label {
-    font-size: 1.0em;
-    color: #101213;
-    text-align: center;
-    flex: 1;
+.date-picker {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
 }
 
-.rbc-toolbar-custom .rbc-toolbar-button {
-    color: #007bff;
-    background-color: #ffffff;
-    border: 1px solid #dee2e6;
-    padding: 5px 10px;
-    margin: 2px;
-    border-radius: 0.25rem;
-    transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-.rbc-toolbar-custom .rbc-toolbar-button:hover {
-    background-color: #007bff;
-    color: #ffffff;
-}
-
-.rbc-toolbar-select {
-    margin: 0 5px;
-    padding: 5px;
-    border: 1px solid #dee2e6;
-    border-radius: 0.25rem;
-}
-
-/* Calendar Styles */
-.rbc-calendar {
-    border: 1px solid #dee2e6;
-    border-radius: 0.25rem;
-}
-
-.rbc-month-view {
-    border-bottom: 1px solid #dee2e6;
-}
-
-.rbc-header {
-    background-color: #f8f9fa;
-    font-weight: bold;
+.statistics {
     text-align: center;
 }
 
-.rbc-day-bg {
+.calendar {
     background-color: #ffffff;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-.rbc-day-bg:hover {
-    background-color: #e9ecef;
-}
-
-.rbc-event {
-    background-color: #007bff;
-    color: #ffffff;
-    border-radius: 0.25rem;
-    padding: 2px 5px;
-    font-size: 0.75rem;
-    text-align: center;
-}
-
-.rbc-event:hover {
-    background-color: #0056b3;
-}
-
-/* Additional Styles */
-.appointment-actions {
-    margin-top: 10px;
+.appointments {
     display: flex;
-    /* justify-content: space-between; */
+    flex-direction: column;
+    gap: 10px;
 }
 
-.appointment-actions .btn {
-    width: 100px;
-    padding: 4px 8px;
-    font-size: 0.875rem;
-    margin: 0 5px;
+.appointment-card {
+    padding: 15px;
+    border: 1px solid #e0e0e0;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.appointment-card.selected {
+    background-color: #e0f7fa;
+}
+
+.appointment-card:hover {
+    background-color: #f1f1f1;
+}
+
+.appointment-details {
+    background-color: #ffffff;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.reschedule-button, .cancel-button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+.reschedule-button {
+    background-color: #ff9800;
+    color: #ffffff;
+}
+
+.cancel-button {
+    background-color: #f44336;
+    color: #ffffff;
+}
+
+.reschedule-button:hover {
+    background-color: #fb8c00;
+}
+
+.cancel-button:hover {
+    background-color: #e53935;
 }

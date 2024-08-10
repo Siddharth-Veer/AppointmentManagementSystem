@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import '../css/index.css';
+import '../css/AppointmentBooking.css';
 
 const AppointmentBooking = () => {
   const [doctors, setDoctors] = useState([]);
@@ -116,9 +116,8 @@ const AppointmentBooking = () => {
         <span
           key={i}
           onClick={() => handleDateChange(i)}
-          className={`day ${
-            selectedDate && selectedDate.getDate() === i && selectedDate.getMonth() === month && selectedDate.getFullYear() === year ? 'selected' : ''
-          } ${availableDates.some(d => d.toDateString() === dayDate.toDateString()) ? 'available' : ''}`}
+          className={`day ${selectedDate && selectedDate.getDate() === i && selectedDate.getMonth() === month && selectedDate.getFullYear() === year ? 'selected' : ''
+            } ${availableDates.some(d => d.toDateString() === dayDate.toDateString()) ? 'available' : ''}`}
         >
           {i}
         </span>
@@ -154,7 +153,7 @@ const AppointmentBooking = () => {
       setCurrentMonth(currentMonth + 1);
     }
   };
-  
+
   const handleLogout = () => {
     // Clear session storage
     sessionStorage.removeItem('userName');
@@ -169,7 +168,7 @@ const AppointmentBooking = () => {
         <h2>Welcome {patientName}!</h2>
         <div className="buttons">
           <button className="appointment_btn">Appointments</button>
-          <button className="appointment_btn">Walk-In</button>
+          <button className="appointment_btn" onClick={() => navigate('/walk-in')}>Walk-In</button>
           <button className="appointment_btn" onClick={handleLogout}>Logout</button>
         </div>
       </div>
@@ -178,11 +177,15 @@ const AppointmentBooking = () => {
           <div className="doctors-list-container">
             <div className="doctors-list">
               <h2>Doctors List:</h2>
-              {doctors.map((doctor) => (
-                <div key={doctor._id} className="doctor-item" onClick={() => handleDoctorSelect(doctor)}>
-                  <div className="doctor-name">{doctor.name}</div>
-                </div>
-              ))}
+              {doctors.length > 0 ? (
+                doctors.map((doctor) => (
+                  <div key={doctor._id} className="doctor-item" onClick={() => handleDoctorSelect(doctor)}>
+                    <div className="doctor-name">{doctor.name}</div>
+                  </div>
+                ))
+              ) : (
+                <p>No doctors available</p>
+              )}
             </div>
             <div className="doctor-details-container">
               {selectedDoctor && (

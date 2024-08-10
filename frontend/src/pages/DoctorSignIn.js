@@ -21,10 +21,9 @@ const DoctorSignIn = () => {
             console.log('Response:', response.data);
 
             if (response.data.message === 'Sign in successful') {
-                sessionStorage.setItem('doctorToken', response.data.token); // Store JWT token in session storage
-                sessionStorage.setItem('doctorName', response.data.name);  // Store doctor's name in session storage
+                localStorage.setItem('doctorToken', response.data.token); // Store JWT token in local storage
                 alert('Sign in successful!');
-                navigate('/doctor-dashboard');
+                navigate('/doctor-page');
             } else {
                 setError('Failed to sign in. Please check your credentials.');
             }
@@ -58,8 +57,7 @@ const DoctorSignIn = () => {
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             required
-                        />
-                    </div>
+                        />                    </div>
                     <button type="submit">Sign In</button>
                 </form>
             </div>

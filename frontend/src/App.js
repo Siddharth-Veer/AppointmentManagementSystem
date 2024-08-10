@@ -9,14 +9,14 @@ import ContactUs from './pages/ContactUs';
 import AboutUs from './pages/AboutUs';
 import ForgotPassword from './components/ForgotPassword';
 import ResetPassword from './components/ResetPassword';
-import RegistrationForm from './components/RegistrationForm';
 import AddDoctor from './components/AddDoctor';
 import SelectDateTime from './pages/select-date-time';
 import AppointmentConfirmation from './pages/AppointmentConfirmation';
 import AdminMainLayout from './components/AdminMainLayout';
-import AdminLogin from './components/AdminLogin'; // Import the AdminLogin component
+import AdminLogin from './components/AdminLogin'; 
 import DoctorSignIn from './components/DoctorSignIn';
-import AdminLogout from './components/AdminLogout'; // Import the AdminLogout component
+import DoctorDashboard from './components/DoctorDashboard';
+import AdminLogout from './components/AdminLogout'; 
 
 const App = () => {
   return (
@@ -30,11 +30,11 @@ const App = () => {
         <Route path="/about-us" element={<AboutUs />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password" element={<ResetPassword />} />
-        <Route path="/registration-form" element={<RegistrationForm />} />
         <Route path="/add-doctor" element={<AddDoctor />} />
         <Route path="/select-date-time" element={<SelectDateTime />} />
         <Route path="/appointment-confirmation" element={<AppointmentConfirmation />} />
         <Route path="/doctor-signin" element={<DoctorSignIn />} />
+        <Route path="/doctor-dashboard" element={<DoctorDashboard />} />
         <Route path="/admin-login" element={<AdminLogin />} />
         <Route path="/admin-logout" element={<AdminLogout />} /> {/* Add AdminLogout route */}
         <Route path="/admin/*" element={<AdminMainLayout />} />
