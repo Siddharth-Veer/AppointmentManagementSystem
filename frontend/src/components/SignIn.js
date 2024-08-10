@@ -23,7 +23,7 @@ const SignIn = () => {
 
             if (user) {
                 const userName = user.displayName || 'User';
-                localStorage.setItem('userName', userName); // Save user name to local storage
+                sessionStorage.setItem('userName', userName); // Save user name to local storage
                 console.log('User signed in:', user);
                 navigate('/appointment-booking'); // Redirect to book-appointment page after sign-in
             } else {
@@ -41,7 +41,7 @@ const SignIn = () => {
 
             if (user) {
                 const userName = user.displayName || 'User';
-                localStorage.setItem('userName', userName); // Save user name to local storage
+                sessionStorage.setItem('userName', userName); // Save user name to local storage
                 console.log('User signed in with Google:', user);
                 navigate('/appointment-booking'); // Redirect to book-appointment page after Google sign-in
             } else {
