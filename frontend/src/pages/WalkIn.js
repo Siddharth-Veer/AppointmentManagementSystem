@@ -26,7 +26,7 @@ const WalkIn = () => {
   useEffect(() => {
     const fetchCurrentTicket = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/tickets/current');
+        const response = await axios.get('https://medisync-w9rq.onrender.com/api/tickets/current');
         setCurrentTicket(response.data);
       } catch (error) {
         console.error('Error fetching current ticket:', error);
@@ -35,7 +35,7 @@ const WalkIn = () => {
 
     const fetchPeopleAhead = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/tickets/people-ahead');
+        const response = await axios.get('https://medisync-w9rq.onrender.com/api/tickets/people-ahead');
         setPeopleAhead(response.data);
       } catch (error) {
         console.error('Error fetching people ahead:', error);
@@ -85,12 +85,12 @@ const WalkIn = () => {
       const validUntil = new Date(nextAvailableTime.getTime() + TIME_INTERVAL * 60000);
 
       // Post the ticket to the server
-      const response = await axios.post('http://localhost:5000/api/tickets/buy', { name, validUntil });
+      const response = await axios.post('https://medisync-w9rq.onrender.com/api/tickets/buy', { name, validUntil });
       setTicket(response.data);
       setError('');
       setShowModal(false); // Hide the modal
       // Refresh people ahead list after buying a ticket
-      const peopleResponse = await axios.get('http://localhost:5000/api/tickets/people-ahead');
+      const peopleResponse = await axios.get('https://medisync-w9rq.onrender.com/api/tickets/people-ahead');
       setPeopleAhead(peopleResponse.data);
     } catch (error) {
       setError('Error buying ticket. Please try again.');

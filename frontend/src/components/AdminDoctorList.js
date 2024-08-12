@@ -11,7 +11,7 @@ const AdminDoctorList = () => {
   useEffect(() => {
     const fetchDoctors = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/doctors');
+        const response = await axios.get('https://medisync-w9rq.onrender.com/api/doctors');
         setDoctors(response.data);
       } catch (error) {
         console.error('Error fetching doctors:', error);
@@ -26,7 +26,7 @@ const AdminDoctorList = () => {
 
   const handleStatusChange = async (id) => {
     try {
-      await axios.put(`http://localhost:5000/api/doctors/${id}`, { status: 'suspended' });
+      await axios.put(`https://medisync-w9rq.onrender.com/api/doctors/${id}`, { status: 'suspended' });
       setDoctors((prevState) =>
         prevState.map((doctor) =>
           doctor._id === id ? { ...doctor, status: 'suspended' } : doctor
