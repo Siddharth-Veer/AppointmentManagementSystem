@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
 import { auth, googleProvider } from '../firebase';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate , Link } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Container, Row, Col, Form, Button, Alert, Modal } from 'react-bootstrap';
 
@@ -102,10 +102,10 @@ const SignIn = () => {
                             </Button>
                             <div className="text-center">
                                 <p>
-                                    <a href="/forgot-password" className="link-primary">Forgot Password?</a>
+                                    <Link to="/forgot-password" className="link-primary">Forgot Password?</Link>
                                 </p>
                                 <p>
-                                    <a href="/signup" className="link-primary">New User - Sign Up First</a>
+                                    <Link to="/signup" className="link-primary">New User - Sign Up First</Link>
                                 </p>
                             </div>
                         </Col>

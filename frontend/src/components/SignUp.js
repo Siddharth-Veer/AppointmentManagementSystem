@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { auth, createUserWithEmailAndPassword, updateProfile, googleProvider, signInWithPopup } from '../firebase';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate , Link } from 'react-router-dom';
 import axios from "axios";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Container, Row, Col, Form, Button, Alert, Modal } from 'react-bootstrap';
@@ -150,7 +150,7 @@ const SignUp = () => {
 
                             {/* Add a link which says if already a user go to Signin */}
                             <p className="text-center mt-3">
-                                Already have an account? <a href="/sign-in">Sign In</a>
+                                Already have an account? <Link to="/sign-in">Sign In</Link>
                             </p>
                         </Col>
                     </Row>

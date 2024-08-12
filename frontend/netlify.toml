@@ -1,5 +1,4 @@
 [[redirects]]
-  from = "/*"
-  to = "/index.html"
+  from = "/test"
+  to = "/"
   status = 200
-  force = true

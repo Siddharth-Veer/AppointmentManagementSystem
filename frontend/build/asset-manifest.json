@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/static/css/main.4b72c293.css",
-    "main.js": "/static/js/main.cd3ce828.js",
+    "main.js": "/static/js/main.b542462a.js",
     "static/media/health-care.gif": "/static/media/health-care.086b21461dd4df6e4ae9.gif",
     "static/media/logo.png": "/static/media/logo.1d717f1fb9c844659c72.png",
     "static/media/medi.jpg": "/static/media/medi.c0c604b0b8d72e7f4c44.jpg",
@@ -9,10 +9,10 @@
     "static/media/medi2.jpg": "/static/media/medi2.288759505ea489a1eac3.jpg",
     "index.html": "/index.html",
     "main.4b72c293.css.map": "/static/css/main.4b72c293.css.map",
-    "main.cd3ce828.js.map": "/static/js/main.cd3ce828.js.map"
+    "main.b542462a.js.map": "/static/js/main.b542462a.js.map"
   },
   "entrypoints": [
     "static/css/main.4b72c293.css",
-    "static/js/main.cd3ce828.js"
+    "static/js/main.b542462a.js"
   ]
 }
