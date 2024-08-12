@@ -1,12 +1,11 @@
 const Appointment = require('../models/Appointment');
 
 // Get all appointments
-const getAppointments = async (req, res) => {
+const getAppointments = async (query = {}) => {
   try {
-    const appointments = await Appointment.find();
-    res.status(200).json(appointments);
+    return await Appointment.find(query);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    throw new Error('Error fetching appointments');
   }
 };
 
@@ -38,4 +37,6 @@ const setAppointment = async (req, res) => {
 module.exports = {
   getAppointments,
   setAppointment,
+  updateAppointment,
+  deleteAppointment,
 };

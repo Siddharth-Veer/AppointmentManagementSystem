@@ -15,7 +15,7 @@ const AppointmentList = () => {
         const userName = sessionStorage.getItem('userName');
         if (userName) {
           const response = await axios.get(`https://medisync-w9rq.onrender.com/api/appointments`, {
-            params: { patientName: userName } // Use `params` to send query parameters
+            params: { patientName: userName } // This should match the endpoint in your consolidated route
           });
           setAppointments(response.data);
         }
