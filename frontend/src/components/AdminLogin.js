@@ -20,7 +20,7 @@ const AdminLogin = () => {
           const response = await fetch('https://medisync-w9rq.onrender.com/api/admin/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email, password })
+            body: JSON.stringify({ username: email, password })
           });
       
           const result = await response.json();
@@ -34,7 +34,7 @@ const AdminLogin = () => {
           setError('An error occurred');
         }
       };
-      
+
     return (
         <Modal show={true} centered>
             <Modal.Body className="p-4">
@@ -54,7 +54,7 @@ const AdminLogin = () => {
                             {error && <Alert variant="danger">{error}</Alert>}
                             <Form onSubmit={handleSubmit}>
                                 <Form.Group className="mb-3" controlId="formEmail">
-                                    <Form.Label>Email</Form.Label>
+                                    <Form.Label>Username</Form.Label>
                                     <Form.Control
                                         type="text"
                                         placeholder="Enter email"

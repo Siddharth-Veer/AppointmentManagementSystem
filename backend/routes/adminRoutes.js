@@ -17,7 +17,7 @@ const adminUsername = 'admin';
 const adminPassword = 'admin@123';
 
 // Admin login route
-router.post('/admin/login', (req, res) => {
+router.post('/login', (req, res) => {
   const { username, password } = req.body;
   
   if (username === adminUsername && password === adminPassword) {
@@ -29,7 +29,7 @@ router.post('/admin/login', (req, res) => {
 });
 
 // Admin logout route
-router.post('/admin/logout', (req, res) => {
+router.post('/logout', (req, res) => {
   req.session.destroy((err) => {
     if (err) {
       return res.status(500).json({ message: 'Failed to log out' });
@@ -48,24 +48,24 @@ const checkAdminAuth = (req, res, next) => {
 };
 
 // Protected admin routes
-router.get('/admin/dashboard', checkAdminAuth, (req, res) => {
+router.get('/dashboard', checkAdminAuth, (req, res) => {
   res.status(200).json({ message: 'Welcome to the Admin Dashboard' });
 });
 
-router.get('/admin/doctorslist', checkAdminAuth, (req, res) => {
+router.get('/doctorslist', checkAdminAuth, (req, res) => {
   res.status(200).json({ message: 'Doctors List' });
 });
 
 // Add other protected routes as needed
-router.get('/admin/add-doctor', checkAdminAuth, (req, res) => {
+router.get('/add-doctor', checkAdminAuth, (req, res) => {
   res.status(200).json({ message: 'Add Doctor Page' });
 });
 
-router.get('/admin/manage-doctors', checkAdminAuth, (req, res) => {
+router.get('/manage-doctors', checkAdminAuth, (req, res) => {
   res.status(200).json({ message: 'Manage Doctors Page' });
 });
 
-router.get('/admin/manage-availability', checkAdminAuth, (req, res) => {
+router.get('/manage-availability', checkAdminAuth, (req, res) => {
   res.status(200).json({ message: 'Manage Availability Page' });
 });
 

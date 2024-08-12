@@ -13,6 +13,7 @@ const adminAuthRoute = require('./routes/adminAuth');
 const adminRoutes = require('./routes/adminRoutes');
 const ticketRoutes = require('./routes/tickets');
 const symptomsRoute = require('./routes/symptoms');
+const adminRouter = require('./routes/adminRoutes'); 
 
 require('dotenv').config();
 
@@ -30,7 +31,7 @@ db.on('error', (error) => console.error('MongoDB connection error:', error));
 db.once('open', () => console.log('MongoDB connected'));
 
 const corsOptions = {
-  origin: 'https://medi-sync.netlify.app', // Replace with your Netlify domain
+  origin: 'https://medi-sync.netlify.app', // Replace with your Netlify domain https://medi-sync.netlify.app  http://localhost:3000
   methods: 'GET,POST,PUT,DELETE', // Replace with your frontend URL
   credentials: true, // Allow cookies and credentials
 };
@@ -42,6 +43,7 @@ app.use(sessionMiddleware); // Use session middleware here
 
 // Routes
 app.use('/api/auth', authRoutes);
+app.use('/api/admin', adminRouter);
 app.use('/api/doctors', doctorsRouter);
 app.use('/api/appointments', appointmentRoutes);
 app.use('/api/patients', patientsRouter);
