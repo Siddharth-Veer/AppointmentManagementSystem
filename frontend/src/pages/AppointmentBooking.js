@@ -311,6 +311,7 @@ const AppointmentBooking = () => {
               <Card className="mb-4">
                 <Card.Body>
                   <Card.Title>Doctor's Details</Card.Title>
+                  <Card.Title>{selectedDoctor.name}</Card.Title>
                   <Card.Subtitle className="mb-2 text-muted">{selectedDoctor.speciality}</Card.Subtitle>
                   <Card.Text>Contact: {selectedDoctor.contact}</Card.Text>
                   <Button variant="primary" onClick={handleSelectClick}>Select Doctor</Button>
