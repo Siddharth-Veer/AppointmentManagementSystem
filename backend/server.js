@@ -30,7 +30,8 @@ db.on('error', (error) => console.error('MongoDB connection error:', error));
 db.once('open', () => console.log('MongoDB connected'));
 
 const corsOptions = {
-  origin: 'http://localhost:3000', // Replace with your frontend URL
+  origin: 'https://medi-sync.netlify.app', // Replace with your Netlify domain
+  methods: 'GET,POST,PUT,DELETE', // Replace with your frontend URL
   credentials: true, // Allow cookies and credentials
 };
 
