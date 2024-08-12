@@ -5,6 +5,7 @@ const getAppointments = async (query = {}) => {
   try {
     return await Appointment.find(query);
   } catch (error) {
+    console.error('Error fetching appointments:', error); // Log detailed error
     throw new Error('Error fetching appointments');
   }
 };
