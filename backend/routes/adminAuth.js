@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
 const session = require('express-session');
-const User = require('./models/User'); // Import the User model
+const User = require('../models/User'); // Import the User model
 const bcrypt = require('bcryptjs');
 
 // Middleware to protect admin routes
