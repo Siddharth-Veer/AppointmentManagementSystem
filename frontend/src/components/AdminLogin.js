@@ -12,29 +12,29 @@ const AdminLogin = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (!email || !password) {
-            setError('Please fill in all fields');
-            return;
+          setError('Please fill in all fields');
+          return;
         }
-
+        
         try {
-            const response = await fetch('https://medisync-w9rq.onrender.com/api/auth/login', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, password })
-            });
-
-            const result = await response.json();
-            if (response.ok) {
-                localStorage.setItem('adminToken', result.token);
-                navigate('/admin');
-            } else {
-                setError(result.message || 'Login failed');
-            }
+          const response = await fetch('https://medisync-w9rq.onrender.com/api/admin/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password })
+          });
+      
+          const result = await response.json();
+          if (response.ok) {
+            localStorage.setItem('adminToken', result.token);
+            navigate('/admin/dashboard'); // Redirect to admin dashboard or other protected route
+          } else {
+            setError(result.message || 'Login failed');
+          }
         } catch (err) {
-            setError('An error occurred');
+          setError('An error occurred');
         }
-    };
-
+      };
+      
     return (
         <Modal show={true} centered>
             <Modal.Body className="p-4">

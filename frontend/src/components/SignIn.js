@@ -102,10 +102,10 @@ const SignIn = () => {
                             </Button>
                             <div className="text-center">
                                 <p>
-                                    <Link to="/forgot-password" className="link-primary">Forgot Password?</Link>
+                                    <a href="/forgot-password" className="link-primary">Forgot Password?</a>
                                 </p>
                                 <p>
-                                    <Link to="/sign-up" className="link-primary">New User - Sign Up First</Link>
+                                    <a href="/signup" className="link-primary">New User - Sign Up First</a>
                                 </p>
                             </div>
                         </Col>
