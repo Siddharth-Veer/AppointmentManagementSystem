@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Link} from 'react-router-dom';
 import HomePage from './pages/HomePage';
 import AppointmentBooking from './pages/AppointmentBooking';
 import AppointmentList from './pages/AppointmentList';
@@ -18,6 +18,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import WalkIn from './pages/WalkIn';
 import ContactUs from './pages/ContactUs';
 import AboutUs from './pages/AboutUs';
+
 
 const App = () => {
   return (

@@ -236,6 +236,7 @@ const AppointmentBooking = () => {
   };
 
   return (
+    
     <Container className="appointment-booking mt-4">
       <Row className="mb-4">
         <Col>

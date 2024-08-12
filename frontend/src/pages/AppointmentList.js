@@ -10,33 +10,33 @@ const AppointmentList = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchPatientName = () => {
-      const storedPatientName = sessionStorage.getItem('patientName');
-      if (storedPatientName) {
-        setPatientName(storedPatientName);
-      } else {
+    const fetchAppointments = async () => {
+      const storedPatientName = sessionStorage.getItem('userName'); // Corrected key from 'patientName' to 'userName'
+
+      if (!storedPatientName) {
         console.error('Patient name not found in session storage. Please log in again.');
         setLoading(false);
         return;
       }
-    };
 
-    const fetchAppointments = async () => {
       try {
-        const response = await axios.get(`https://medisync-w9rq.onrender.com/api/appointments?patientName=${encodeURIComponent(patientName)}`);
+        const response = await axios.get(`https://medisync-w9rq.onrender.com/api/appointments?patientName=${encodeURIComponent(storedPatientName)}`);
         setAppointments(response.data);
+        setLoading(false);
       } catch (error) {
         console.error('Error fetching appointments:', error);
-      } finally {
         setLoading(false);
       }
     };
 
+    const fetchPatientName = () => {
+      const userName = sessionStorage.getItem('userName');
+      setPatientName(userName || 'Guest');
+    };
+
     fetchPatientName();
-    if (patientName) {
-      fetchAppointments();
-    }
-  }, [patientName]); // Adding patientName as a dependency to fetch appointments after the name is set
+    fetchAppointments();
+  }, []);
 
   const handleCancel = async (appointmentId) => {
     try {

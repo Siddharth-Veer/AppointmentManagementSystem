@@ -11,6 +11,7 @@ const WalkIn = () => {
   const [showModal, setShowModal] = useState(false);
   const [name, setName] = useState('');
   const [error, setError] = useState('');
+  const [patientName, setPatientName] = useState('');
   const [currentTime, setCurrentTime] = useState(new Date());
 
   const START_TIME = new Date();
@@ -33,6 +34,11 @@ const WalkIn = () => {
       }
     };
 
+    const fetchPatientName = () => {
+      const userName = sessionStorage.getItem('userName');
+      setPatientName(userName || 'Guest');
+    };
+
     const fetchPeopleAhead = async () => {
       try {
         const response = await axios.get('https://medisync-w9rq.onrender.com/api/tickets/people-ahead');
@@ -42,6 +48,7 @@ const WalkIn = () => {
       }
     };
 
+    fetchPatientName();
     fetchCurrentTicket();
     fetchPeopleAhead();
 
@@ -126,7 +133,7 @@ const WalkIn = () => {
     <Container className="mt-5">
       <Row className="mb-4">
         <Col>
-          <h2>Welcome, Kronos!</h2>
+          <h2>Welcome, {patientName}!</h2>
         </Col>
         <Col className="text-end">
           <Button variant="primary" className="me-2" onClick={() => navigate('/appointments')}>Appointments</Button>
