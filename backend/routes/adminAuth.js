@@ -1,12 +1,14 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
-const jwt = require("jsonwebtoken");
-const session = require("express-session");
+const jwt = require('jsonwebtoken');
+const session = require('express-session');
+const User = require('./models/User'); // Import the User model
+const bcrypt = require('bcryptjs');
 
 // Middleware to protect admin routes
 const auth = (req, res, next) => {
   if (!req.session || !req.session.isAuthenticated) {
-    return res.status(401).json({ message: "Unauthorized access. Please log in." });
+    return res.status(401).json({ message: 'Unauthorized access. Please log in.' });
   }
   next();
 };
@@ -14,7 +16,7 @@ const auth = (req, res, next) => {
 // Configure session management
 router.use(
   session({
-    secret: process.env.SESSION_SECRET || "your-secret-key", // Replace with a secure secret key
+    secret: process.env.SESSION_SECRET || 'your-secret-key', // Replace with a secure secret key
     resave: false,
     saveUninitialized: true,
     cookie: { secure: false, maxAge: 60000 } // Set secure to true in production
@@ -22,42 +24,52 @@ router.use(
 );
 
 // Admin login route
-router.post("/login", (req, res) => {
-  const { username, password } = req.body;
+router.post('/login', async (req, res) => {
+  const { email, password } = req.body;
 
-  // Hardcoded admin credentials
-  const adminUsername = "admin";
-  const adminPassword = "admin@123";
+  try {
+    // Find user by email
+    const user = await User.findOne({ email });
 
-  if (username === adminUsername && password === adminPassword) {
+    if (!user) {
+      return res.status(401).json({ message: 'Invalid email or password' });
+    }
+
+    // Check password
+    const isMatch = await bcrypt.compare(password, user.password);
+
+    if (!isMatch) {
+      return res.status(401).json({ message: 'Invalid email or password' });
+    }
+
     // Create a session
     req.session.isAuthenticated = true;
-    req.session.user = { username };
+    req.session.user = { email };
 
     // Generate a token if needed (optional)
-    const token = jwt.sign({ username }, process.env.JWT_PRIVATE_KEY || "your-private-key");
+    const token = jwt.sign({ email }, process.env.JWT_PRIVATE_KEY || 'your-private-key');
 
-    return res.status(200).json({ message: "Login successful", token });
-  } else {
-    return res.status(401).json({ message: "Invalid username or password" });
+    return res.status(200).json({ message: 'Login successful', token });
+  } catch (err) {
+    return res.status(500).json({ message: 'Server error' });
   }
 });
 
 // Admin logout route
-router.post("/logout", (req, res) => {
+router.post('/logout', (req, res) => {
   req.session.destroy((err) => {
     if (err) {
-      return res.status(500).json({ message: "Failed to log out" });
+      return res.status(500).json({ message: 'Failed to log out' });
     } else {
-      return res.status(200).json({ message: "Logout successful" });
+      return res.status(200).json({ message: 'Logout successful' });
     }
   });
 });
 
 // Protected admin routes
-router.get("/dashboard", auth, (req, res) => {
+router.get('/dashboard', auth, (req, res) => {
   // Render or send the admin dashboard
-  res.status(200).json({ message: "Welcome to the Admin Dashboard" });
+  res.status(200).json({ message: 'Welcome to the Admin Dashboard' });
 });
 
 router.get("/doctorslist", auth, (req, res) => {
