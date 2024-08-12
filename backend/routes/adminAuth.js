@@ -19,7 +19,7 @@ router.use(
     secret: process.env.SESSION_SECRET || 'your-secret-key', // Replace with a secure secret key
     resave: false,
     saveUninitialized: true,
-    cookie: { secure: false, maxAge: 60000 } // Set secure to true in production
+    cookie: { secure: true, maxAge: 60000 } // Set secure to true in production
   })
 );
 

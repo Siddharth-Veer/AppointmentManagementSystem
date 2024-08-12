@@ -150,7 +150,7 @@ const SignUp = () => {
 
                             {/* Add a link which says if already a user go to Signin */}
                             <p className="text-center mt-3">
-                                Already have an account? <a href="/sign-in">Sign In</a>
+                                Already have an account? <Link to="./sign-in">Sign In</Link>
                             </p>
                         </Col>
                     </Row>
