@@ -16,15 +16,17 @@ const HamburgerMenu = ({ isOpen, onClose }) => {
         <Link to="/sign-up" className="create-account" onClick={onClose}>Create a patient account</Link>
         <Link to="/sign-in" onClick={onClose}>Have an account? Sign in here</Link>
         <hr />
-        <a href="#">Practice Login</a>
+        <Link to="/">Home</Link>
+        <Link to="#">Practice Login</Link>
         <Link to="/doctor-signin" onClick={onClose}>Doctor Login</Link>
         <Link to="/admin-login" onClick={onClose}>Admin Login</Link>
-        <a href="#">List Your Practice</a>
-        <a href="#">Practice Pricing</a>
-        <a href="/aboutus">About Us</a>
-        <a href="#">Advertise with Us</a>
-        <a href="/contactus">Contact Us</a>
+        <Link to="#">List Your Practice</Link>
+        <Link to="#">Practice Pricing</Link>
+        <Link to="/aboutus">About Us</Link>
+        <Link to="/contactus">Contact Us</Link>
+        <Link to="#">Advertise with Us</Link>
       </div>
+  
     </div>
   );
 };

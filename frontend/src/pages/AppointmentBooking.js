@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { Container, Row, Col, Button, Card, ListGroup, Form } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import logo from "./logo.png";
 
 const AppointmentBooking = () => {
   const [doctors, setDoctors] = useState([]);
@@ -238,6 +239,10 @@ const AppointmentBooking = () => {
   return (
     
     <Container className="appointment-booking mt-4">
+      <div className="logo-section">
+          <img className="logo" src={logo} alt="Medisync Logo" />
+          <p className="brand-name">Medisync</p>
+        </div>
       <Row className="mb-4">
         <Col>
           <h2>Welcome, {patientName}!</h2>

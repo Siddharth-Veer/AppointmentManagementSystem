@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { Container, Row, Col, Button } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css'; // Ensure Bootstrap CSS is included
+import logo from "./logo.png";
 
 const WalkIn = () => {
   const [ticket, setTicket] = useState(null);
@@ -131,6 +132,10 @@ const WalkIn = () => {
 
   return (
     <Container className="mt-5">
+      <div className="logo-section">
+          <img className="logo" src={logo} alt="Medisync Logo" />
+          <p className="brand-name">Medisync</p>
+        </div>
       <Row className="mb-4">
         <Col>
           <h2>Welcome, {patientName}!</h2>

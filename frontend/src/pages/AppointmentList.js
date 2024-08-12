@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Container, Row, Col, Card, Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
+import logo from "./logo.png";
 
 const AppointmentList = () => {
   const [appointments, setAppointments] = useState([]);
@@ -59,6 +60,10 @@ const AppointmentList = () => {
 
   return (
     <Container className="appointment-list">
+      <div className="logo-section">
+          <img className="logo" src={logo} alt="Medisync Logo" />
+          <p className="brand-name">Medisync</p>
+        </div>
       <Row className="mb-4">
         <Col>
           <h2>Welcome, {patientName}!</h2>

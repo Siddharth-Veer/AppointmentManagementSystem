@@ -23,21 +23,18 @@ const ManageAppointments = () => {
   useEffect(() => {
     // Fetch appointments for the selected doctor
     const fetchAppointments = async () => {
-      if (selectedDoctor) {
-        try {
-          const response = await axios.get(`https://medisync-w9rq.onrender.com/api/appointments`);
-          // Filter appointments based on the selected doctor's name
-          const filteredAppointments = response.data.filter(appointment => appointment.doctorName === selectedDoctor);
-          setAppointments(filteredAppointments);
-        } catch (error) {
-          console.error('Error fetching appointments:', error);
-        }
-      } else {
-        // Clear appointments if no doctor is selected
-        setAppointments([]);
+      try {
+        const response = await axios.get(`https://medisync-w9rq.onrender.com/api/appointments?doctorName=${selectedDoctor}`);
+        setAppointments(response.data);
+      } catch (error) {
+        console.error('Error fetching appointments:', error);
       }
     };
-    fetchAppointments();
+    if (selectedDoctor) {
+      fetchAppointments();
+    } else {
+      setAppointments([]);
+    }
   }, [selectedDoctor]);
 
   return (
@@ -79,7 +76,7 @@ const ManageAppointments = () => {
                       <td>{appointment.date}</td>
                       <td>{appointment.time}</td>
                       <td>{appointment.contact}</td>
-                      <td>{appointment.doctorName}</td> {/* Display the doctor's name from appointment data */}
+                      <td>{appointment.doctorName}</td>
                     </tr>
                   ))
                 ) : (

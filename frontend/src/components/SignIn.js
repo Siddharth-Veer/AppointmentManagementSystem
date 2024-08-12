@@ -105,7 +105,7 @@ const SignIn = () => {
                                     <Link to="/forgot-password" className="link-primary">Forgot Password?</Link>
                                 </p>
                                 <p>
-                                    <Link to="/signup" className="link-primary">New User - Sign Up First</Link>
+                                    <Link to="/sign-up" className="link-primary">New User - Sign Up First</Link>
                                 </p>
                             </div>
                         </Col>
