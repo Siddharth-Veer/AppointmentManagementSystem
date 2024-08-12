@@ -5,7 +5,6 @@ import AppointmentBooking from './pages/AppointmentBooking';
 import AppointmentList from './pages/AppointmentList';
 import SignIn from './components/SignIn';
 import SignUp from './components/SignUp';
-import ContactUs from './pages/ContactUs';
 import ForgotPassword from './components/ForgotPassword';
 import ResetPassword from './components/ResetPassword';
 import AddDoctor from './components/AddDoctor';
@@ -17,6 +16,8 @@ import DoctorDashboard from './components/DoctorDashboard';
 import AdminLogout from './components/AdminLogout'; 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import WalkIn from './pages/WalkIn';
+import ContactUs from './pages/ContactUs';
+import AboutUs from './pages/AboutUs';
 
 const App = () => {
   return (
@@ -26,7 +27,8 @@ const App = () => {
         <Route path="/appointments" element={<AppointmentList />} />
         <Route path="/sign-in" element={<SignIn />} />
         <Route path="/sign-up" element={<SignUp />} />
-        <Route path="/contact-us" element={<ContactUs />} />
+        <Route path="/contactus" element={<ContactUs />} />
+        <Route path="/aboutus" element={<AboutUs />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="/add-doctor" element={<AddDoctor />} />

@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const Symptom = require('../models/symptom'); // Adjust the path as needed
+const Symptom = require('../models/Symptom'); // Adjust the path as needed
 
 // GET /api/symptoms
 router.get('/', async (req, res) => {

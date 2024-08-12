@@ -21,9 +21,9 @@ const HamburgerMenu = ({ isOpen, onClose }) => {
         <Link to="/admin-login" onClick={onClose}>Admin Login</Link>
         <a href="#">List Your Practice</a>
         <a href="#">Practice Pricing</a>
-        <a href="#">About Us</a>
+        <a href="/aboutus">About Us</a>
         <a href="#">Advertise with Us</a>
-        <a href="#">Contact Us</a>
+        <a href="/contactus">Contact Us</a>
       </div>
     </div>
   );

@@ -1,31 +1,21 @@
 import React, { useState } from "react";
 import '../css/index.css';
+import missionImage from '../images/medi.jpg';
+import visionImage from '../images/medi2.jpg';
+import teamImage from '../images/medi3.jpg';
 import HamburgerMenu from "../components/HamburgerMenu";
 import logo from "./logo.png";
-const ContactUs = () => {
-  const [name, setName] = useState("");
-  const [phone, setPhone] = useState("");
-  const [email, setEmail] = useState("");
-  const [subject, setSubject] = useState("");
-  const [message, setMessage] = useState("");
-  const [error, setError] = useState("");
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (!email || !name || !phone || !subject || !message) {
-      setError("Please fill in all fields");
-    }
-  };
+const AboutUs = () => {
+  
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
-
   return (
-    <>
-    <header>
+
+    <><header>
     <div className="logo-section">
       <img className="logo" src={logo} alt="Medisync Logo" />
       <p className="brand-name">Medisync</p>
@@ -42,69 +32,45 @@ const ContactUs = () => {
     </nav>
   </header>
   <HamburgerMenu isOpen={isMenuOpen} onClose={toggleMenu} />
-      <div className="container">
-        <div className="contact-box">
-          <div className="contact-left">
-            <h3>Connect With Us</h3>
-            {error && <p className="error">{error}</p>}
-            <form onSubmit={handleSubmit}>
-              <div className="contact-row">
-                <div className="contact-group">
-                  <label>Name</label>
-                  <input
-                    type="text"
-                    placeholder="Your Name"
-                    name="name"
-                    value={name}
-                    onChange={(e) => setName(e?.target?.value)}
-                  />
-                </div>
-                <div className="contact-group">
-                  <label>Phone</label>
-                  <input
-                    type="text"
-                    placeholder="Your Phone No."
-                    name="phone"
-                    value={phone}
-                    onChange={(e) => setPhone(e?.target?.value)}
-                  />
-                </div>
-              </div>
-              <div className="contact-row">
-                <div className="contact-group">
-                  <label>Email</label>
-                  <input
-                    type="email"
-                    placeholder="Your email"
-                    name="email"
-                    value={email}
-                    onChange={(e) => setEmail(e?.target?.value)}
-                  />
-                </div>
-                <div className="contact-group">
-                  <label className="input-lab">Subject</label>
-                  <input
-                    type="text"
-                    placeholder="Please write Subject here"
-                    className="input-message"
-                    name="message"
-                    value={subject}
-                    onChange={(e) => setSubject(e?.target?.value)}
-                  />
-                </div>
-              </div>
-              <label>Message</label>
-              <textarea
-                rows="5"
-                placeholder="your message..."
-                value={message}
-                onChange={(e) => setMessage(e?.target?.value)}
-              ></textarea>
-
-              <button type="submit">Send</button>
-            </form>
+    
+    <div className="about-us-container">
+        <section className="hero-section">
+          <div className="hero-content">
+            <h1>About MediSync</h1>
+            <p>MediSync is Canada's largest online and mobile real-time resource for same-day access to care.</p>
           </div>
-        </div>
+        </section>
+
+        <section className="section mission-section">
+          <div className="text-container">
+            <h2>Our Mission</h2>
+            <p>Our mission is to empower patients by providing them with the information they need to access timely healthcare. We believe in a healthcare system where patients can easily navigate their options and choose the best care for their needs.</p>
+          </div>
+          <div className="image-container">
+            <img src={missionImage} alt="Mission" />
+          </div>
+        </section>
+
+        <section className="section vision-section">
+          <div className="text-container">
+            <h2>Our Vision</h2>
+            <p>We envision a world where accessing healthcare is simple, convenient, and stress-free. Our goal is to be the trusted resource that patients turn to for finding the right care at the right time.</p>
+          </div>
+          <div className="image-container">
+            <img src={visionImage} alt="Vision" />
+          </div>
+        </section>
+
+        <section className="section team-section">
+          <div className="text-container">
+            <h2>Our Team</h2>
+            <p>Our team is made up of dedicated professionals who are passionate about improving healthcare accessibility. We bring together expertise in technology, healthcare, and customer service to deliver the best possible experience for our users.</p>
+          </div>
+          <div className="image-container">
+            <img src={teamImage} alt="Team" />
+          </div>
+        </section>
+
       </div>
       <footer className="main-footer">
         <div className="footer-content">
@@ -186,9 +152,7 @@ const ContactUs = () => {
           <p>&copy; 2023 Medisync. All rights reserved.</p>
         </div>
       </footer>
-
-    </>
+      </>
   );
 };
-
-export default ContactUs;
+export default AboutUs;
