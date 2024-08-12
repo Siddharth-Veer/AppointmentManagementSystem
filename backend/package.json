@@ -5,7 +5,7 @@
     "scripts": {
         "start": "node server.js",
         "dev": "nodemon server.js",
-        "build": "react-scripts build"
+        "build": "npm i"
     },
     "dependencies": {
         "auth": "^1.0.2",
