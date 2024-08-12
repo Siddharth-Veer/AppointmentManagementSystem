@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import '../css/AppointmentBooking.css';
+import { Container, Row, Col, Button, Card, ListGroup, Form } from 'react-bootstrap';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const AppointmentBooking = () => {
   const [doctors, setDoctors] = useState([]);
+  const [filteredDoctors, setFilteredDoctors] = useState([]);
   const [selectedDoctor, setSelectedDoctor] = useState(null);
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [selectedTime, setSelectedTime] = useState('');
@@ -14,15 +16,52 @@ const AppointmentBooking = () => {
   const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
   const [availableSlots, setAvailableSlots] = useState([]);
   const [availableDates, setAvailableDates] = useState([]);
+  const [selectedSpecialty, setSelectedSpecialty] = useState('');
+  const [specialties, setSpecialties] = useState([]);
+  const [symptoms, setSymptoms] = useState([]);
+  const [symptomQuery, setSymptomQuery] = useState('');
+  const [suggestions, setSuggestions] = useState([]);
   const navigate = useNavigate();
+
+  const handleSymptomChange = (e) => {
+    const query = e.target.value;
+    setSymptomQuery(query);
+
+    if (query) {
+      const filteredSymptoms = symptoms.filter(symptom =>
+        symptom.symptom.toLowerCase().includes(query.toLowerCase())
+      );
+      setSuggestions(filteredSymptoms);
+    } else {
+      setSuggestions([]);
+    }
+  };
+
+  const handleSymptomSelect = (symptom) => {
+    setSymptomQuery(symptom.symptom);
+    setSuggestions([]);
+    const specialty = symptom.speciality;
+    setSelectedSpecialty(specialty);
+  };
 
   useEffect(() => {
     const fetchDoctors = async () => {
       try {
         const response = await axios.get('http://localhost:5000/api/doctors');
         setDoctors(response.data);
+        const uniqueSpecialties = [...new Set(response.data.map(doctor => doctor.speciality))];
+        setSpecialties(uniqueSpecialties);
       } catch (error) {
         console.error('Error fetching doctors:', error);
+      }
+    };
+
+    const fetchSymptoms = async () => {
+      try {
+        const response = await axios.get('http://localhost:5000/api/symptoms');
+        setSymptoms(response.data);
+      } catch (error) {
+        console.error('Error fetching symptoms:', error);
       }
     };
 
@@ -31,30 +70,66 @@ const AppointmentBooking = () => {
       setPatientName(userName || 'Guest');
     };
 
+    // Load symptom from session storage and set it to the input field
+    const storedSymptom = sessionStorage.getItem('selectedSymptom');
+    if (storedSymptom) {
+      setSymptomQuery(storedSymptom);
+      handleSymptomChange({ target: { value: storedSymptom } });
+    }
+
     fetchDoctors();
+    fetchSymptoms();
     fetchPatientName();
   }, []);
 
+  useEffect(() => {
+    const filterDoctors = () => {
+      let filtered = doctors;
+
+      // Filter by specialty
+      if (selectedSpecialty) {
+        filtered = filtered.filter(doctor => doctor.speciality === selectedSpecialty);
+      }
+
+      // Filter by symptoms
+      if (symptomQuery) {
+        const matchedSpecialties = symptoms
+          .filter(symptom => symptom.symptom.toLowerCase().includes(symptomQuery.toLowerCase()))
+          .map(symptom => symptom.speciality);
+
+        filtered = filtered.filter(doctor => matchedSpecialties.includes(doctor.speciality));
+      }
+
+      setFilteredDoctors(filtered);
+    };
+
+    filterDoctors();
+  }, [selectedSpecialty, symptomQuery, doctors, symptoms]);
   useEffect(() => {
     const fetchAvailableDates = async () => {
       if (selectedDoctor) {
         try {
           const response = await axios.get(`http://localhost:5000/api/availability?doctorId=${selectedDoctor._id}`);
-          const datesWithAvailability = response.data.map(item => new Date(item.day));
-          setAvailableDates(datesWithAvailability);
+          const data = response.data;
+          if (Array.isArray(data)) {
+            const datesWithAvailability = data.map(item => new Date(item.day));
+            setAvailableDates(datesWithAvailability);
+          } else {
+            console.error('Expected an array but received:', data);
+          }
         } catch (error) {
           console.error('Error fetching available dates:', error);
         }
       }
     };
-
+    
     fetchAvailableDates();
   }, [selectedDoctor]);
 
   useEffect(() => {
     const fetchAvailableSlots = async () => {
       if (selectedDoctor && selectedDate) {
-        const formattedDate = selectedDate.toISOString().split('T')[0]; // Format date as YYYY-MM-DD
+        const formattedDate = selectedDate.toISOString().split('T')[0];
         try {
           const response = await axios.get(`http://localhost:5000/api/availability?doctorId=${selectedDoctor._id}&date=${formattedDate}`);
           setAvailableSlots(response.data?.slots || []);
@@ -105,29 +180,33 @@ const AppointmentBooking = () => {
     const firstDay = new Date(year, month, 1).getDay();
     const daysInMonth = new Date(year, month + 1, 0).getDate();
     const days = [];
-
+    
+    // Add empty slots for the days of the previous month
     for (let i = 0; i < firstDay; i++) {
-      days.push(<span key={`empty-${i}`} className="empty-day"></span>);
+      days.push(<div key={`empty-${i}`} className="empty-day"></div>);
     }
-
+  
+    // Add the days of the current month
     for (let i = 1; i <= daysInMonth; i++) {
       const dayDate = new Date(year, month, i);
       days.push(
-        <span
+        <div
           key={i}
           onClick={() => handleDateChange(i)}
-          className={`day ${
-            selectedDate && selectedDate.getDate() === i && selectedDate.getMonth() === month && selectedDate.getFullYear() === year ? 'selected' : ''
+          className={`day p-2 text-center ${
+            selectedDate && selectedDate.getDate() === i && selectedDate.getMonth() === month && selectedDate.getFullYear() === year ? 'selected bg-primary text-white' : 'bg-light'
           } ${availableDates.some(d => d.toDateString() === dayDate.toDateString()) ? 'available' : ''}`}
+          style={{ flex: '1 0 14%' }} // 14% to fit 7 items per row
           aria-selected={selectedDate && selectedDate.getDate() === i}
         >
           {i}
-        </span>
+        </div>
       );
     }
-
+  
     return days;
   }, [selectedDate, availableDates, handleDateChange]);
+  
 
   const handleDoctorSelect = (doctor) => {
     setSelectedDoctor(doctor);
@@ -156,115 +235,136 @@ const AppointmentBooking = () => {
     }
   };
 
-  const handleLogout = () => {
-    // Clear session storage
-    sessionStorage.removeItem('userName');
-    sessionStorage.removeItem('appointmentDetails');
-    // Redirect to sign-in page
-    navigate('/sign-in');
-  };
-
   return (
-    <div className="appointment-booking">
-      <div className="top-menu">
-        <h2>Welcome {patientName}!</h2>
-        <div className="buttons">
-          <button className="appointment_btn">Appointments</button>
-          <button className="appointment_btn" onClick={() => navigate('/walk-in')}>Walk-In</button>
-          <button className="appointment_btn" onClick={handleLogout}>Logout</button>
-        </div>
+    <Container className="appointment-booking mt-4">
+      <Row className="mb-4">
+        <Col>
+          <h2>Welcome, {patientName}!</h2>
+        </Col>
+        <Col className="text-end">
+          <Button variant="primary" className="me-2" onClick={() => navigate('/appointments')}>Appointments</Button>
+          <Button variant="secondary" className="me-2" onClick={() => navigate('/walk-in')}>Walk-In</Button>
+          <Button variant="danger" onClick={() => navigate('/sign-in')}>Logout</Button>
+        </Col>
+      </Row>
+
+      <Row>
+        <Col md={4}>
+          <Card className="mb-4">
+            <Card.Body>
+              <Card.Title>Search Symptoms</Card.Title>
+              <Form.Group controlId="symptomSearch">
+                <Form.Control
+                  type="text"
+                  placeholder="Enter symptoms to search"
+                  value={symptomQuery}
+                  onChange={handleSymptomChange}
+                />
+                {suggestions.length > 0 && (
+                  <ListGroup className="mt-2">
+                    {suggestions.map((symptom) => (
+                      <ListGroup.Item
+                        key={symptom._id}
+                        action
+                        onClick={() => handleSymptomSelect(symptom)}
+                      >
+                        {symptom.symptom}
+                      </ListGroup.Item>
+                    ))}
+                  </ListGroup>
+                )}
+              </Form.Group>
+              <Card.Title className="mt-3">Select a Doctor</Card.Title>
+              <Form.Group controlId="specialtyFilter">
+                <Form.Label>Filter by Specialty</Form.Label>
+                <Form.Control
+                  as="select"
+                  value={selectedSpecialty}
+                  onChange={(e) => setSelectedSpecialty(e.target.value)}
+                >
+                  <option value="">All Specialties</option>
+                  {specialties.map((specialty, index) => (
+                    <option key={index} value={specialty}>{specialty}</option>
+                  ))}
+                </Form.Control>
+              </Form.Group>
+              {filteredDoctors.length > 0 && (
+                <ListGroup className="mt-3">
+                  {filteredDoctors.map((doctor) => (
+                    <ListGroup.Item
+                      key={doctor._id}
+                      action
+                      onClick={() => handleDoctorSelect(doctor)}
+                    >
+                      {doctor.name}
+                    </ListGroup.Item>
+                  ))}
+                </ListGroup>
+              )}
+            </Card.Body>
+          </Card>
+        </Col>
+
+        <Col md={8}>
+          {selectedDoctor && (
+            <>
+              <Card className="mb-4">
+                <Card.Body>
+                  <Card.Title>Doctor's Details</Card.Title>
+                  <Card.Subtitle className="mb-2 text-muted">{selectedDoctor.speciality}</Card.Subtitle>
+                  <Card.Text>Contact: {selectedDoctor.contact}</Card.Text>
+                  <Button variant="primary" onClick={handleSelectClick}>Select Doctor</Button>
+                </Card.Body>
+              </Card>
+            </>
+          )}
+
+          {showDateTimeSection && (
+            <>
+              <Card className="mb-4">
+  <Card.Body>
+    <Card.Title>Select Date</Card.Title>
+    <div className="calendar">
+      <div className="calendar-header d-flex justify-content-between">
+        <Button variant="link" onClick={handlePrevMonth}>&lt;</Button>
+        <span>{new Date(currentYear, currentMonth).toLocaleString('default', { month: 'long', year: 'numeric' })}</span>
+        <Button variant="link" onClick={handleNextMonth}>&gt;</Button>
       </div>
-      <div className="main-container">
-        <div className="bottom-section">
-          <div className="doctors-list-container">
-            <div className="doctors-list">
-              <h2>Doctors List:</h2>
-              {doctors.length > 0 ? (
-                doctors.map((doctor) => (
-                  <div key={doctor._id} className="doctor-item" onClick={() => handleDoctorSelect(doctor)}>
-                    <div className="doctor-name">{doctor.name}</div>
-                  </div>
-                ))
-              ) : (
-                <p>No doctors available</p>
-              )}
-            </div>
-            <div className="doctor-details-container">
-              {selectedDoctor && (
-                <>
-                  <h2>Doctor's Details:</h2>
-                  <div className="doctor-details">
-                    <h2>{selectedDoctor.name}</h2>
-                    <p>Speciality: {selectedDoctor.speciality}</p>
-                    <p>Contact: {selectedDoctor.contact}</p>
-                  </div>
-                  <button className="select-button" onClick={handleSelectClick}>Select Date & Time</button>
-                </>
-              )}
-            </div>
-            <div className="map-container">
-              {selectedDoctor && (
-                <iframe
-                  title={`Map of ${selectedDoctor.hospital}`}
-                  src={`https://maps.google.com/maps?q=${selectedDoctor.hospital}&output=embed`}
-                  width="100%"
-                  height="100%"
-                  frameBorder="0"
-                  allowFullScreen=""
-                  loading="lazy"
-                ></iframe>
-              )}
-            </div>
-          </div>
-        </div>
-        {showDateTimeSection && (
-          <div className="top-section">
-            <div className="appointment-content">
-              <div className="appointment-body">
-                <div className="calendar">
-                  <div className="calendar-header">
-                    <button onClick={handlePrevMonth}>Prev</button>
-                    <span>{new Date(currentYear, currentMonth).toLocaleString('default', { month: 'long' })} {currentYear}</span>
-                    <button onClick={handleNextMonth}>Next</button>
-                  </div>
-                  <div className="calendar-body">
-                    <div className="day-names">
-                      <span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span>
-                    </div>
-                    <div className="days">
-                      {populateDays(currentYear, currentMonth)}
-                    </div>
-                  </div>
-                </div>
-                <div className="time-slots">
-                  <h2>Available Slots</h2>
-                  <div className="slots">
-                    {availableSlots.length > 0 ? (
-                      availableSlots.map((slot, index) => (
-                        <button
-                          key={index}
-                          className={selectedTime === slot.startTime ? 'active' : ''}
-                          onClick={() => handleTimeSelect(slot.startTime)}
-                        >
-                          {slot.startTime} - {slot.endTime}
-                        </button>
-                      ))
-                    ) : (
-                      <p>No slots available for the selected date.</p>
-                    )}
-                  </div>
-                  <div className="confirm-button">
-                    <button onClick={handleConfirm} disabled={!selectedTime}>
-                      Confirm Appointment
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
+      <div className="calendar-grid d-flex flex-wrap">
+        {populateDays(currentYear, currentMonth)}
       </div>
     </div>
+  </Card.Body>
+</Card>
+
+              <Card className="mb-4">
+                <Card.Body>
+                  <Card.Title>Select Time Slot</Card.Title>
+                  {availableSlots.length === 0 ? (
+                    <p>No available slots for the selected date.</p>
+                  ) : (
+                    <ListGroup>
+                      {availableSlots.map((slot, index) => (
+                        <ListGroup.Item
+                          key={index}
+                          action
+                          onClick={() => handleTimeSelect(slot.startTime)} // Ensure you're only passing the startTime as a string
+                          active={selectedTime === slot.startTime} // Comparison should also be against the string
+                        >
+                          {slot.startTime} {/* Render the startTime string */}
+                        </ListGroup.Item>
+                      ))}
+                    </ListGroup>
+                  )}
+                </Card.Body>
+              </Card>
+
+              <Button variant="success" onClick={handleConfirm}>Confirm Appointment</Button>
+            </>
+          )}
+        </Col>
+      </Row>
+    </Container>
   );
 };
 

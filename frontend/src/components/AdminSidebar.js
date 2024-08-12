@@ -1,39 +1,39 @@
 import React from 'react';
-import { Link } from 'react-router-dom'; // Import Link for routing
-import { HomeIcon, UserIcon, PlusIcon, CogIcon, CalendarIcon, ClipboardDocumentIcon, PowerIcon } from '@heroicons/react/24/outline'; // Import icons from Heroicons
-import '../css/AdminSidebar.css';
+import { Link } from 'react-router-dom';
+import { HomeIcon, UserIcon, PlusIcon, CogIcon, CalendarIcon, ClipboardDocumentIcon, PowerIcon } from '@heroicons/react/24/outline';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const AdminSidebar = () => {
   return (
-    <aside className="fixed inset-y-0 left-0 z-10 hidden w-14 flex-col border-r bg-background sm:flex">
-      <nav className="flex flex-col items-center gap-4 px-2 sm:py-5">
-        <Link to="/admin" className="sidebar-item group">
-          <HomeIcon className="icon" />
-          <span className="sr-only">Home</span>
+    <aside className="position-fixed top-0 start-0 zindex-10 d-none d-sm-flex flex-column bg-light border-end h-100 p-3">
+      <nav className="d-flex flex-column align-items-center gap-3">
+        <Link to="/admin" className="btn btn-light d-flex align-items-center justify-content-center rounded-circle p-2 hover-bg-primary">
+          <HomeIcon className="icon" style={{ width: '24px', height: '24px', color: '#000' }} />
+          <span className="visually-hidden">Home</span>
         </Link>
-        <Link to="/admin/doctorslist" className="sidebar-item group">
-          <UserIcon className="icon" />
-          <span className="sr-only">Doctors List</span>
+        <Link to="/admin/doctorslist" className="btn btn-light d-flex align-items-center justify-content-center rounded-circle p-2 hover-bg-primary">
+          <UserIcon className="icon" style={{ width: '24px', height: '24px', color: '#000' }} />
+          <span className="visually-hidden">Doctors List</span>
         </Link>
-        <Link to="/admin/add-doctor" className="sidebar-item group">
-          <PlusIcon className="icon" />
-          <span className="sr-only">Add Doctor</span>
+        <Link to="/admin/add-doctor" className="btn btn-light d-flex align-items-center justify-content-center rounded-circle p-2 hover-bg-primary">
+          <PlusIcon className="icon" style={{ width: '24px', height: '24px', color: '#000' }} />
+          <span className="visually-hidden">Add Doctor</span>
         </Link>
-        <Link to="/admin/manage-doctors" className="sidebar-item group">
-          <CogIcon className="icon" />
-          <span className="sr-only">Manage Doctors</span>
+        <Link to="/admin/manage-doctors" className="btn btn-light d-flex align-items-center justify-content-center rounded-circle p-2 hover-bg-primary">
+          <CogIcon className="icon" style={{ width: '24px', height: '24px', color: '#000' }} />
+          <span className="visually-hidden">Manage Doctors</span>
         </Link>
-        <Link to="/admin/manage-availability" className="sidebar-item group">
-          <CalendarIcon className="icon" />
-          <span className="sr-only">Manage Availability</span>
+        <Link to="/admin/manage-availability" className="btn btn-light d-flex align-items-center justify-content-center rounded-circle p-2 hover-bg-primary">
+          <CalendarIcon className="icon" style={{ width: '24px', height: '24px', color: '#000' }} />
+          <span className="visually-hidden">Manage Availability</span>
         </Link>
-        <Link to="/admin/manage-appointment" className="sidebar-item group">
-          <ClipboardDocumentIcon className="icon" />
-          <span className="sr-only">Manage Appointments</span>
+        <Link to="/admin/manage-appointment" className="btn btn-light d-flex align-items-center justify-content-center rounded-circle p-2 hover-bg-primary">
+          <ClipboardDocumentIcon className="icon" style={{ width: '24px', height: '24px', color: '#000' }} />
+          <span className="visually-hidden">Manage Appointments</span>
         </Link>
-        <Link to="/admin-login" className="sidebar-item group">
-          <PowerIcon className="icon" />
-          <span className="sr-only">Logout</span>
+        <Link to="/admin-login" className="btn btn-light d-flex align-items-center justify-content-center rounded-circle p-2 hover-bg-primary">
+          <PowerIcon className="icon" style={{ width: '24px', height: '24px', color: '#000' }} />
+          <span className="visually-hidden">Logout</span>
         </Link>
       </nav>
     </aside>

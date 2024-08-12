@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import 'bootstrap/dist/css/bootstrap.min.css'; // Ensure Bootstrap CSS is included
 
 const ManageDoctors = () => {
   const [doctors, setDoctors] = useState([]);
-  const [showConfirm, setShowConfirm] = useState(false); // State to manage confirmation dialog
-  const [doctorToDelete, setDoctorToDelete] = useState(null); // State to track which doctor to delete
+  const [showConfirm, setShowConfirm] = useState(false);
+  const [doctorToDelete, setDoctorToDelete] = useState(null);
 
   useEffect(() => {
     const fetchDoctors = async () => {
@@ -52,9 +53,9 @@ const ManageDoctors = () => {
   };
 
   return (
-    <div className="manage-doctors-container">
+    <div className="container mt-4">
       <h2>Manage Doctors</h2>
-      <table className="manage-doctors-table">
+      <table className="table table-striped">
         <thead>
           <tr>
             <th>Name</th>
@@ -73,6 +74,7 @@ const ManageDoctors = () => {
                   name="name"
                   value={doctor.name}
                   onChange={(event) => handleInputChange(doctor._id, event)}
+                  className="form-control"
                 />
               </td>
               <td>
@@ -81,6 +83,7 @@ const ManageDoctors = () => {
                   name="speciality"
                   value={doctor.speciality}
                   onChange={(event) => handleInputChange(doctor._id, event)}
+                  className="form-control"
                 />
               </td>
               <td>
@@ -89,6 +92,7 @@ const ManageDoctors = () => {
                   name="email"
                   value={doctor.email}
                   onChange={(event) => handleInputChange(doctor._id, event)}
+                  className="form-control"
                 />
               </td>
               <td>
@@ -97,11 +101,20 @@ const ManageDoctors = () => {
                   name="password"
                   value={doctor.password}
                   onChange={(event) => handleInputChange(doctor._id, event)}
+                  className="form-control"
                 />
               </td>
               <td>
-                <button onClick={() => handleSave(doctor._id)}>Save</button>
-                <button onClick={() => { setShowConfirm(true); setDoctorToDelete(doctor._id); }}>
+                <button 
+                  className="btn btn-primary me-2" 
+                  onClick={() => handleSave(doctor._id)}
+                >
+                  Save
+                </button>
+                <button 
+                  className="btn btn-danger"
+                  onClick={() => { setShowConfirm(true); setDoctorToDelete(doctor._id); }}
+                >
                   Delete
                 </button>
               </td>
@@ -112,10 +125,38 @@ const ManageDoctors = () => {
 
       {/* Confirmation Dialog */}
       {showConfirm && (
-        <div className="confirm-dialog">
-          <p>Are you sure you want to delete this doctor?</p>
-          <button onClick={handleDelete}>Yes</button>
-          <button onClick={() => setShowConfirm(false)}>No</button>
+        <div className="modal show d-block" tabIndex="-1">
+          <div className="modal-dialog">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title">Confirm Deletion</h5>
+                <button 
+                  type="button" 
+                  className="btn-close" 
+                  onClick={() => setShowConfirm(false)}
+                ></button>
+              </div>
+              <div className="modal-body">
+                <p>Are you sure you want to delete this doctor?</p>
+              </div>
+              <div className="modal-footer">
+                <button 
+                  type="button" 
+                  className="btn btn-secondary" 
+                  onClick={() => setShowConfirm(false)}
+                >
+                  No
+                </button>
+                <button 
+                  type="button" 
+                  className="btn btn-primary" 
+                  onClick={handleDelete}
+                >
+                  Yes
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       )}
     </div>

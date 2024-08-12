@@ -1,18 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import Calendar from 'react-calendar';
-import 'react-calendar/dist/Calendar.css';
-import '../css/ManageAvailability.css'; // Import custom CSS for layout
+import 'bootstrap/dist/css/bootstrap.min.css'; // Ensure Bootstrap CSS is included
 
 const ManageAvailability = () => {
   const [doctors, setDoctors] = useState([]);
   const [selectedDoctor, setSelectedDoctor] = useState('');
-  const [date, setDate] = useState(new Date());
+  const [date, setDate] = useState('');
   const [timeSlots, setTimeSlots] = useState([]);
-  const [availableDates, setAvailableDates] = useState([]); // Track available dates
+  const [availableDates, setAvailableDates] = useState([]);
 
   useEffect(() => {
-    // Fetch list of doctors
     const fetchDoctors = async () => {
       try {
         const response = await axios.get('http://localhost:5000/api/doctors');
@@ -29,9 +26,8 @@ const ManageAvailability = () => {
       if (selectedDoctor) {
         try {
           const response = await axios.get(`http://localhost:5000/api/availability?doctorId=${selectedDoctor}`);
-          const datesWithAvailability = response.data.map(item => new Date(item.day));
+          const datesWithAvailability = response.data.map(item => new Date(item.day).toISOString().split('T')[0]);
           setAvailableDates(datesWithAvailability);
-          setHasSlots(response.data.length > 0); // Check if there are slots
         } catch (error) {
           console.error('Error fetching available dates:', error);
         }
@@ -41,12 +37,10 @@ const ManageAvailability = () => {
   }, [selectedDoctor]);
 
   useEffect(() => {
-    // Fetch time slots for the selected date
     const fetchAvailability = async () => {
-      if (selectedDoctor) {
+      if (selectedDoctor && date) {
         try {
-          const formattedDate = date.toISOString().split('T')[0]; // Format date as YYYY-MM-DD
-          const response = await axios.get(`http://localhost:5000/api/availability?doctorId=${selectedDoctor}&date=${formattedDate}`);
+          const response = await axios.get(`http://localhost:5000/api/availability?doctorId=${selectedDoctor}&date=${date}`);
           setTimeSlots(response.data?.slots || generateTimeSlots());
         } catch (error) {
           console.error('Error fetching availability:', error);
@@ -59,9 +53,9 @@ const ManageAvailability = () => {
   const generateTimeSlots = () => {
     const slots = [];
     let startTime = new Date();
-    startTime.setHours(9, 0, 0); // Start at 9 AM
+    startTime.setHours(9, 0, 0);
 
-    while (startTime.getHours() < 18) { // Until 6 PM
+    while (startTime.getHours() < 18) {
       const endTime = new Date(startTime);
       endTime.setHours(startTime.getHours() + 1);
 
@@ -78,17 +72,15 @@ const ManageAvailability = () => {
 
   const handleSave = async () => {
     try {
-      const formattedDate = date.toISOString().split('T')[0];
       await axios.post('http://localhost:5000/api/availability', {
         doctorId: selectedDoctor,
-        day: formattedDate,
+        day: date,
         slots: timeSlots
       });
       alert('Availability saved successfully!');
-      // Update available dates
       setAvailableDates(prevDates => {
-        const newDate = new Date(formattedDate);
-        return [...prevDates.filter(d => d.toDateString() !== newDate.toDateString()), newDate];
+        const newDate = new Date(date).toISOString().split('T')[0];
+        return [...prevDates.filter(d => d !== newDate), newDate];
       });
     } catch (error) {
       console.error('Error saving availability:', error);
@@ -108,59 +100,85 @@ const ManageAvailability = () => {
     setTimeSlots(newSlots);
   };
 
-  const isDateAvailable = (date) => {
-    return availableDates.some(d => d.toDateString() === date.toDateString());
+  const isDateAvailable = (dateString) => {
+    if (!dateString) return false;
+    const date = new Date(dateString);
+    return !isNaN(date.getTime()) && availableDates.includes(date.toISOString().split('T')[0]);
   };
 
   return (
-    <div className="manage-availability-container">
-      <div className="calendar-container">
-        <h2>Select Date:</h2>
-        <Calendar
-          onChange={setDate}
-          value={date}
-          tileClassName={({ date }) => isDateAvailable(date) ? 'available-date' : null} // Highlight available dates
-          onClickDay={setDate} // Set date on click
-        />
-      </div>
-      <div className="details-container">
-        <h2>Manage Doctor Availability</h2>
-        <select onChange={(e) => setSelectedDoctor(e.target.value)} value={selectedDoctor}>
-          <option value="">Select Doctor</option>
-          {doctors.map((doctor) => (
-            <option key={doctor._id} value={doctor._id}>
-              {doctor.name}
-            </option>
-          ))}
-        </select>
-        {selectedDoctor && (
-          <div>
-            <div>
-              <button onClick={() => handleSetAvailability('allDay')}>Available All Day</button>
-              <button onClick={() => handleSetAvailability('morning')}>Available in the Morning</button>
-              <button onClick={() => handleSetAvailability('afternoon')}>Available in the Afternoon</button>
-            </div>
-            <div className="time-slots-container">
-              <label>Time Slots:</label>
-              <div className="time-slots-grid">
-                {timeSlots.map((slot, index) => (
-                  <button
-                    key={index}
-                    className={`time-slot-button ${slot.isAvailable ? 'available' : 'unavailable'}`}
-                    onClick={() => {
-                      const newSlots = [...timeSlots];
-                      newSlots[index].isAvailable = !newSlots[index].isAvailable;
-                      setTimeSlots(newSlots);
-                    }}
-                  >
-                    {slot.startTime} - {slot.endTime}
-                  </button>
-                ))}
-              </div>
-            </div>
-            <button onClick={handleSave}>Save Availability</button>
+    <div className="container mt-4">
+      <div className="row">
+        <div className="col-md-4 mb-4">
+          <h2>Select Date:</h2>
+          <input
+            type="date"
+            value={date}
+            onChange={(e) => setDate(e.target.value)}
+            className={`form-control ${isDateAvailable(date) ? 'bg-success text-white' : ''}`} // Highlight available dates
+          />
+        </div>
+        <div className="col-md-8">
+          <h2>Manage Doctor Availability</h2>
+          <div className="mb-3">
+            <select 
+              onChange={(e) => setSelectedDoctor(e.target.value)} 
+              value={selectedDoctor}
+              className="form-select"
+            >
+              <option value="">Select Doctor</option>
+              {doctors.map((doctor) => (
+                <option key={doctor._id} value={doctor._id}>
+                  {doctor.name}
+                </option>
+              ))}
+            </select>
           </div>
-        )}
+          {selectedDoctor && (
+            <div>
+              <div className="mb-3">
+                <button 
+                  className="btn btn-primary me-2"
+                  onClick={() => handleSetAvailability('allDay')}
+                >
+                  Available All Day
+                </button>
+                <button 
+                  className="btn btn-secondary me-2"
+                  onClick={() => handleSetAvailability('morning')}
+                >
+                  Available in the Morning
+                </button>
+                <button 
+                  className="btn btn-warning"
+                  onClick={() => handleSetAvailability('afternoon')}
+                >
+                  Available in the Afternoon
+                </button>
+              </div>
+              <div className="mb-3">
+                <label className="form-label">Time Slots:</label>
+                <div className="row row-cols-3 g-2">
+                  {timeSlots.map((slot, index) => (
+                    <div className="col" key={index}>
+                      <button
+                        className={`btn w-100 ${slot.isAvailable ? 'btn-success' : 'btn-danger'}`}
+                        onClick={() => {
+                          const newSlots = [...timeSlots];
+                          newSlots[index].isAvailable = !newSlots[index].isAvailable;
+                          setTimeSlots(newSlots);
+                        }}
+                      >
+                        {slot.startTime} - {slot.endTime}
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <button className="btn btn-primary" onClick={handleSave}>Save Availability</button>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

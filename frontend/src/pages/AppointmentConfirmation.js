@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../css/AppointmentConfirmation.css';
+import { Container, Card, Button } from 'react-bootstrap';
 
 const AppointmentConfirmation = () => {
   const [appointmentDetails, setAppointmentDetails] = useState({
@@ -23,36 +23,38 @@ const AppointmentConfirmation = () => {
   }, []);
 
   return (
-    <div className="confirmation-container">
-      <div className="confirmation-form">
-        <h2>Appointment Confirmation</h2>
-        <div className="form-section">
-          <label>Patient Name:</label>
-          <p>{appointmentDetails.patientName}</p>
-        </div>
-        <div className="form-section">
-          <label>Doctor Name:</label>
-          <p>{appointmentDetails.doctorName}</p>
-        </div>
-        <div className="form-section">
-          <label>Speciality:</label>
-          <p>{appointmentDetails.speciality}</p>
-        </div>
-        <div className="form-section">
-          <label>Contact:</label>
-          <p>{appointmentDetails.contact}</p>
-        </div>
-        <div className="form-section">
-          <label>Date:</label>
-          <p>{appointmentDetails.date}</p>
-        </div>
-        <div className="form-section">
-          <label>Time:</label>
-          <p>{appointmentDetails.time}</p>
-        </div>
-        <button onClick={() => navigate('/')}>Go to Home</button>
-      </div>
-    </div>
+    <Container className="confirmation-container">
+      <Card className="confirmation-form">
+        <Card.Body>
+          <Card.Title>Appointment Confirmation</Card.Title>
+          <div className="form-section">
+            <Card.Subtitle className="mb-2 text-muted">Patient Name:</Card.Subtitle>
+            <Card.Text>{appointmentDetails.patientName}</Card.Text>
+          </div>
+          <div className="form-section">
+            <Card.Subtitle className="mb-2 text-muted">Doctor Name:</Card.Subtitle>
+            <Card.Text>{appointmentDetails.doctorName}</Card.Text>
+          </div>
+          <div className="form-section">
+            <Card.Subtitle className="mb-2 text-muted">Speciality:</Card.Subtitle>
+            <Card.Text>{appointmentDetails.speciality}</Card.Text>
+          </div>
+          <div className="form-section">
+            <Card.Subtitle className="mb-2 text-muted">Contact:</Card.Subtitle>
+            <Card.Text>{appointmentDetails.contact}</Card.Text>
+          </div>
+          <div className="form-section">
+            <Card.Subtitle className="mb-2 text-muted">Date:</Card.Subtitle>
+            <Card.Text>{appointmentDetails.date}</Card.Text>
+          </div>
+          <div className="form-section">
+            <Card.Subtitle className="mb-2 text-muted">Time:</Card.Subtitle>
+            <Card.Text>{appointmentDetails.time}</Card.Text>
+          </div>
+          <Button variant="primary" onClick={() => navigate('/appointments')}>Go to Appointments</Button>
+        </Card.Body>
+      </Card>
+    </Container>
   );
 };
 

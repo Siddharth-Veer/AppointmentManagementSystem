@@ -71,20 +71,6 @@
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-.icon {
-  height: 1.25rem;
-  width: 1.25rem;
-  transition: transform 0.3s ease;
-}
-
-.sidebar-item:hover .icon {
-  transform: scale(1.1);
-}
-
-.sidebar-item:hover {
-  background-color: #007bff; /* Adjust hover background color */
-  color: #ffffff; /* Adjust hover text color */
-}
 
 .sr-only {
   position: absolute;

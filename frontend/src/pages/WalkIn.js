@@ -1,7 +1,8 @@
-// src/pages/WalkIn.js
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import '../css/WalkIn.css';
+import { useNavigate } from 'react-router-dom';
+import { Container, Row, Col, Button } from 'react-bootstrap';
+import 'bootstrap/dist/css/bootstrap.min.css'; // Ensure Bootstrap CSS is included
 
 const WalkIn = () => {
   const [ticket, setTicket] = useState(null);
@@ -12,7 +13,15 @@ const WalkIn = () => {
   const [error, setError] = useState('');
   const [currentTime, setCurrentTime] = useState(new Date());
 
+  const START_TIME = new Date();
+  START_TIME.setHours(9, 0, 0, 0); // Start time: 9:00 AM
+
+  const END_TIME = new Date();
+  END_TIME.setHours(18, 0, 0, 0); // End time: 6:00 PM
+
   const TIME_INTERVAL = 30; // Minutes
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchCurrentTicket = async () => {
@@ -35,7 +44,7 @@ const WalkIn = () => {
 
     fetchCurrentTicket();
     fetchPeopleAhead();
-    
+
     // Update current time every minute
     const interval = setInterval(() => {
       setCurrentTime(new Date());
@@ -44,7 +53,7 @@ const WalkIn = () => {
     return () => clearInterval(interval);
   }, []);
 
-  const handleBuyTicket = async () => {
+  const handleBuyTicket = () => {
     setShowModal(true); // Show the modal when "Buy Ticket" is clicked
   };
 
@@ -56,7 +65,27 @@ const WalkIn = () => {
     }
 
     try {
-      const response = await axios.post('http://localhost:5000/api/tickets/buy', { name });
+      const now = new Date();
+      let nextAvailableTime = new Date();
+
+      if (now < START_TIME) {
+        nextAvailableTime = START_TIME;
+      } else {
+        const elapsedMinutes = Math.floor((now - START_TIME) / (1000 * 60));
+        const ticketsElapsed = Math.floor(elapsedMinutes / TIME_INTERVAL);
+        nextAvailableTime = new Date(START_TIME.getTime() + (ticketsElapsed + 1) * TIME_INTERVAL * 60000);
+      }
+
+      if (nextAvailableTime >= END_TIME) {
+        alert('Walk-in hours are over for today.');
+        setShowModal(false);
+        return;
+      }
+
+      const validUntil = new Date(nextAvailableTime.getTime() + TIME_INTERVAL * 60000);
+
+      // Post the ticket to the server
+      const response = await axios.post('http://localhost:5000/api/tickets/buy', { name, validUntil });
       setTicket(response.data);
       setError('');
       setShowModal(false); // Hide the modal
@@ -94,31 +123,55 @@ const WalkIn = () => {
   };
 
   return (
-    <div className="walk-in">
-      <h2>Walk-In Ticket</h2>
-      <button onClick={handleBuyTicket}>Buy Ticket</button>
+    <Container className="mt-5">
+      <Row className="mb-4">
+        <Col>
+          <h2>Welcome, Kronos!</h2>
+        </Col>
+        <Col className="text-end">
+          <Button variant="primary" className="me-2" onClick={() => navigate('/appointments')}>Appointments</Button>
+          <Button variant="secondary" className="me-2" onClick={() => navigate('/walk-in')}>Walk-In</Button>
+          <Button variant="danger" onClick={() => navigate('/sign-in')}>Logout</Button>
+        </Col>
+      </Row>
+
+      <Button variant="primary" className="mb-3" onClick={handleBuyTicket}>Buy Ticket</Button>
 
       {showModal && (
-        <div className="modal-overlay">
-          <div className="modal-content">
-            <h3>Enter Your Name</h3>
-            <form onSubmit={handleModalSubmit}>
-              <input
-                type="text"
-                placeholder="Your Name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-              />
-              <button type="submit">Submit</button>
-              <button type="button" onClick={() => setShowModal(false)}>Cancel</button>
-            </form>
-            {error && <p className="error">{error}</p>}
+        <div className="modal fade show d-block" tabIndex="-1" role="dialog">
+          <div className="modal-dialog" role="document">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title">Enter Your Name</h5>
+                <Button type="button" className="close" onClick={() => setShowModal(false)}>
+                  <span>&times;</span>
+                </Button>
+              </div>
+              <div className="modal-body">
+                <form onSubmit={handleModalSubmit}>
+                  <div className="form-group">
+                    <input
+                      type="text"
+                      className="form-control"
+                      placeholder="Your Name"
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                    />
+                  </div>
+                  {error && <div className="alert alert-danger mt-2">{error}</div>}
+                  <div className="mt-3">
+                    <Button type="submit" variant="primary">Submit</Button>
+                    <Button type="button" variant="secondary" className="ml-2" onClick={() => setShowModal(false)}>Cancel</Button>
+                  </div>
+                </form>
+              </div>
+            </div>
           </div>
         </div>
       )}
 
       {ticket && (
-        <div className="ticket-info">
+        <div className="alert alert-info mt-4">
           <p>Your Ticket Number: {ticket.ticketNumber}</p>
           <p>Valid Until: {new Date(ticket.validUntil).toLocaleTimeString()}</p>
           <p>People Ahead: {peopleAhead.length}</p>
@@ -127,14 +180,14 @@ const WalkIn = () => {
       )}
 
       {currentTicket && !ticket && (
-        <div className="current-ticket-info">
+        <div className="alert alert-warning mt-4">
           <p>Current Ticket Number: {currentTicket.ticketNumber}</p>
           <p>{calculateTimeUntilCurrentTicketEnds()}</p>
         </div>
       )}
       
-      <button onClick={() => window.history.back()}>Back</button>
-    </div>
+      <Button variant="secondary" className="mt-4" onClick={() => window.history.back()}>Back</Button>
+    </Container>
   );
 };
 

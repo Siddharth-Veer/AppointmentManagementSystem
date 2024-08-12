@@ -3,17 +3,16 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const nodemailer = require('nodemailer');
+const sessionMiddleware = require('./middleware/session'); // Import session middleware
 const authRoutes = require('./routes/auth');
 const doctorsRouter = require('./routes/doctors');
-const appointmentRoutes = require('./routes/appointments');
-const Appointment = require('./models/Appointment'); // Import the model if needed
+const appointmentRoutes = require('./routes/Appointments');
 const patientsRouter = require('./routes/patient');
-const sessionMiddleware = require('./middleware/session');
 const availabilityRoutes = require('./routes/availability');
 const adminAuthRoute = require('./routes/adminAuth');
 const adminRoutes = require('./routes/adminRoutes');
-// Add this line to import and use the tickets route
 const ticketRoutes = require('./routes/tickets');
+const symptomsRoute = require('./routes/symptoms');
 
 require('dotenv').config();
 
@@ -30,21 +29,26 @@ const db = mongoose.connection;
 db.on('error', (error) => console.error('MongoDB connection error:', error));
 db.once('open', () => console.log('MongoDB connected'));
 
+const corsOptions = {
+  origin: 'http://localhost:3000', // Replace with your frontend URL
+  credentials: true, // Allow cookies and credentials
+};
+
 // Middleware
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(bodyParser.json());
+app.use(sessionMiddleware); // Use session middleware here
 
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/doctors', doctorsRouter);
 app.use('/api/appointments', appointmentRoutes);
 app.use('/api/patients', patientsRouter);
-app.use('/api/login', authRoutes);
 app.use('/api/availability', availabilityRoutes);
-app.use('/', adminRoutes);
 app.use('/api/admin-auth', adminAuthRoute);
 app.use('/api/tickets', ticketRoutes);
-
+app.use('/', adminRoutes);
+app.use('/api/symptoms', symptomsRoute);
 
 // Email endpoint (example for testing)
 app.post('/api/send-test-email', async (req, res) => {
@@ -66,12 +70,12 @@ app.post('/api/send-test-email', async (req, res) => {
 });
 
 // 404 handler for undefined routes
-app.use((req, res, next) => {
+app.use((req, res) => {
   res.status(404).send("Route not found");
 });
 
 // Error handling middleware
-app.use((err, req, res, next) => {
+app.use((err, req, res) => {
   console.error(err.stack);
   res.status(500).send("Something broke!");
 });

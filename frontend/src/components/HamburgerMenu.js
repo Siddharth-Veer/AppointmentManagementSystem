@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom'; // Add this line
 import '../css/HamburgerMenu.css';
 
+
 const HamburgerMenu = ({ isOpen, onClose }) => {
   return (
     <div className={`hamburger-menu ${isOpen ? 'open' : ''}`}>

@@ -39,6 +39,17 @@ router.post("/register", async (req, res) => {
   }
 });
 
+// GET /api/auth/generate-id - Generate a unique ID for a new user
+router.get("/generate-id", async (req, res) => {
+  try {
+    const idNo = Math.floor(100000 + Math.random() * 900000);
+    res.json({ idNo });
+  } catch (error) {
+    console.error("Error generating unique ID:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
 
 // POST /api/auth/login - Log in an existing user
 router.post("/login", async (req, res) => {

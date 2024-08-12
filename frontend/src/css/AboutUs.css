@@ -15,13 +15,6 @@
   
 }
 
-
-.hero-section h1 {
-  color: #ffffff;
-  font-size: 36px;
-  margin-bottom: 10px;
-}
-
 .hero-section p {
   color: #ffffff;
   font-size: 23px;
@@ -92,7 +85,7 @@
 
 /* Background gradient for the entire page */
 #root {
-  background: linear-gradient(to bottom right, #0081A7, #00AFB9, #FED9B7, #F07167);
+  /* background: linear-gradient(to bottom right, #0081A7, #00AFB9, #FED9B7, #F07167); */
   min-height: 100vh;
   overflow: auto;
 }
@@ -103,7 +96,7 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  /* padding: 20px; */
+  padding: 20px;
   background-color: var(--background-color);
   border-bottom: 1px solid #dddddd;
 }

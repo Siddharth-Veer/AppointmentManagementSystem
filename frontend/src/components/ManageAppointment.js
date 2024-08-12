@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import '../css/ManageAppointment.css'; // Import custom CSS for layout
+import 'bootstrap/dist/css/bootstrap.min.css'; // Ensure Bootstrap CSS is included
 
 const ManageAppointments = () => {
   const [doctors, setDoctors] = useState([]);
@@ -41,47 +41,55 @@ const ManageAppointments = () => {
   }, [selectedDoctor]);
 
   return (
-    <div className="manage-appointments-container">
-      <h2>Manage Appointments</h2>
-      <select onChange={(e) => setSelectedDoctor(e.target.value)} value={selectedDoctor}>
-        <option value="">Select Doctor</option>
-        {doctors.map((doctor) => (
-          <option key={doctor._id} value={doctor.name}>
-            {doctor.name}
-          </option>
-        ))}
-      </select>
+    <div className="container mt-4">
+      <h2 className="mb-4">Manage Appointments</h2>
+      <div className="mb-4">
+        <select 
+          onChange={(e) => setSelectedDoctor(e.target.value)} 
+          value={selectedDoctor}
+          className="form-select"
+        >
+          <option value="">Select Doctor</option>
+          {doctors.map((doctor) => (
+            <option key={doctor._id} value={doctor.name}>
+              {doctor.name}
+            </option>
+          ))}
+        </select>
+      </div>
       {selectedDoctor && (
-        <div className="appointments-table">
-          <h3>Appointments for {selectedDoctor}</h3>
-          <table>
-            <thead>
-              <tr>
-                <th>Patient Name</th>
-                <th>Date</th>
-                <th>Time</th>
-                <th>Contact</th>
-                <th>Doctor's Name</th>
-              </tr>
-            </thead>
-            <tbody>
-              {appointments.length > 0 ? (
-                appointments.map((appointment) => (
-                  <tr key={appointment._id}>
-                    <td>{appointment.patientName}</td>
-                    <td>{appointment.date}</td>
-                    <td>{appointment.time}</td>
-                    <td>{appointment.contact}</td>
-                    <td>{appointment.doctorName}</td> {/* Display the doctor's name from appointment data */}
-                  </tr>
-                ))
-              ) : (
+        <div className="card">
+          <div className="card-body">
+            <h3 className="card-title">Appointments for {selectedDoctor}</h3>
+            <table className="table table-striped">
+              <thead>
                 <tr>
-                  <td colSpan="5">No appointments found</td>
+                  <th>Patient Name</th>
+                  <th>Date</th>
+                  <th>Time</th>
+                  <th>Contact</th>
+                  <th>Doctor's Name</th>
                 </tr>
-              )}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {appointments.length > 0 ? (
+                  appointments.map((appointment) => (
+                    <tr key={appointment._id}>
+                      <td>{appointment.patientName}</td>
+                      <td>{appointment.date}</td>
+                      <td>{appointment.time}</td>
+                      <td>{appointment.contact}</td>
+                      <td>{appointment.doctorName}</td> {/* Display the doctor's name from appointment data */}
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="5" className="text-center">No appointments found</td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
     </div>

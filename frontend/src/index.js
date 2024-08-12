@@ -5,7 +5,7 @@ import { AppointmentProvider } from './context/AppointmentContext'; // Import th
 
 ReactDOM.render(
   <React.StrictMode>
-    <AppointmentProvider> {/* Wrap App with AppointmentProvider */}
+    <AppointmentProvider> {/* Wrap App with AppointmentProvider */ }
       <App />
     </AppointmentProvider>
   </React.StrictMode>,

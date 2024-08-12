@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import '../css/AdminDoctorList.css'; // Ensure this CSS file exists and is correctly set up
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { Container, Table, Button, Badge, Alert } from 'react-bootstrap';
 
 const AdminDoctorList = () => {
   const [doctors, setDoctors] = useState([]);
@@ -38,56 +39,53 @@ const AdminDoctorList = () => {
   };
 
   if (loading) return <div>Loading...</div>;
-  if (error) return <div>{error}</div>;
+  if (error) return <Alert variant="danger">{error}</Alert>;
 
   return (
-    <div className="rounded-lg border bg-card text-card-foreground shadow-sm">
-      <div className="flex flex-col space-y-1.5 p-6">
-        <h3 className="text-2xl font-semibold">All Doctors</h3>
-        <p className="text-sm text-muted-foreground">Manage your clinic's doctors.</p>
+    <Container className="my-4">
+      <div className="mb-4">
+        <h2>All Doctors</h2>
+        <p>Manage your clinic's doctors.</p>
       </div>
-      <div className="p-6">
-        <div className="relative w-full overflow-auto">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="border-b">
-                <th className="h-12 px-4 text-left font-medium text-muted-foreground">Name</th>
-                <th className="h-12 px-4 text-left font-medium text-muted-foreground">Specialty</th>
-                <th className="h-12 px-4 text-left font-medium text-muted-foreground">Phone</th>
-                <th className="h-12 px-4 text-left font-medium text-muted-foreground">Email</th>
-                <th className="h-12 px-4 text-left font-medium text-muted-foreground">Status</th>
-                <th className="h-12 px-4 text-left font-medium text-muted-foreground"><span className="sr-only">Actions</span></th>
+      <div className="table-responsive">
+        <Table striped bordered hover>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Specialty</th>
+              <th>Phone</th>
+              <th>Email</th>
+              <th>Status</th>
+              <th><span className="sr-only">Actions</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            {doctors.map((doctor) => (
+              <tr key={doctor._id}>
+                <td>{doctor.name}</td>
+                <td>{doctor.speciality}</td>
+                <td>{doctor.contact}</td>
+                <td>{doctor.email}</td>
+                <td>
+                  <Badge bg={doctor.status === 'active' ? 'success' : 'danger'}>
+                    {doctor.status}
+                  </Badge>
+                </td>
+                <td>
+                  <Button
+                    variant="primary"
+                    onClick={() => handleStatusChange(doctor._id)}
+                    disabled={doctor.status === 'suspended'}
+                  >
+                    Suspend
+                  </Button>
+                </td>
               </tr>
-            </thead>
-            <tbody>
-              {doctors.map((doctor) => (
-                <tr key={doctor._id} className="border-b">
-                  <td className="p-4 font-medium">{doctor.name}</td>
-                  <td className="p-4">{doctor.speciality}</td>
-                  <td className="p-4">{doctor.contact}</td>
-                  <td className="p-4">{doctor.email}</td>
-                  <td className="p-4">
-                    <div className={`badge ${doctor.status === 'active' ? 'badge-active' : 'badge-suspended'}`}>
-                      {doctor.status}
-                    </div>
-                  </td>
-                  <td className="p-4">
-                    <button
-                      className="status-button"
-                      onClick={() => handleStatusChange(doctor._id)}
-                      type="button"
-                      disabled={doctor.status === 'suspended'}
-                    >
-                      Suspend
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+            ))}
+          </tbody>
+        </Table>
       </div>
-    </div>
+    </Container>
   );
 };
 

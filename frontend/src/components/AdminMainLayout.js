@@ -1,32 +1,36 @@
-// src/components/AdminMainLayout.js
-
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
+import { Container, Row, Col } from 'react-bootstrap';
 import AdminSidebar from './AdminSidebar';
 import AdminHeader from './AdminHeader';
 import AdminDoctorList from './AdminDoctorList';
 import AddDoctor from './AddDoctor';
 import ManageDoctors from './ManageDoctors';
 import ManageAvailability from './ManageAvailability'; 
-import ManageAppointments from './ManageAppointment'; // Import new component
-import '../css/AdminMainLayout.css';
+import ManageAppointments from './ManageAppointment'; // Ensure this path is correct
 
 const AdminMainLayout = () => {
   return (
-    <div className="flex min-h-screen w-full bg-muted-40">
+    <div className="d-flex min-vh-100">
       <AdminSidebar />
-      <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-14">
+      <div className="flex-grow-1">
         <AdminHeader />
-        <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
-          <Routes>
-            <Route path="/" element={<AdminDoctorList />} />
-            <Route path="doctorslist" element={<AdminDoctorList />} />
-            <Route path="add-doctor" element={<AddDoctor />} />
-            <Route path="manage-doctors" element={<ManageDoctors />} />
-            <Route path="manage-availability" element={<ManageAvailability />} />
-            <Route path="manage-appointment" element={<ManageAppointments />} /> {/* Add route */}
-          </Routes>
-        </main>
+        <Container fluid className="py-4">
+          <Row>
+            <Col xs={12} md={12} lg={12}>
+              <main className="p-4">
+                <Routes>
+                  <Route path="/" element={<AdminDoctorList />} />
+                  <Route path="doctorslist" element={<AdminDoctorList />} />
+                  <Route path="add-doctor" element={<AddDoctor />} />
+                  <Route path="manage-doctors" element={<ManageDoctors />} />
+                  <Route path="manage-availability" element={<ManageAvailability />} />
+                  <Route path="manage-appointment" element={<ManageAppointments />} />
+                </Routes>
+              </main>
+            </Col>
+          </Row>
+        </Container>
       </div>
     </div>
   );
