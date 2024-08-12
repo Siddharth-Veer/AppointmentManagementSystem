@@ -10,7 +10,7 @@ const ManageDoctors = () => {
   useEffect(() => {
     const fetchDoctors = async () => {
       try {
-        const response = await axios.get('https://medisync-w9rq.onrender.com/api/doctors');
+        const response = await axios.get('http://localhost:5000/api/doctors');
         setDoctors(response.data);
       } catch (error) {
         console.error('Error fetching doctors:', error);
@@ -30,7 +30,7 @@ const ManageDoctors = () => {
   const handleSave = async (id) => {
     const doctorToSave = doctors.find((doc) => doc._id === id);
     try {
-      await axios.put(`https://medisync-w9rq.onrender.com/api/doctors/${id}`, doctorToSave);
+      await axios.put(`http://localhost:5000/api/doctors/${id}`, doctorToSave);
       console.log('Doctor saved:', doctorToSave);
       alert('Doctor details updated successfully!');
     } catch (error) {
@@ -41,7 +41,7 @@ const ManageDoctors = () => {
 
   const handleDelete = async () => {
     try {
-      await axios.delete(`https://medisync-w9rq.onrender.com/api/doctors/${doctorToDelete}`);
+      await axios.delete(`http://localhost:5000/api/doctors/${doctorToDelete}`);
       setDoctors(doctors.filter((doctor) => doctor._id !== doctorToDelete));
       setShowConfirm(false);
       setDoctorToDelete(null);

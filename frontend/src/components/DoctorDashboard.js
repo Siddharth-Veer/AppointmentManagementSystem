@@ -21,7 +21,7 @@ const DoctorDashboard = () => {
   useEffect(() => {
     const fetchAppointments = async () => {
       try {
-        const response = await axios.get('https://medisync-w9rq.onrender.com/api/appointments');
+        const response = await axios.get('http://localhost:5000/api/appointments');
         const appointmentsData = response.data;
   
         // Ensure date format is consistent
@@ -50,7 +50,7 @@ const DoctorDashboard = () => {
   useEffect(() => {
     const fetchAppointmentsForWeek = async () => {
       try {
-        const response = await axios.get('https://medisync-w9rq.onrender.com/api/appointments', {
+        const response = await axios.get('http://localhost:5000/api/appointments', {
           params: {
             start: weekStart.toISOString(),
             end: moment(weekStart).endOf('week').toISOString(),
@@ -99,7 +99,7 @@ const DoctorDashboard = () => {
   const handleReschedule = async () => {
     if (selectedAppointment && selectedDate) {
       try {
-        const response = await axios.put(`https://medisync-w9rq.onrender.com/api/appointments/${selectedAppointment._id}`, {
+        const response = await axios.put(`http://localhost:5000/api/appointments/${selectedAppointment._id}`, {
           date: selectedDate.toLocaleDateString(),
         });
         if (response.status === 200) {
@@ -124,7 +124,7 @@ const DoctorDashboard = () => {
 
   const handleCancel = async (appointmentId) => {
     try {
-      const response = await axios.delete(`https://medisync-w9rq.onrender.com/api/appointments/${appointmentId}`);
+      const response = await axios.delete(`http://localhost:5000/api/appointments/${appointmentId}`);
       if (response.status === 200) {
         alert('Appointment cancelled successfully');
         setAppointments(prevAppointments =>
@@ -139,7 +139,7 @@ const DoctorDashboard = () => {
 
   const fetchAvailableSlots = async () => {
     try {
-      const response = await axios.get(`https://medisync-w9rq.onrender.com/api/available-slots`, {
+      const response = await axios.get(`http://localhost:5000/api/available-slots`, {
         params: {
           date: selectedDate.toISOString().split('T')[0],
           doctorId: sessionStorage.getItem('doctorId') // Assuming doctor ID is stored in session storage
@@ -164,7 +164,7 @@ const DoctorDashboard = () => {
   const handleSlotSelect = async (slot) => {
     if (selectedAppointment) {
       try {
-        await axios.put(`https://medisync-w9rq.onrender.com/api/appointments/${selectedAppointment._id}`, {
+        await axios.put(`http://localhost:5000/api/appointments/${selectedAppointment._id}`, {
           date: selectedDate.toLocaleDateString(),
           time: slot.time
         });

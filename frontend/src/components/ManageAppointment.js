@@ -11,7 +11,7 @@ const ManageAppointments = () => {
     // Fetch list of doctors
     const fetchDoctors = async () => {
       try {
-        const response = await axios.get('https://medisync-w9rq.onrender.com/api/doctors');
+        const response = await axios.get('http://localhost:5000/api/doctors');
         setDoctors(response.data);
       } catch (error) {
         console.error('Error fetching doctors:', error);
@@ -25,7 +25,7 @@ const ManageAppointments = () => {
     const fetchAppointments = async () => {
       if (selectedDoctor) {
         try {
-          const response = await axios.get(`https://medisync-w9rq.onrender.com/api/appointments`);
+          const response = await axios.get(`http://localhost:5000/api/appointments`);
           // Filter appointments based on the selected doctor's name
           const filteredAppointments = response.data.filter(appointment => appointment.doctorName === selectedDoctor);
           setAppointments(filteredAppointments);

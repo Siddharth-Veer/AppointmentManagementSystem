@@ -16,7 +16,7 @@ const SignUp = () => {
 
     const generateUniqueId = async () => {
         try {
-            const response = await axios.get("https://medisync-w9rq.onrender.com/api/auth/generate-id");
+            const response = await axios.get("http://localhost:5000/api/auth/generate-id");
             return response.data.idNo;
         } catch (error) {
             console.error("Error generating unique ID:", error);
@@ -42,7 +42,7 @@ const SignUp = () => {
 
                 // Generate a unique ID and save user details in MongoDB
                 const idNo = await generateUniqueId();
-                await axios.post("https://medisync-w9rq.onrender.com/api/auth/register", {
+                await axios.post("http://localhost:5000/api/auth/register", {
                     idNo,
                     name,
                     email,

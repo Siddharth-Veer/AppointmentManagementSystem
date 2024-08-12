@@ -18,7 +18,7 @@ const DoctorSignIn = () => {
         }
 
         try {
-            const response = await axios.post('https://medisync-w9rq.onrender.com/api/doctors/signin', { email, password });
+            const response = await axios.post('http://localhost:5000/api/doctors/signin', { email, password });
             console.log('Response:', response.data);
 
             if (response.data.message === 'Sign in successful') {

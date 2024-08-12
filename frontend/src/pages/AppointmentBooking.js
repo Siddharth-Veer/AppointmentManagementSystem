@@ -47,7 +47,7 @@ const AppointmentBooking = () => {
   useEffect(() => {
     const fetchDoctors = async () => {
       try {
-        const response = await axios.get('https://medisync-w9rq.onrender.com/api/doctors');
+        const response = await axios.get('http://localhost:5000/api/doctors');
         setDoctors(response.data);
         const uniqueSpecialties = [...new Set(response.data.map(doctor => doctor.speciality))];
         setSpecialties(uniqueSpecialties);
@@ -58,7 +58,7 @@ const AppointmentBooking = () => {
 
     const fetchSymptoms = async () => {
       try {
-        const response = await axios.get('https://medisync-w9rq.onrender.com/api/symptoms');
+        const response = await axios.get('http://localhost:5000/api/symptoms');
         setSymptoms(response.data);
       } catch (error) {
         console.error('Error fetching symptoms:', error);
@@ -109,7 +109,7 @@ const AppointmentBooking = () => {
     const fetchAvailableDates = async () => {
       if (selectedDoctor) {
         try {
-          const response = await axios.get(`https://medisync-w9rq.onrender.com/api/availability?doctorId=${selectedDoctor._id}`);
+          const response = await axios.get(`http://localhost:5000/api/availability?doctorId=${selectedDoctor._id}`);
           const data = response.data;
           if (Array.isArray(data)) {
             const datesWithAvailability = data.map(item => new Date(item.day));
@@ -131,7 +131,7 @@ const AppointmentBooking = () => {
       if (selectedDoctor && selectedDate) {
         const formattedDate = selectedDate.toISOString().split('T')[0];
         try {
-          const response = await axios.get(`https://medisync-w9rq.onrender.com/api/availability?doctorId=${selectedDoctor._id}&date=${formattedDate}`);
+          const response = await axios.get(`http://localhost:5000/api/availability?doctorId=${selectedDoctor._id}&date=${formattedDate}`);
           setAvailableSlots(response.data?.slots || []);
         } catch (error) {
           console.error('Error fetching available slots:', error);
@@ -163,7 +163,7 @@ const AppointmentBooking = () => {
       };
 
       try {
-        const response = await axios.post('https://medisync-w9rq.onrender.com/api/appointments', appointmentDetails);
+        const response = await axios.post('http://localhost:5000/api/appointments', appointmentDetails);
         if (response.status === 201) {
           localStorage.setItem('appointmentDetails', JSON.stringify(appointmentDetails));
           navigate('/appointment-confirmation');

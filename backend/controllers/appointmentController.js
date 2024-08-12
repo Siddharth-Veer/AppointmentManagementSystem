@@ -1,12 +1,13 @@
 const Appointment = require('../models/Appointment');
 
 // Get all appointments
-const getAppointments = async (query = {}) => {
+const getAppointments = async (req, res) => {
   try {
-    return await Appointment.find(query);
+    const appointments = await Appointment.find({ patientName: req.query.patientName });
+    res.json(appointments);
   } catch (error) {
-    console.error('Error fetching appointments:', error); // Log detailed error
-    throw new Error('Error fetching appointments');
+    console.error('Error fetching appointments:', error);
+    res.status(500).send('Server error');
   }
 };
 

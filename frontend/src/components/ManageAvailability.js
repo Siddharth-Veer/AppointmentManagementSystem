@@ -12,7 +12,7 @@ const ManageAvailability = () => {
   useEffect(() => {
     const fetchDoctors = async () => {
       try {
-        const response = await axios.get('https://medisync-w9rq.onrender.com/api/doctors');
+        const response = await axios.get('http://localhost:5000/api/doctors');
         setDoctors(response.data);
       } catch (error) {
         console.error('Error fetching doctors:', error);
@@ -25,7 +25,7 @@ const ManageAvailability = () => {
     const fetchAvailableDates = async () => {
       if (selectedDoctor) {
         try {
-          const response = await axios.get(`https://medisync-w9rq.onrender.com/api/availability?doctorId=${selectedDoctor}`);
+          const response = await axios.get(`http://localhost:5000/api/availability?doctorId=${selectedDoctor}`);
           const datesWithAvailability = response.data.map(item => new Date(item.day).toISOString().split('T')[0]);
           setAvailableDates(datesWithAvailability);
         } catch (error) {
@@ -40,7 +40,7 @@ const ManageAvailability = () => {
     const fetchAvailability = async () => {
       if (selectedDoctor && date) {
         try {
-          const response = await axios.get(`https://medisync-w9rq.onrender.com/api/availability?doctorId=${selectedDoctor}&date=${date}`);
+          const response = await axios.get(`http://localhost:5000/api/availability?doctorId=${selectedDoctor}&date=${date}`);
           setTimeSlots(response.data?.slots || generateTimeSlots());
         } catch (error) {
           console.error('Error fetching availability:', error);
@@ -72,7 +72,7 @@ const ManageAvailability = () => {
 
   const handleSave = async () => {
     try {
-      await axios.post('https://medisync-w9rq.onrender.com/api/availability', {
+      await axios.post('http://localhost:5000/api/availability', {
         doctorId: selectedDoctor,
         day: date,
         slots: timeSlots

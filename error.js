@@ -24,7 +24,7 @@ const AppointmentBooking = () => {
   useEffect(() => {
     const fetchPatientName = async () => {
         try {
-            const response = await axios.get('https://medisync-w9rq.onrender.com/api/auth/user/name');
+            const response = await axios.get('http://localhost:5000/api/auth/user/name');
             setPatientName(response.data);
         } catch (error) {
             console.error('Error fetching patient name:', error);

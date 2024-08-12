@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Container, Row, Col, Card, Button } from 'react-bootstrap';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import { useNavigate } from 'react-router-dom';
 
 const AppointmentList = () => {
   const [appointments, setAppointments] = useState([]);
@@ -10,34 +10,37 @@ const AppointmentList = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    const fetchPatientName = () => {
+      const storedPatientName = sessionStorage.getItem('patientName');
+      if (storedPatientName) {
+        setPatientName(storedPatientName);
+      } else {
+        console.error('Patient name not found in session storage. Please log in again.');
+        setLoading(false);
+        return;
+      }
+    };
+
     const fetchAppointments = async () => {
       try {
-        const userName = sessionStorage.getItem('userName');
-        if (userName) {
-          const response = await axios.get(`https://medisync-w9rq.onrender.com/api/appointments`, {
-            params: { patientName: userName } // This should match the endpoint in your consolidated route
-          });
-          setAppointments(response.data);
-        }
-        setLoading(false);
+        const response = await axios.get(`http://localhost:5000/api/appointments?patientName=${encodeURIComponent(patientName)}`);
+        setAppointments(response.data);
       } catch (error) {
         console.error('Error fetching appointments:', error);
+      } finally {
         setLoading(false);
       }
     };
 
-    const fetchPatientName = () => {
-      const userName = sessionStorage.getItem('userName');
-      setPatientName(userName || 'Guest');
-    };
-
     fetchPatientName();
-    fetchAppointments();
-  }, []);
+    if (patientName) {
+      fetchAppointments();
+    }
+  }, [patientName]); // Adding patientName as a dependency to fetch appointments after the name is set
 
   const handleCancel = async (appointmentId) => {
     try {
-      await axios.delete(`https://medisync-w9rq.onrender.com/api/appointments/${appointmentId}`);
+      await axios.delete(`http://localhost:5000/api/appointments/${appointmentId}`);
       setAppointments(appointments.filter(app => app._id !== appointmentId));
       alert('Appointment cancelled successfully');
     } catch (error) {
