@@ -41,7 +41,7 @@ const AddDoctor = () => {
         e.preventDefault();
         try {
             console.log('Submitting form data:', formData); // Log form data for debugging
-            const response = await axios.post('http://localhost:5000/api/doctors', formData);
+            const response = await axios.post('https://medisync-w9rq.onrender.com/api/doctors', formData);
             console.log('Doctor added:', response.data);
             setSuccess('Doctor has been added successfully!');
             setError('');

@@ -118,7 +118,7 @@ const HomePage = () => {
   useEffect(() => {
     const fetchSymptoms = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/symptoms');
+        const response = await axios.get('https://medisync-w9rq.onrender.com/api/symptoms');
         setSymptoms(response.data);
         console.log(response.data);
       } catch (error) {

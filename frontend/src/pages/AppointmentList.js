@@ -13,8 +13,12 @@ const AppointmentList = () => {
     const fetchAppointments = async () => {
       try {
         const userName = sessionStorage.getItem('userName');
-        const response = await axios.get(`http://localhost:5000/api/appointments?patientName=${userName}`);
-        setAppointments(response.data);
+        if (userName) {
+          const response = await axios.get(`https://medisync-w9rq.onrender.com/api/appointments`, {
+            params: { patientName: userName } // Use `params` to send query parameters
+          });
+          setAppointments(response.data);
+        }
         setLoading(false);
       } catch (error) {
         console.error('Error fetching appointments:', error);
@@ -33,7 +37,7 @@ const AppointmentList = () => {
 
   const handleCancel = async (appointmentId) => {
     try {
-      await axios.delete(`http://localhost:5000/api/appointments/${appointmentId}`);
+      await axios.delete(`https://medisync-w9rq.onrender.com/api/appointments/${appointmentId}`);
       setAppointments(appointments.filter(app => app._id !== appointmentId));
       alert('Appointment cancelled successfully');
     } catch (error) {
