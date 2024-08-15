@@ -4,42 +4,42 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { Container, Row, Col, Form, Button, Alert, Modal } from 'react-bootstrap';
 
 const AdminLogin = () => {
-    const [email, setEmail] = useState('');
+    const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (!email || !password) {
-          setError('Please fill in all fields');
-          return;
+        if (!username || !password) {
+            setError('Please fill in all fields');
+            return;
         }
-        
+
         try {
-          const response = await fetch('https://medisync-w9rq.onrender.com/api/admin/login', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ username: email, password })
-          });
-      
-          const result = await response.json();
-          if (response.ok) {
-            localStorage.setItem('adminToken', result.token);
-            navigate('/admin/dashboard'); // Redirect to admin dashboard or other protected route
-          } else {
-            setError(result.message || 'Login failed');
-          }
+            const response = await fetch('https://medisync-w9rq.onrender.com/api/admin-auth/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, password })
+            });
+
+            const result = await response.json();
+            if (response.ok) {
+                localStorage.setItem('adminToken', result.token);
+                navigate('/admin/dashboard'); // Redirect to admin dashboard or other protected route
+            } else {
+                setError(result.message || 'Login failed');
+            }
         } catch (err) {
-          setError('An error occurred');
+            setError('An error occurred');
         }
-      };
+    };
 
     return (
         <Modal show={true} centered>
             <Modal.Body className="p-4">
                 <Container>
-                <Row className="justify-content-start">
+                    <Row className="justify-content-start">
                         <Col xs="auto">
                             <Button variant="link" onClick={() => navigate('/')}>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" className="bi bi-arrow-left" viewBox="0 0 16 16">
@@ -53,13 +53,13 @@ const AdminLogin = () => {
                             <h2 className="text-center mb-4">Admin Login</h2>
                             {error && <Alert variant="danger">{error}</Alert>}
                             <Form onSubmit={handleSubmit}>
-                                <Form.Group className="mb-3" controlId="formEmail">
+                                <Form.Group className="mb-3" controlId="formUsername">
                                     <Form.Label>Username</Form.Label>
                                     <Form.Control
                                         type="text"
-                                        placeholder="Enter email"
-                                        value={email}
-                                        onChange={(e) => setEmail(e.target.value)}
+                                        placeholder="Enter username"
+                                        value={username}
+                                        onChange={(e) => setUsername(e.target.value)}
                                         required
                                     />
                                 </Form.Group>

@@ -35,7 +35,7 @@
     margin: 1em 0;
     padding: 0.5em;
     background-color: #007bff;
-    color: white;
+    color: rgb(255, 255, 255) !important;
     border: none;
     cursor: pointer;
     text-align: center;
@@ -54,5 +54,10 @@
   
   .menu-content hr {
     margin: 1em 0;
+  }
+  h2 {
+    font-size: 1.5em;
+    margin: 0.5em 0;
+    padding-right: 10px;
   }
   

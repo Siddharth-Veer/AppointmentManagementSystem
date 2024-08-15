@@ -62,7 +62,6 @@ const AppointmentList = () => {
     <Container className="appointment-list">
       <div className="logo-section">
           <img className="logo" src={logo} alt="Medisync Logo" />
-          <p className="brand-name">Medisync</p>
         </div>
       <Row className="mb-4">
         <Col>

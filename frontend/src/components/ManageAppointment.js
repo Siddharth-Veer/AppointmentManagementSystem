@@ -23,18 +23,21 @@ const ManageAppointments = () => {
   useEffect(() => {
     // Fetch appointments for the selected doctor
     const fetchAppointments = async () => {
-      try {
-        const response = await axios.get(`https://medisync-w9rq.onrender.com/api/appointments?doctorName=${selectedDoctor}`);
-        setAppointments(response.data);
-      } catch (error) {
-        console.error('Error fetching appointments:', error);
+      if (selectedDoctor) {
+        try {
+          console.log('Fetching appointments for doctor:', selectedDoctor);
+          const response = await axios.get(`https://medisync-w9rq.onrender.com/api/appointments?doctorName=${selectedDoctor}`);
+          console.log('Appointments response:', response.data);
+          setAppointments(response.data);
+        } catch (error) {
+          console.error('Error fetching appointments:', error);
+        }
+      } else {
+        setAppointments([]);
       }
     };
-    if (selectedDoctor) {
-      fetchAppointments();
-    } else {
-      setAppointments([]);
-    }
+    
+    fetchAppointments();
   }, [selectedDoctor]);
 
   return (

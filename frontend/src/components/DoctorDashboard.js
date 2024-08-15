@@ -1,116 +1,104 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { Calendar, momentLocalizer } from 'react-big-calendar';
-import moment from 'moment';
-import 'react-big-calendar/lib/css/react-big-calendar.css';
-import { Container, Row, Col, Button, Form, Card, Modal } from 'react-bootstrap';
-
-const localizer = momentLocalizer(moment);
+import { Container, Row, Col, Button, Form, Card, Modal, Table } from 'react-bootstrap';
 
 const DoctorDashboard = () => {
   const [appointments, setAppointments] = useState([]);
   const [selectedAppointment, setSelectedAppointment] = useState(null);
   const [selectedDate, setSelectedDate] = useState(new Date());
-  const [events, setEvents] = useState([]);
-  const [weekStart, setWeekStart] = useState(moment().startOf('week').toDate());
   const [showRescheduleModal, setShowRescheduleModal] = useState(false);
-  const [availableSlots, setAvailableSlots] = useState([]);
+  const [slots, setSlots] = useState([]);
+  const [selectedSlot, setSelectedSlot] = useState('');
+  const [newDate, setNewDate] = useState(new Date());
   const navigate = useNavigate();
+
+  const doctorName = sessionStorage.getItem('doctorName');
 
   useEffect(() => {
     const fetchAppointments = async () => {
       try {
-        const response = await axios.get('https://medisync-w9rq.onrender.com/api/appointments');
-        const appointmentsData = response.data;
-  
-        // Ensure date format is consistent
-        const formattedDate = selectedDate.toISOString().split('T')[0];
-        const filteredAppointments = appointmentsData.filter(
-          appointment => new Date(appointment.date).toISOString().split('T')[0] === formattedDate
-        );
-  
-        const formattedEvents = filteredAppointments.map(appointment => ({
-          id: appointment._id,
-          title: appointment.patientName || 'No Title',
-          start: new Date(`${appointment.date}T${appointment.time}`),
-          end: new Date(new Date(`${appointment.date}T${appointment.time}`).getTime() + 30 * 60000),
-        }));
-  
-        setAppointments(filteredAppointments);
-        setEvents(formattedEvents);
-      } catch (error) {
-        console.error('Error fetching appointments:', error);
-      }
-    };
-  
-    fetchAppointments();
-  }, [selectedDate]);
-
-  useEffect(() => {
-    const fetchAppointmentsForWeek = async () => {
-      try {
         const response = await axios.get('https://medisync-w9rq.onrender.com/api/appointments', {
           params: {
-            start: weekStart.toISOString(),
-            end: moment(weekStart).endOf('week').toISOString(),
+            doctorName: doctorName,
           },
         });
         const appointmentsData = response.data;
+
+        const formattedDate = selectedDate.toISOString().split('T')[0];
         const filteredAppointments = appointmentsData.filter(
-          appointment => new Date(appointment.date).toDateString() === new Date(selectedDate).toDateString()
+          appointment => {
+            const appointmentDate = new Date(appointment.date);
+            return !isNaN(appointmentDate.getTime()) &&
+              appointmentDate.toISOString().split('T')[0] === formattedDate;
+          }
         );
-        const formattedEvents = filteredAppointments.map(appointment => {
-          const start = new Date(`${appointment.date}T${appointment.time}`);
-          const end = new Date(start.getTime() + 30 * 60000);
-          return {
-            id: appointment._id,
-            title: appointment.patientName || 'No Title',
-            start,
-            end,
-          };
-        });
+
         setAppointments(filteredAppointments);
-        setEvents(formattedEvents);
       } catch (error) {
         console.error('Error fetching appointments:', error);
       }
     };
 
-    fetchAppointmentsForWeek();
-  }, [weekStart, selectedDate]);
+    fetchAppointments();
+  }, [selectedDate, doctorName]);
 
   const handleAppointmentSelect = (appointment) => {
     setSelectedAppointment(appointment);
+    setNewDate(new Date(appointment.date)); // Initialize newDate with the current date of the selected appointment
   };
 
   const handleDateChange = (e) => {
     const newDate = new Date(e.target.value);
     setSelectedDate(newDate);
-    const newWeekStart = moment(newDate).startOf('week').toDate();
-    setWeekStart(newWeekStart);
   };
 
-  const handleWeekChange = (e) => {
-    const newStartOfWeek = moment(e.target.value).startOf('week').toDate();
-    setWeekStart(newStartOfWeek);
+  const handleNewDateChange = (e) => {
+    const date = new Date(e.target.value);
+    setNewDate(date);
+    fetchSlots(); // Fetch slots on date change
+  };
+
+  const fetchSlots = async () => {
+    // Generate time slots from 9 AM to 7 PM
+    const startHour = 9;
+    const endHour = 19;
+    const slotsArray = [];
+
+    for (let hour = startHour; hour <= endHour; hour++) {
+      const time = `${hour}:00`;
+      slotsArray.push({ time });
+    }
+
+    // Exclude the current slot from the list
+    const currentSlot = selectedAppointment?.time;
+    const availableSlots = slotsArray.filter(slot => slot.time !== currentSlot);
+
+    setSlots(availableSlots);
+    setShowRescheduleModal(true);
+  };
+
+  const handleSlotSelect = (e) => {
+    setSelectedSlot(e.target.value);
   };
 
   const handleReschedule = async () => {
-    if (selectedAppointment && selectedDate) {
+    if (selectedAppointment && newDate && selectedSlot) {
       try {
         const response = await axios.put(`https://medisync-w9rq.onrender.com/api/appointments/${selectedAppointment._id}`, {
-          date: selectedDate.toLocaleDateString(),
+          date: newDate.toISOString().split('T')[0],
+          time: selectedSlot
         });
         if (response.status === 200) {
           alert('Appointment rescheduled successfully');
           setAppointments(prevAppointments =>
             prevAppointments.map(appointment =>
               appointment._id === selectedAppointment._id
-                ? { ...appointment, date: selectedDate.toLocaleDateString() }
+                ? { ...appointment, date: newDate.toISOString().split('T')[0], time: selectedSlot }
                 : appointment
             )
           );
+          setShowRescheduleModal(false);
           setSelectedAppointment(null);
         }
       } catch (error) {
@@ -118,84 +106,32 @@ const DoctorDashboard = () => {
         alert('Failed to reschedule the appointment.');
       }
     } else {
-      alert('Please select an appointment and a new date.');
+      alert('Please select a date and a slot.');
     }
   };
 
-  const handleCancel = async (appointmentId) => {
-    try {
-      const response = await axios.delete(`https://medisync-w9rq.onrender.com/api/appointments/${appointmentId}`);
-      if (response.status === 200) {
-        alert('Appointment cancelled successfully');
-        setAppointments(prevAppointments =>
-          prevAppointments.filter(appointment => appointment._id !== appointmentId)
-        );
-      }
-    } catch (error) {
-      console.error('Error cancelling appointment:', error);
-      alert('Failed to cancel the appointment.');
-    }
-  };
-
-  const fetchAvailableSlots = async () => {
-    try {
-      const response = await axios.get(`https://medisync-w9rq.onrender.com/api/available-slots`, {
-        params: {
-          date: selectedDate.toISOString().split('T')[0],
-          doctorId: sessionStorage.getItem('doctorId') // Assuming doctor ID is stored in session storage
-          
-        }
-      });
-      const slots = response.data;
-      // console logg all the availabel slots in the console
-      console.log(slots);
-      setAvailableSlots(slots);
-      setShowRescheduleModal(true);
-    } catch (error) {
-      console.error('Error fetching available slots:', error);
-      
-    }
-  };
-
-  const handleRescheduleButtonClick = () => {
-    fetchAvailableSlots();
-  };
-
-  const handleSlotSelect = async (slot) => {
+  const handleCompleteButtonClick = async () => {
     if (selectedAppointment) {
       try {
-        await axios.put(`https://medisync-w9rq.onrender.com/api/appointments/${selectedAppointment._id}`, {
-          date: selectedDate.toLocaleDateString(),
-          time: slot.time
+        const response = await axios.put(`https://medisync-w9rq.onrender.com/api/appointments/${selectedAppointment._id}`, {
+          status: 'Complete'
         });
-        alert('Appointment rescheduled successfully');
-        setShowRescheduleModal(false);
-        setSelectedAppointment(null);
-        // Refresh appointments
-        setAppointments(prevAppointments =>
-          prevAppointments.map(appointment =>
-            appointment._id === selectedAppointment._id
-              ? { ...appointment, date: selectedDate.toLocaleDateString(), time: slot.time }
-              : appointment
-          )
-        );
+        if (response.status === 200) {
+          alert('Appointment marked as complete');
+          setAppointments(prevAppointments =>
+            prevAppointments.map(appointment =>
+              appointment._id === selectedAppointment._id
+                ? { ...appointment, status: 'Complete' }
+                : appointment
+            )
+          );
+          setSelectedAppointment(null);
+        }
       } catch (error) {
-        console.error('Error rescheduling appointment:', error);
-        alert('Failed to reschedule the appointment.');
+        console.error('Error completing appointment:', error);
+        alert(`Failed to complete the appointment: ${error.response?.data?.message || error.message}`);
       }
     }
-  };
-  const safeDate = (date) => {
-    try {
-      return new Date(date);
-    } catch (error) {
-      console.error('Invalid date:', date, error);
-      return new Date();
-    }
-  };
-  const handleNavigate = (date) => {
-    // Update state or perform actions based on the new date
-    setSelectedDate(date);
   };
 
   const handleLogout = () => {
@@ -203,14 +139,23 @@ const DoctorDashboard = () => {
     navigate('/doctor-signin');
   };
 
-  const doctorName = sessionStorage.getItem('doctorName') || 'Doctor';
+  const getStatusColor = (status) => {
+    switch (status) {
+      case 'Active':
+        return 'green';
+      case 'Complete':
+        return 'red';
+      default:
+        return 'black';
+    }
+  };
 
   return (
     <Container fluid className="doctor-dashboard-container p-4">
       <header className="d-flex justify-content-between align-items-center mb-4">
         <h1 className="text-primary">Medisync</h1>
         <div className="d-flex align-items-center">
-          <span className="me-3">{`Dr. ${doctorName}`}</span>
+          <span className="me-3">{`${doctorName}`}</span>
           <Button variant="danger" onClick={handleLogout}>Logout</Button>
         </div>
       </header>
@@ -218,15 +163,7 @@ const DoctorDashboard = () => {
       <Row className="dashboard-content g-4">
         <Col md={3}>
           <Card className="p-3">
-            <Form.Group controlId="weekPicker">
-              <Form.Label>Select Week</Form.Label>
-              <Form.Control
-  type="week"
-  value={moment(weekStart).format('YYYY-[W]WW')}
-  onChange={handleWeekChange}
-/>
-            </Form.Group>
-            <Form.Group controlId="datePicker" className="mt-3">
+            <Form.Group controlId="datePicker">
               <Form.Label>Select Date</Form.Label>
               <Form.Control
                 type="date"
@@ -237,55 +174,84 @@ const DoctorDashboard = () => {
           </Card>
         </Col>
 
-        <Col md={8}>
+        <Col md={9}>
           <Card className="p-3">
-            <div className="calendar-wrapper">
-              <Calendar
-                localizer={localizer}
-                events={events}
-                startAccessor="start"
-                endAccessor="end"
-                style={{ height: 500 }}
-                views={['week']}
-                onSelectEvent={handleAppointmentSelect}
-                defaultView="week"
-                min={new Date(2024, 7, 1, 9, 0, 0)} // 9 AM
-                max={new Date(2024, 7, 1, 19, 0, 0)} // 7 PM
-                date={selectedDate}
-                onNavigate={handleNavigate} // Add onNavigate handler
-              />
-            </div>
+            <Table striped bordered hover>
+              <thead>
+                <tr>
+                  <th>Patient Name</th>
+                  <th>Date</th>
+                  <th>Time</th>
+                  <th>Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {appointments.map(appointment => (
+                  <tr key={appointment._id}>
+                    <td>{appointment.patientName}</td>
+                    <td>{new Date(appointment.date).toLocaleDateString()}</td>
+                    <td>{appointment.time}</td>
+                    <td style={{ color: getStatusColor(appointment.status) }}>
+                      {appointment.status}
+                    </td>
+                    <td>
+                      <Button variant="primary" onClick={() => handleAppointmentSelect(appointment)}>Details</Button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
           </Card>
         </Col>
 
-        <Col md={3}>
+        <Col md={12}>
           {selectedAppointment && (
-            <Card className="p-3">
-              <h2>Appointment Details</h2>
-              <p>Patient: {selectedAppointment.patientName}</p>
-              <p>Date: {selectedAppointment.date}</p>
-              <p>Time: {selectedAppointment.time}</p>
-              <Button variant="warning" onClick={handleRescheduleButtonClick} className="me-2">Reschedule</Button>
-              <Button variant="danger" onClick={() => handleCancel(selectedAppointment._id)}>Cancel</Button>
-            </Card>
+            <Modal show={true} onHide={() => setSelectedAppointment(null)}>
+              <Modal.Header closeButton>
+                <Modal.Title>Appointment Details</Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+                <p><strong>Patient:</strong> {selectedAppointment.patientName}</p>
+                <p><strong>Date:</strong> {new Date(selectedAppointment.date).toLocaleDateString()}</p>
+                <p><strong>Time:</strong> {selectedAppointment.time}</p>
+                <p><strong>Status:</strong> <span style={{ color: getStatusColor(selectedAppointment.status) }}>{selectedAppointment.status}</span></p>
+                <Button variant="primary" onClick={() => fetchSlots()}>Reschedule</Button>
+                <Button variant="success" className="mt-2" onClick={handleCompleteButtonClick}>Complete</Button>
+              </Modal.Body>
+            </Modal>
           )}
         </Col>
       </Row>
 
+      {/* Reschedule Modal */}
       <Modal show={showRescheduleModal} onHide={() => setShowRescheduleModal(false)}>
         <Modal.Header closeButton>
           <Modal.Title>Reschedule Appointment</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <h5>Select a new time slot</h5>
-          <ul>
-            {availableSlots.map(slot => (
-              <li key={slot.time}>
-                <Button variant="primary" onClick={() => handleSlotSelect(slot)}>{slot.time}</Button>
-              </li>
-            ))}
-          </ul>
+          <Form.Group controlId="rescheduleDate">
+            <Form.Label>Select New Date</Form.Label>
+            <Form.Control
+              type="date"
+              value={newDate.toISOString().split('T')[0]}
+              onChange={handleNewDateChange}
+            />
+          </Form.Group>
+          <Form.Group controlId="rescheduleSlot">
+            <Form.Label>Select Slot</Form.Label>
+            <Form.Control as="select" value={selectedSlot} onChange={handleSlotSelect}>
+              <option value="">Select a slot</option>
+              {slots.map(slot => (
+                <option key={slot.time} value={slot.time}>{slot.time}</option>
+              ))}
+            </Form.Control>
+          </Form.Group>
         </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowRescheduleModal(false)}>Close</Button>
+          <Button variant="primary" onClick={handleReschedule}>Reschedule</Button>
+        </Modal.Footer>
       </Modal>
     </Container>
   );

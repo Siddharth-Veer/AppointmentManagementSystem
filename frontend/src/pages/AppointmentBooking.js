@@ -161,6 +161,7 @@ const AppointmentBooking = () => {
         contact: selectedDoctor.contact,
         date: selectedDate.toLocaleDateString(),
         time: selectedTime,
+        status: 'Active',
       };
 
       try {
@@ -241,7 +242,6 @@ const AppointmentBooking = () => {
     <Container className="appointment-booking mt-4">
       <div className="logo-section">
           <img className="logo" src={logo} alt="Medisync Logo" />
-          <p className="brand-name">Medisync</p>
         </div>
       <Row className="mb-4">
         <Col>

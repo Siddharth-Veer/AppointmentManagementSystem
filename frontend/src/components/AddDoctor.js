@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import bcrypt from 'bcryptjs';  // Import bcrypt for password hashing
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Container, Row, Col, Form, Button, Alert } from 'react-bootstrap';
 
@@ -41,11 +42,31 @@ const AddDoctor = () => {
         e.preventDefault();
         try {
             console.log('Submitting form data:', formData); // Log form data for debugging
-            const response = await axios.post('https://medisync-w9rq.onrender.com/api/doctors', formData);
-            console.log('Doctor added:', response.data);
-            setSuccess('Doctor has been added successfully!');
-            setError('');
-            setTimeout(() => navigate('/admin/manage-doctors'), 2000); // Redirect after 2 seconds
+            
+            const saltRounds = 10;
+            const hashedPassword = await bcrypt.hash(formData.password, saltRounds);
+
+            const response = await axios.post('https://medisync-w9rq.onrender.com/api/doctors', {
+                ...formData,
+                password: hashedPassword,
+            });
+
+            if (response.data.message === 'Doctor added successfully') {
+                setSuccess('Doctor added successfully!');
+                setFormData({
+                    name: '',
+                    speciality: '',
+                    contact: '',
+                    email: '',
+                    password: '',
+                    status: 'Active',
+                });
+                setError('');
+                setTimeout(() => navigate('/admin/manage-doctors'), 2000); // Redirect after 2 seconds
+            } else {
+                setError('Failed to add doctor. Please try again.');
+                setSuccess('');
+            }
         } catch (error) {
             console.error('Error adding doctor:', error.response ? error.response.data : error.message);
             setError('Failed to add doctor. Please try again.');

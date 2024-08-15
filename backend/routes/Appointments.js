@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { getAppointments, setAppointment } = require('../controllers/appointmentController');
+const { getAppointments, setAppointment, updateAppointment, deleteAppointment} = require('../controllers/appointmentController');
 const Appointment = require('../models/Appointment'); // Update with your actual path
 
 // Endpoint to get appointments by patient name or doctor name
@@ -27,5 +27,11 @@ router.get('/', getAppointments);
 
 // Route to create a new appointment
 router.post('/', setAppointment);
+
+// Route to Update an existing appointment
+router.put('/:id', updateAppointment);
+
+router.delete('/:id', deleteAppointment);
+
 
 module.exports = router;

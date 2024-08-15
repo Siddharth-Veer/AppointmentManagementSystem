@@ -25,19 +25,27 @@ router.use(
 
 // Admin login route
 router.post('/login', async (req, res) => {
-  const { email, password } = req.body;
+  const { username, password } = req.body;
+
+  // Hardcoded credentials
+  const hardcodedUsername = 'admin';
+  const hardcodedPassword = 'admin';
+
   try {
-    const user = await User.findOne({ email });
-    if (!user || !(await bcrypt.compare(password, user.password))) {
-      return res.status(401).json({ message: 'Invalid email or password' });
+    // Check if the provided username and password match the hardcoded credentials
+    if (username !== hardcodedUsername || password !== hardcodedPassword) {
+      return res.status(401).json({ message: 'Invalid username or password' });
     }
+
+    // If credentials match, set session flag and generate JWT token
     req.session.isAdmin = true; // Set session flag for admin
-    const token = jwt.sign({ email }, process.env.JWT_PRIVATE_KEY);
+    const token = jwt.sign({ username }, process.env.JWT_PRIVATE_KEY);
     return res.status(200).json({ message: 'Login successful', token });
   } catch (err) {
     return res.status(500).json({ message: 'Server error' });
   }
 });
+
 
 // Admin logout route
 router.post('/logout', (req, res) => {

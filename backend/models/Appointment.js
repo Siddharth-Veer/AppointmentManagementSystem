@@ -25,6 +25,11 @@ const appointmentSchema = mongoose.Schema({
     type: String,
     required: true
   },
+  // add a status which is active by default when created.
+  status: {
+    type: String,
+    default: 'Active'
+  }
 }, {
   timestamps: true
 });

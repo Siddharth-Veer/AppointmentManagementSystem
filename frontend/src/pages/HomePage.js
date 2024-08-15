@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate , Link } from "react-router-dom";
 import Appointment from "../components/Appointment";
 import { AppointmentContext } from "../context/AppointmentContext";
 import HamburgerMenu from "../components/HamburgerMenu";
@@ -164,9 +164,9 @@ const HomePage = () => {
         <nav>
           <ul>
             <li>
-              <a href="#" onClick={toggleMenu}>
+              <Link to="#" onClick={toggleMenu}>
                 Menu
-              </a>
+              </Link>
             </li>
           </ul>
         </nav>
@@ -175,7 +175,7 @@ const HomePage = () => {
       <main>
         <section className="search-section">
           <div className="navbar main-search-section">
-            <div className="container-fluid hero-section" >
+            <div className="container-fluid hero-section">
               <div className="search-container">
                 <h1>Find the best <span className="highlight">health specialist</span> for you!</h1>
                 <form className="d-flex search-form" role="search">
@@ -227,38 +227,6 @@ const HomePage = () => {
               </div>
             </div>
           </div>
-
-          <div className="icons">
-            <div className="icon">
-              <img src="/images/ADHD-icon.png" alt="ADHD" />{" "}
-              {/* Image from public folder */}
-              <span>ADHD</span>
-            </div>
-            <div className="icon">
-              <img src="/images/Weight-loss-icon.png" alt="Weight Loss" />
-              <span>Weight Loss</span>
-            </div>
-            <div className="icon">
-              <img src="/images/Birth-Control-icon.png" alt="Birth Control" />
-              <span>Birth Control</span>
-            </div>
-            <div className="icon">
-              <img src="/images/Prescription-icon.png" alt="Prescription" />
-              <span>Prescription</span>
-            </div>
-            <div className="icon">
-              <img src="/images/Back-Pain-icon.png" alt="Back Pain" />
-              <span>Back Pain</span>
-            </div>
-            <div className="icon">
-              <img src="/images/Hair-loss-icon.png" alt="Hair Loss" />
-              <span>Hair Loss</span>
-            </div>
-            <div className="icon">
-              <img src="/images/Headache-icon.png" alt="Headache" />
-              <span>Headache</span>
-            </div>
-          </div>
         </section>
 
         <section className="how-it-works">
@@ -272,16 +240,15 @@ const HomePage = () => {
                 className="card-img-top card-image"
                 alt="Care Image"
               />
-
               <div className="card-body">
                 <h5 className="card-title">1. Search For Care</h5>
                 <p className="card-text">
                   Enter your location and search for in-person or virtual care
                   appointments.
                 </p>
-                <a href="" className="btn btn-primary">
+                <Link to="#" className="btn btn-primary">
                   Learn More..
-                </a>
+                </Link>
               </div>
             </div>
 
@@ -291,16 +258,15 @@ const HomePage = () => {
                 className="card-img-top card-image"
                 alt="Compare Image"
               />
-
               <div className="card-body">
                 <h5 className="card-title">2. Compare Providers</h5>
                 <p className="card-text">
                   See a list and map of providers in your area. Compare their
                   services and availability to find the best option for you.
                 </p>
-                <a href="" className="btn btn-primary">
+                <Link to="#" className="btn btn-primary">
                   Learn More..
-                </a>
+                </Link>
               </div>
             </div>
 
@@ -310,16 +276,15 @@ const HomePage = () => {
                 className="card-img-top card-image"
                 alt="Appointment Image"
               />
-
               <div className="card-body">
                 <h5 className="card-title">3. Book an Appointment</h5>
                 <p className="card-text">
                   Once you’ve selected a provider you can immediately make a
                   booking. Access the care you need in minutes.
                 </p>
-                <a href="" className="btn btn-primary">
+                <Link to="#" className="btn btn-primary">
                   Learn More..
-                </a>
+                </Link>
               </div>
             </div>
           </div>
@@ -346,16 +311,16 @@ const HomePage = () => {
               <h4>Company</h4>
               <ul>
                 <li>
-                  <a href="#">About</a>
+                  <Link to="/aboutus">About Us</Link>
                 </li>
                 <li>
-                  <a href="#">Careers</a>
+                  <Link to="#">Careers</Link>
                 </li>
                 <li>
-                  <a href="#">Press</a>
+                  <Link to="#">Press</Link>
                 </li>
                 <li>
-                  <a href="#">Blog</a>
+                  <Link to="#">Blog</Link>
                 </li>
               </ul>
             </div>
@@ -363,16 +328,16 @@ const HomePage = () => {
               <h4>Support</h4>
               <ul>
                 <li>
-                  <a href="#">Help Center</a>
+                  <Link to="#">Help Center</Link>
                 </li>
                 <li>
-                  <a href="#">Contact Us</a>
+                  <Link to="/contactus">Contact Us</Link>
                 </li>
                 <li>
-                  <a href="#">Privacy Policy</a>
+                  <Link to="#">Privacy Policy</Link>
                 </li>
                 <li>
-                  <a href="#">Terms of Service</a>
+                  <Link to="#">Terms of Service</Link>
                 </li>
               </ul>
             </div>
@@ -380,34 +345,14 @@ const HomePage = () => {
               <h4>Community</h4>
               <ul>
                 <li>
-                  <a href="#">Developers</a>
+                  <Link to="#">Developers</Link>
                 </li>
                 <li>
-                  <a href="#">Partners</a>
-                </li>
-                <li>
-                  <a href="#">Affiliates</a>
+                  <Link to="#">Partners</Link>
                 </li>
               </ul>
             </div>
           </div>
-        </div>
-        <div className="footer-bottom">
-          <div className="social-icons">
-            <a href="#">
-              <i className="fab fa-facebook-f"></i>
-            </a>
-            <a href="#">
-              <i className="fab fa-twitter"></i>
-            </a>
-            <a href="#">
-              <i className="fab fa-instagram"></i>
-            </a>
-            <a href="#">
-              <i className="fab fa-linkedin-in"></i>
-            </a>
-          </div>
-          <p>&copy; 2023 Medisync. All rights reserved.</p>
         </div>
       </footer>
     </>

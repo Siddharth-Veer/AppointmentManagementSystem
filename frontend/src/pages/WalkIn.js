@@ -134,7 +134,6 @@ const WalkIn = () => {
     <Container className="mt-5">
       <div className="logo-section">
           <img className="logo" src={logo} alt="Medisync Logo" />
-          <p className="brand-name">Medisync</p>
         </div>
       <Row className="mb-4">
         <Col>
