@@ -30,10 +30,18 @@ const db = mongoose.connection;
 db.on('error', (error) => console.error('MongoDB connection error:', error));
 db.once('open', () => console.log('MongoDB connected'));
 
+const allowedOrigins = ['http://localhost:3000', 'https://medi-sync.netlify.app'];
+
 const corsOptions = {
-  origin: 'https://medi-sync.netlify.app/', // Replace with your Netlify domain https://medi-sync.netlify.app  http://localhost:3000
-  methods: 'GET,POST,PUT,DELETE', // Replace with your frontend URL
-  credentials: true, // Allow cookies and credentials
+  origin: function (origin, callback) {
+    if (allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  methods: 'GET,POST,PUT,DELETE',
+  credentials: true,
 };
 
 // Middleware
