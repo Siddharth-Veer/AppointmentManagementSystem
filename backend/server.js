@@ -30,7 +30,7 @@ const db = mongoose.connection;
 db.on('error', (error) => console.error('MongoDB connection error:', error));
 db.once('open', () => console.log('MongoDB connected'));
 
-const allowedOrigins = ['http://localhost:3000', 'https://medi-sync.netlify.app'];
+const allowedOrigins = ['http://localhost:3000', 'https://medi-sync.netlify.app', 'https://medisync-w9rq.onrender.com'];
 
 const corsOptions = {
   origin: function (origin, callback) {
