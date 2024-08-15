@@ -2,6 +2,8 @@
 
 This is a basic appointment management system built with React, Node.js, and MongoDB.
 
+Go to medi-sync.netlify.app to look at the product.
+
 ## Getting Started
 
 ### Backend

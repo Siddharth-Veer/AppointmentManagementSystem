@@ -5,13 +5,26 @@ import logo from "../pages/logo.png";
 
 const Header = () => {
   return (
-    <Navbar sticky="top" bg="light" className="border-bottom mb-4">
-      <div className="logo-section">
-          <img className="logo" src={logo} alt="Medisync Logo" />
-          <p className="brand-name">Medisync</p>
-        </div>
+    <Navbar
+      sticky="top"
+      bg="light"
+      className="border-bottom mb-4"
+      style={{ padding: '8px 16px' }} // Reduce padding for smaller header
+    >
+      <div style={{ display: 'flex', alignItems: 'center' }}>
+        <img
+          src={logo}
+          alt="Medisync Logo"
+          style={{ width: '40px', height: 'auto' }} // Adjust logo size
+        />
+        <p style={{ fontSize: '1rem', marginLeft: '8px', fontWeight: '500' }}>
+          Medisync
+        </p>
+      </div>
       <Container>
-        <Navbar.Brand className="text-lg font-weight-semibold">
+        <Navbar.Brand
+          style={{ fontSize: '1rem', fontWeight: '500' }} // Adjust text size and weight
+        >
           Admin Dashboard
         </Navbar.Brand>
       </Container>
